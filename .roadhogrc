@@ -5,14 +5,22 @@
     "transform-decorators-legacy",
     "transform-class-properties",
     ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": true }],
-    ["import", { "libraryName": "antd-mobile", "style": true }]
+    ["import", { "libraryName": "antd-mobile", "style": "css" }]
   ],
   "env": {
     "development": {
       "extraBabelPlugins": [
-        "dva-hmr"
+        "dva-hmr",
+        ["import", { "libraryName": "antd-mobile", "style": "css" }]
       ]
-    }
+    },
+    "production": {
+          "extraBabelPlugins": [
+            "dva-hmr",
+            ["import", { "libraryName": "antd-mobile", "style": "css" }],
+            ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": true }]
+          ]
+        }
   },
   "externals": {
     "g2": "G2",

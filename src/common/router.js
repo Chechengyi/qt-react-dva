@@ -57,7 +57,16 @@ export const getRouterData = (app) => {
     '/admin/user/register-result': {
       component: dynamicWrapper(app, [], () => import('../routes/User/RegisterResult')),
     },
-
+    // 司机端路由
+    '/driverLogin': {
+      component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Login')),
+    },
+    '/driver': {
+      component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Index')),
+    },
+    '/driver/ceshi': {
+      component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Ceshi')),
+    }
   };
   // Get name from ./menu.js or just set it in the router data.
   const menuData = getFlatMenuData(getMenuData());
