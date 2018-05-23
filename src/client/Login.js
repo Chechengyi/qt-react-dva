@@ -1,0 +1,61 @@
+import React, { PureComponent } from 'react';
+import { connect } from 'dva';
+import {List, InputItem, WingBlank, WhiteSpace, Button, Toast} from 'antd-mobile'
+import { Alert } from 'antd'
+import { createForm } from 'rc-form';
+@createForm()
+@connect( state =>({
+  client_status: state.client_login.client_status
+}) )
+export default class Login extends PureComponent {
+
+  renderMessage = (message) => {
+    return (
+      <Alert
+        style={{ marginBottom: 24 }}
+        message={message}
+        type="error"
+        showIcon
+      />
+    );
+  }
+
+  submit = () => {
+    const { username, password } = this.props.form.getFieldsValue()
+    if ( !username || !password ) {
+      Toast.fail('用户名或密码不能为空', 1)
+      return
+    }
+    this.props.dispatch({
+      type: 'client_login/login',
+      payload: {
+        account: username,
+        password
+      }
+    })
+  }
+
+  render () {
+    const { getFieldProps } = this.props.form
+      return <div style={{marginTop: 30}} >
+      <WingBlank>
+        { this.props.client_status==='ERROR'&&this.renderMessage('用户名或密码错误') }
+        <List>
+          <InputItem
+            {...getFieldProps('username')}
+          >用户名</InputItem>
+          <InputItem
+            type='password'
+            {...getFieldProps('password')}
+          >密码</InputItem>
+        </List>
+        <WhiteSpace></WhiteSpace>
+        <Button type='primary' onClick={ this.submit } >登录</Button>
+        <WhiteSpace></WhiteSpace>
+        <Button onClick={ () => { this.props.history.push('/clientUser/reg') } } type='ghost' >注册</Button>
+        <WhiteSpace />
+        <Button type='warning' >忘记密码</Button>
+      </WingBlank>
+    </div>
+  }
+}

@@ -1,12 +1,12 @@
 import { routerRedux } from 'dva/router';
-import { fakeAccountLogin } from '../services/api';
+import { adminLogin } from '../services/api';
 
 export default {
   namespace: 'login',
 
   state: {
-    status: window.sessionStorage.getItem('admin_status'),
-    name: window.sessionStorage.getItem('admin_name'),
+    admin_status: window.sessionStorage.getItem('admin_status'),
+    admin_name: window.sessionStorage.getItem('admin_name'),
     aid: window.sessionStorage.getItem('admin_aid')
   },
 
@@ -16,21 +16,26 @@ export default {
         type: 'changeSubmitting',
         payload: true,
       });
-      const response = yield call(fakeAccountLogin, payload);
-      if (response.status === 'ok') {
-        window.sessionStorage.setItem('admin_status', 'ok')
-        window.sessionStorage.setItem('admin_name', response.name)
-        window.sessionStorage.setItem('admin_aid', response.aid)
+      const response = yield call(adminLogin, payload);
+      console.log(response)
+      if (response.status === 'OK') {
+        window.sessionStorage.setItem('admin_status', 'OK')
+        window.sessionStorage.setItem('admin_name', response.data.name)
+        window.sessionStorage.setItem('admin_aid', response.data.id)
         yield put({
           type: 'changeLoginStatus',
-          payload: response
+          payload: {
+            status: 'OK',
+            aid: response.data.id,
+            admin_name: response.data.name
+          }
         })
         yield put(routerRedux.push('/admin/cont/home/frontdesk'));
       } else {
         yield put({
           type: 'changeLoginStatus',
           payload: {
-            status: 'error'
+            status: 'ERROR'
           }
         })
       }
@@ -53,7 +58,7 @@ export default {
         ...state,
         status: payload.status,
         // type: payload.type,
-        name: payload.name,
+        admin_name: payload.admin_name,
         aid: payload.aid,
         submitting: false,
       };

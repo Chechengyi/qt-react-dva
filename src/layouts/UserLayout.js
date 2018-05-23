@@ -18,7 +18,7 @@ const links = [{
   href: '',
 }];
 
-const copyright = <div>Copyright <Icon type="copyright" /> 2017菜多美 </div>;
+const copyright = <div>Copyright <Icon type="copyright" /> 2018强通快递 </div>;
 
 class UserLayout extends React.PureComponent {
   getPageTitle() {
@@ -38,8 +38,8 @@ class UserLayout extends React.PureComponent {
           <div className={styles.top}>
             <div className={styles.header}>
               <Link to="/">
-                <img alt="logo" className={styles.logo} src='/img/favicon.png' />
-                <span className={styles.title}>菜多美</span>
+                {/*<img alt="logo" className={styles.logo} src='/img/favicon.png' />*/}
+                <span className={styles.title}>强通快递</span>
               </Link>
             </div>
             <div className={styles.desc}>管理员系统</div>

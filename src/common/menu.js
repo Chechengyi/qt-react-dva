@@ -14,6 +14,11 @@ const menuData = [
       }
     ]
   },
+  {
+    name: '订单定位',
+    icon: 'user',
+    path: 'orderMap/2'
+  }
   ]
 
 function formatter(data, parentPath = '') {

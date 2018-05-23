@@ -30,6 +30,7 @@
     "g-cloud": "^1.0.2-beta",
     "g2": "^2.3.13",
     "g2-plugin-slider": "^1.2.1",
+    "iscroll": "^5.2.0",
     "lodash": "^4.17.4",
     "lodash-decorators": "^4.4.1",
     "lodash.clonedeep": "^4.5.0",
@@ -44,6 +45,7 @@
     "react-dom": "^16.0.0",
     "react-fittext": "^1.0.0",
     "react-transition-group": "^2.2.1",
+    "store": "^2.0.12",
     "svg-sprite-loader": "^3.6.2",
     "ws": "^5.1.1"
   },

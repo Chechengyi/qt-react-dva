@@ -5,6 +5,8 @@ var AMap = Object.AMap
 var map = null
 var ws = null
 var maker = null
+let SockJs = null  // sockJs
+let stompClient = null  // stomp
 
 export default class Position extends PureComponent {
 
@@ -17,6 +19,7 @@ export default class Position extends PureComponent {
 
   componentDidMount () {
     var self = this
+
     //   27.70846  107.05683
     AMap = Object.AMap
     map = new AMap.Map(this.refs.map, {
@@ -64,11 +67,23 @@ export default class Position extends PureComponent {
 
   handle_socket = () => {
     var self = this
-    ws = new WebSocket('ws://localhost:3000')
-    ws.onmessage = function(evt) {
-      // evt.data
-      self.drawMarker(evt.data.split(','))
-    };
+    // ws = new WebSocket('ws://localhost:3000')
+    // ws.onmessage = function(evt) {
+    //   // evt.data
+    //   self.drawMarker(evt.data.split(','))
+    // };
+    SockJs = new Object.SockJs('/ws')
+    stompClient = Object.Stomp.over(SockJs)
+    stompClient.connect({}, (frame) => {
+      console.log('Connected: ' + frame);
+      stompClient.subscribe('/topic/greetings',(greeting) => {
+        // showMsg(JSON.parse(greeting.body).content);
+        console.log(JSON.parse(greeting.body))
+      })
+    }, (err) => {
+      // 连接错误
+      console.log(err)
+    });
   }
 
   drawMarker = (arr) => {
@@ -103,7 +118,7 @@ export default class Position extends PureComponent {
     return <div style={{backgroundColor: '#fff', padding: 20}} >
         {this.state.place&&<div>客户地址：{this.state.place}</div>}
         <div>
-          <button onClick={this.handle_socket} >查看附近司机</button>
+          <button onClick={this.handle_socket} >查看附近司机————</button>
           <button onClick={this.closeWs} >关闭连接</button>
         </div>
         <div ref='map' id='map' style={{width:'80%', height: 400}} >

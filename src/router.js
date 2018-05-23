@@ -13,19 +13,32 @@ dynamic.setDefaultLoadingComponent(() => {
 
 function RouterConfig({ history, app }) {
   const routerData = getRouterData(app);
-  const UserLayout = routerData['/admin/user'].component;
-  const BasicLayout = routerData['/admin/cont'].component;
+  const UserLayout = routerData['/admin/user'].component
+  const BasicLayout = routerData['/admin/cont'].component
+  const ClientLayout = routerData['/clientUser'].component
+  const ClientCont = routerData['/cont'].component
+  const OrderMap = routerData['/orderMap'].component
   const DriverLogin = routerData['/driverLogin'].component
-  const DriverIndex = routerData['/driver'].component
+  const DriverCont = routerData['/driverCont'].component
+  const DriverElseCont = routerData['/driverElseCont'].component
+  // 客户端聊天界面
+  const ClientChat = routerData['/clientChat'].component
   return (
     <LocaleProvider locale={zhCN}>
       <Router history={history}>
         <Switch>
           <Route path="/admin/user" render={props => <UserLayout {...props} />} />
           <Route path="/admin/cont" render={props => <BasicLayout {...props} />} />
-          <Route path="/driver" render={ props => <DriverIndex {...props} />} ></Route>
-          <Route path="/driverLogin" render={ props => <DriverLogin {...props} />   } ></Route>
-          <Route path="/*" component={NotFound} ></Route>
+          {/*<Route path="/driver" render={ props => <DriverIndex {...props} />} />*/}
+          <Route path="/driverLogin" render={ props => <DriverLogin {...props} />   } />
+          <Route path="/driverCont" render={ props => <DriverCont {...props} /> }  />
+          <Route path="/driverElseCont" render={ props=><DriverElseCont {...props} /> } ></Route>
+          <Route path='/clientUser' render={ props=><ClientLayout {...props} /> } />
+          {/*<Route path="/login" render={ props => <ClientLogin {...props} /> } />*/}
+          <Route path="/cont" render={ props => <ClientCont {...props} /> } />
+          <Route path="/clientChat" render={ props => <ClientChat {...props} /> } />
+          <Route path="/orderMap/:id" render={ props => <OrderMap {...props} /> } />
+          <Route path="/*" component={NotFound}  />
         </Switch>
       </Router>
     </LocaleProvider>

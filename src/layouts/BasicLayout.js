@@ -83,7 +83,7 @@ class BasicLayout extends React.PureComponent {
     };
   }
   componentDidMount() {
-    if ( this.props.login.status !== 'ok' ) {
+    if ( this.props.login.admin_status !== 'OK' ) {
       this.props.history.push('/admin/user/login')
       return false;
     }
@@ -154,7 +154,7 @@ class BasicLayout extends React.PureComponent {
               // }]}
               copyright={
                 <div>
-                  Copyright <Icon type="copyright" /> 2017 菜多美
+                  Copyright <Icon type="copyright" /> 2017 强通快递
                 </div>
               }
             />

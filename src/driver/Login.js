@@ -1,53 +1,68 @@
 import React, { PureComponent } from 'react'
-import { connect } from 'dva';
-import { Input } from 'antd'
-import { InputItem, WingBlank, List, Button, WhiteSpace, Toast } from 'antd-mobile'
+import { connect } from 'dva'
+import { InputItem, Button, List, WingBlank, WhiteSpace, Toast, Flex } from 'antd-mobile'
 import { createForm } from 'rc-form';
+import { Alert } from 'antd'
+import store from 'store'
+
 @createForm()
-@connect()
+@connect( state => ({
+  driver_status: state.driver_login.driver_status,
+  loading: state.driver_login.loading
+}) )
 export default class Login extends PureComponent {
 
-  submit = () => {
-    this.props.form.validateFields((err, values) => {
-      if (err) {
+  componentDidMount(){
+    console.log(store.get('driverData'))
+  }
 
-      } else {
-        if ( !values.username || !values.password ) {
-          Toast.fail('用户名和密码不能为空！', 0.9)
-          return
-        }
-        this.props.dispatch({
-          type: 'driver_login/login',
-          payload: {
-            username: values.username,
-            password: values.password
-          }
-        })
+  submit = () => {
+    const { username, password } = this.props.form.getFieldsValue()
+    if ( !username || !password ) {
+      Toast.fail('用户名或密码不能为空', 1)
+      return
+    }
+    this.props.dispatch({
+      type: 'driver_login/login',
+      payload: {
+        account: username,
+        password: password
       }
     })
   }
 
+  renderMessage = (message) => {
+    return (
+      <Alert
+        style={{ marginBottom: 24 }}
+        message={message}
+        type="error"
+        showIcon
+      />
+    );
+  }
+
   render () {
-    const { getFieldProps } = this.props.form;
-    return <div>
-      <WingBlank>
-        <div style={{height: 250, textAlign: 'center'}} >
-          <span style={{fontSize: 40}} >强通快递</span>
-        </div>
-        <div style={{marginTop: 30}} >
+    const {getFieldProps} = this.props.form
+    return <div style={{overflow: 'hidden'}} >
+      <div style={{marginTop: 50}} >
+        <WingBlank>
+          { this.props.driver_status==='ERROR'&&this.renderMessage('用户名或密码错误') }
           <List>
             <InputItem
               {...getFieldProps('username')}
-              >用户名</InputItem>
-            <InputItem
-              type='password'
-              {...getFieldProps('password')}
-              >密码</InputItem>
+            >用户名</InputItem>
           </List>
-          <WhiteSpace></WhiteSpace>
-          <Button type='primary' onClick={ this.submit } >登录</Button>
-        </div>
-      </WingBlank>
+          <List>
+            <InputItem
+              {...getFieldProps('password')}
+              type="password"
+            >密码</InputItem>
+          </List>
+          <WhiteSpace />
+          <Button loading={this.props.loading} onClick={this.submit} type='primary' >登录</Button>
+        </WingBlank>
+      </div>
     </div>
   }
 }

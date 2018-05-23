@@ -33,7 +33,7 @@ export default class Login extends Component {
             type: 'login/login',
             payload: {
               password: values.password,
-              username: values.username
+              name: values.username
             },
           });
         }
@@ -60,7 +60,7 @@ export default class Login extends Component {
       <div className={styles.main}>
         <Form onSubmit={this.handleSubmit}>
               {
-                login.status === 'error' && this.renderMessage('账户或密码错误')
+                login.status === 'ERROR' && this.renderMessage('账户或密码错误')
               }
               <FormItem>
                 {getFieldDecorator('username', {

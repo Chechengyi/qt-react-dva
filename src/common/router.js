@@ -57,15 +57,52 @@ export const getRouterData = (app) => {
     '/admin/user/register-result': {
       component: dynamicWrapper(app, [], () => import('../routes/User/RegisterResult')),
     },
-    // 司机端路由
+    '/orderMap': {
+      component: dynamicWrapper(app, [], () => import('../routes/map/Map')),
+    },
+    // 客户端路由
+    '/clientUser': {
+      component: dynamicWrapper(app, [], () => import('../client/UserLayout')),
+    },
+    '/clientUser/login': {
+      component: dynamicWrapper(app, ['client_login'], () => import('../client/Login')),
+    },
+    '/clientUser/reg': {
+      component: dynamicWrapper(app, [], () => import('../client/Reg')),
+    },
+    '/cont': {
+      component: dynamicWrapper(app, ['client_login'], () => import('../client/Cont')),
+    },
+    '/cont/index': {
+      component: dynamicWrapper(app, ['client_login'], () => import('../client/Index')),
+    },
+    '/cont/my': {
+      component: dynamicWrapper(app, ['client_login'], () => import('../client/My')),
+    },
+    '/clientChat': {
+      component: dynamicWrapper(app, ['client_login'], () => import('../client/Chat')),
+    },
+    '/cont/upDatePsw': {
+      component: dynamicWrapper(app, ['client_login'], () => import('../client/UpdatePsw')),
+    },
+    // 快递员端路由
     '/driverLogin': {
       component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Login')),
     },
-    '/driver': {
+    '/driverCont': {
+      component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Cont')),
+    },
+    '/driverCont/index': {
       component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Index')),
     },
-    '/driver/ceshi': {
-      component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Ceshi')),
+    '/driverCont/updatePsw': {
+      component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Psw')),
+    },
+    '/driverElseCont': {
+      component: dynamicWrapper(app, ['driver_login'], () => import('../driver/ElesCont')),
+    },
+    '/driverElseCont/money': {
+      component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Money')),
     }
   };
   // Get name from ./menu.js or just set it in the router data.
