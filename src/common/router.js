@@ -1,6 +1,7 @@
 import React from 'react';
 import dynamic from 'dva/dynamic';
 import { getMenuData } from './menu';
+import AccountManagement from "../driver/AccountManagement";
 
 // wrapper of dynamic
 const dynamicWrapper = (app, models, component) => dynamic({
@@ -103,6 +104,9 @@ export const getRouterData = (app) => {
     },
     '/driverElseCont/money': {
       component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Money')),
+    },
+    '/driverElseCont/account': {
+      component: dynamicWrapper(app, ['driver_login'], () => import('../driver/AccountManagement')),
     }
   };
   // Get name from ./menu.js or just set it in the router data.

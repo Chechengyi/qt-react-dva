@@ -73,7 +73,28 @@ export async function driverUpdatePsw(params) {
     body: params
   })
 }
-// 查询快递员已有的申请提现的账户
+// 查出快递员已有的申请提现的账户
 export async function getDriverMoneyAccount(params) {
-  return request(`/courier/getCash${stringify(params)}`)
+  return request(`/courier/getCash?${stringify(params)}`)
+}
+// 快递员提现请求
+export async function driverTixian(parmas) {
+  return request('/courier/putRecord', {
+    method: 'POST',
+    body: parmas
+  })
+}
+// 快递员添加提现账户请求
+export async function addAccount(params) {
+  return request('/courier/addCash', {
+    method: 'POST',
+    body: params
+  })
+}
+// 快递员修改提现账户
+export async function updateAccount(params) {
+  return request('/courier/updateCash', {
+    method: 'POST',
+    body: params
+  })
 }

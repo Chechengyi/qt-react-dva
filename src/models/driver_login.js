@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router'
-import { driverLogin } from '../services/api'
+import { driverLogin, getDriverMoneyAccount } from '../services/api'
 import store from 'store'
 
 export default {
@@ -10,9 +10,26 @@ export default {
     // workLoading: false
     driver_status: store.get('driverData')?store.get('driverData').driver_status:null,
     driver_name: store.get('driverData')?store.get('driverData').driver_name:null,
-    loading: false
+    loading: false,
+    moneyAccount: []
   },
   effects: {
+    // 获取快递员已有的提现账户
+    *getMoneyAccount( {payload}, {call,put} ){
+      yield put({
+        type: 'changeLoading',
+        payload: true
+      })
+      const res = yield call(getDriverMoneyAccount, payload)
+      yield put({
+        type: 'saveMoneyAccount',
+        payload: res
+      })
+      yield put({
+        type: 'changeLoading',
+        payload: false
+      })
+    },
     // 退出登录
     *logout ( {payload}, {call,put} ) {
       yield put({
@@ -84,6 +101,13 @@ export default {
     }
   },
   reducers: {
+    //  保存快递员的提现的账户
+    saveMoneyAccount( state, {payload} ){
+      return {
+        ...state,
+        moneyAccount: payload
+      }
+    },
     saveLogin ( state, {payload} ) {
       return {
         ...state,
