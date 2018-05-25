@@ -11,7 +11,7 @@ export default {
     driver_status: store.get('driverData')?store.get('driverData').driver_status:null,
     driver_name: store.get('driverData')?store.get('driverData').driver_name:null,
     loading: false,
-    moneyAccount: []
+    moneyAccount: {}
   },
   effects: {
     // 获取快递员已有的提现账户

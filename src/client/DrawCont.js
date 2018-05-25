@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva'
 import { Flex } from 'antd-mobile'
 import globalStyles from '../index.less'
+import menu from './DrawContMenu'
 
 @connect(state=>({
   client_name: state.client_login.client_name,
@@ -23,7 +24,17 @@ export default class DrawCont extends PureComponent {
         paddingTop: 30,
         paddingLeft: '20%'
       }} >
-        dasd
+        {menu.map( (item,i)=>(
+          <div style={{
+            margin: '10px 0',
+            display: 'flex', flexDirection: 'row', alignItems:'center'
+          }} key={i} onClick={ ()=>this.props.history.push(item.linkTo) } >
+            <div>
+              <img style={{width:25,height:25}} src={item.iconPath} alt=""/>
+            </div>
+            <div style={{marginLeft: 10}} ><span style={{color: '#fff', fontSize: '1.2em'}} >{item.title}</span></div>
+          </div>
+        ) )}
       </div>
       <Flex align='center' style={{
         position: 'absolute',

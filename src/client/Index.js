@@ -25,12 +25,6 @@ export default class Index extends PureComponent {
   componentDidMount () {
     this.props.selectedTab('index')
     AMap = Object.AMap
-    // return
-    // this.map = new AMap.Map(this.refs.map, {
-    //   resizeEnable: true,
-    //   zoom:14,
-    //   center: [this.state.longitude,this.state.latitude]
-    // });
     this.getPos()
   }
   //获取客户定位
@@ -108,10 +102,10 @@ export default class Index extends PureComponent {
   }
 
   render () {
-    const sidebar=(<DrawCont />)
+    const sidebar=(<DrawCont history={this.props.history} />)
     return <div>
       <NavBar
-        title='强通快递'
+        title='快递员上门服务'
         leftContent={ ()=>(<img onClick={(e)=>{this.handleDrawOpen('revers')}} src="/Category.png" style={{width: 20, height: 20}} alt=""/>
         ) }
         rightContent={()=>(<img onClick={ ()=>{ this.props.history.push('/clientChat') } } style={{width: 20, height: 20}} src="/chat.png" alt=""/>
@@ -140,6 +134,13 @@ export default class Index extends PureComponent {
           }} ref='map' >
           </div>
           <ActivityIndicator text='正在确定您的位置' animating={this.state.loadMap} />
+          <div style={{
+            position: 'absolute', width: '100%', height: 30,
+            bottom: 0, left: 0, zIndex: 199, lineHeight: '30px',
+            backgroundColor: '#fff', textAlign: 'center'
+          }} >
+            查看并同意<span>《快递运单契约条款》</span>
+          </div>
         </Flex>
       </Drawer>
     </div>

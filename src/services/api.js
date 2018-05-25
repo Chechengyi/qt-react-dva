@@ -47,6 +47,32 @@ export async function clientUpdatePsw(params) {
 export async function getMsg(params) {
   return request('/getMes')
 }
+// 获取用户地址薄列表
+export async function getAdressList(params) {
+  return request(`/cus/getAddress?${stringify(params)}`)
+}
+// 客户添加地址薄
+export async function addAddress(params) {
+  return request('/cus/addAddress', {
+    method: 'POST',
+    body: params
+  })
+}
+// 客户删除地址薄
+export async function deleteAddress(params) {
+  return request('/cus/delAddress', {
+    method: 'POST',
+    body: params
+  })
+}
+// 客户修改地址薄
+export async function updateAddress(params) {
+  return request('/cus/updateAddress', {
+    method: 'POST',
+    body: params
+  })
+}
+
 
 /*
 *   快递员端API

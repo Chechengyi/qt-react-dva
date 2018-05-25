@@ -86,6 +86,17 @@ export const getRouterData = (app) => {
     '/cont/upDatePsw': {
       component: dynamicWrapper(app, ['client_login'], () => import('../client/UpdatePsw')),
     },
+    '/cont/myAdress': {
+      component: dynamicWrapper(app, ['client_login', 'client_address'], () => import('../client/AdressBook'))
+    },
+    '/cont/addAddress': {
+      component: dynamicWrapper(app, ['client_login'], () => import('../client/AddAddress'))
+    },
+    '/cont/updateAddress': {
+      component: dynamicWrapper(app, ['client_login'], () => import('../client/UpdateAddress'))
+    },
+
+
     // 快递员端路由
     '/driverLogin': {
       component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Login')),
