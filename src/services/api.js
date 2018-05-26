@@ -7,17 +7,55 @@ export async function getCode(params) {
 }
 
 /*
-*   管理员端API
+*   管理员端API  经销商API也大部分适用， 可能做一点身份字段识别
 * */
-// 管理员登录
-export async function adminLogin (parmas) {
-  return request('/adminLogin', {
+// 超级管理员的登录
+export async function adminLogin(params) {
+  return request('/admin/login', {
     method: 'POST',
-    body: parmas
+    body: params
   })
 }
-
-
+// 经销商登录
+export async function dealerLogin(params) {
+  return request('/dealer/login', {
+    method: 'POST',
+    body: params
+  })
+}
+// 经销商修改密码
+export async function dealerUpdatePsw(params) {
+  return request('/dealer/modifyPwd', {
+    method: 'POST',
+    body: params
+  })
+}
+// 经销商修改个人信息
+export async function DealerUpdateInfo(params) {
+  return request('/dealer/modifyInfo', {
+    method: 'POST',
+    body: params
+  })
+}
+// 经销商查询
+export async function getDealer(params) {
+  return request(`/dealer/getDealers?${stringify(params)}`)
+}
+// 经销商或者管理员查看平台快递员
+export async function getCourier(params) {
+  return request(`/dealer/getCouriers?${stringify(params)}`)
+}
+// 经销商或管理员禁用快递员
+export async function setCourierActive(params) {
+  return request(`/dealer/delCourier?${stringify(params)}`)
+}
+// 经销商或者管理员添加快递员
+export async function addCourier(params) {
+  return request('/dealer/addCourier', {
+    method: 'POST',
+    body: params
+  })
+}
 
 /*
 *   客户端API

@@ -22,7 +22,8 @@ export default class AdressBook extends Component {
     this.scroll = new Iscroll(this.refs.warp, {
       // scrollbars: true,
       // fadeScrollbars: true
-      click: true
+      // click: true，
+      preventDefault: false,
     })
   }
 

@@ -34,8 +34,20 @@ function getFlatMenuData(menus) {
 export const getRouterData = (app) => {
   const routerData = {
     // 后台管理路由
+    '/admin/else': {
+      component: dynamicWrapper(app, ['admin_login'], () => import('../layouts/AdminEles')),
+    },
+    '/admin/else/updateMsg': {
+      component: dynamicWrapper(app, ['admin_login'], () => import('../routes/Else/UpdateMsg'))
+    },
     '/admin/cont': {
-      component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
+      component: dynamicWrapper(app, ['admin_login'], () => import('../layouts/BasicLayout')),
+    },
+    '/admin/cont/people/courier': {
+      component: dynamicWrapper(app, ['courier','admin_login'], ()=>import('../routes/Staff/Courier'))
+    },
+    '/admin/cont/people/addCourier': {
+      component: dynamicWrapper(app, ['admin_login'], ()=>import('../routes/Staff/AddCourier'))
     },
     '/admin/cont/home/frontdesk': {
       component: dynamicWrapper(app, ['frontdesk', 'global_drop'], ()=>import('../routes/Frontdesk/TableList'))
@@ -50,7 +62,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
     },
     '/admin/user/login': {
-      component: dynamicWrapper(app, ['login'], () => import('../routes/User/Login')),
+      component: dynamicWrapper(app, ['admin_login'], () => import('../routes/User/Login')),
     },
     '/admin/user/register': {
       component: dynamicWrapper(app, ['register'], () => import('../routes/User/Register')),

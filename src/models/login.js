@@ -1,5 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { adminLogin } from '../services/api';
+import store from 'store'
 
 export default {
   namespace: 'login',

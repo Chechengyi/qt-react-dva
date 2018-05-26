@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { connect } from 'dva';
 import { Link } from 'dva/router';
-import { Form, Input, Button, Icon, Checkbox,  Alert } from 'antd';
+import { Form, Input, Button, Icon, Checkbox,  Alert, Select } from 'antd';
 import styles from './Login.less';
 
 const FormItem = Form.Item;
+const Option = Select.Option
 
 @connect(state => ({
-  login: state.login,
+  login: state.admin_login,
 }))
 @Form.create()
 export default class Login extends Component {
@@ -30,10 +31,11 @@ export default class Login extends Component {
       (err, values) => {
         if (!err) {
           this.props.dispatch({
-            type: 'login/login',
+            type: 'admin_login/login',
             payload: {
               password: values.password,
-              name: values.username
+              name: values.username,
+              type: values.type
             },
           });
         }
@@ -89,14 +91,23 @@ export default class Login extends Component {
                 )}
               </FormItem>
           <FormItem className={styles.additional}>
+            {getFieldDecorator('type', {
+              // valuePropName: 'checked',
+              initialValue: 1
+            })(
+              <Select style={{width: 180}} >
+                <Option value={1} >超级管理员</Option>
+                <Option value={2} >经销商</Option>
+              </Select>
+            )}
             {getFieldDecorator('remember', {
               valuePropName: 'checked',
               initialValue: true,
             })(
-              <Checkbox className={styles.autoLogin}>自动登录</Checkbox>
+              <Checkbox style={{marginLeft: 20}} className={styles.forgot}>自动登录</Checkbox>
             )}
-            <a className={styles.forgot} href="">忘记密码</a>
-            <Button size="large" loading={login.submitting} className={styles.submit} type="primary" htmlType="submit">
+            {/*<a className={styles.forgot} href="">忘记密码</a>*/}
+            <Button size="large" loading={login.loading} className={styles.submit} type="primary" htmlType="submit">
               登录
             </Button>
           </FormItem>

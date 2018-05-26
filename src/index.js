@@ -5,7 +5,7 @@ import './g2';
 import './rollbar';
 // import browserHistory from 'history/createBrowserHistory';
 import './index.less';
-import 'antd-mobile/dist/antd-mobile.css'
+// import 'antd-mobile/dist/antd-mobile.css'
 
 // 1. Initialize
 const app = dva({

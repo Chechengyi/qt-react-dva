@@ -13,6 +13,7 @@ dynamic.setDefaultLoadingComponent(() => {
 
 function RouterConfig({ history, app }) {
   const routerData = getRouterData(app);
+  const AdminElse = routerData['/admin/else'].component
   const UserLayout = routerData['/admin/user'].component
   const BasicLayout = routerData['/admin/cont'].component
   const ClientLayout = routerData['/clientUser'].component
@@ -27,6 +28,8 @@ function RouterConfig({ history, app }) {
     <LocaleProvider locale={zhCN}>
       <Router history={history}>
         <Switch>
+          <Route path="/admin/else" render={props => <AdminElse {...props} />} />
+
           <Route path="/admin/user" render={props => <UserLayout {...props} />} />
           <Route path="/admin/cont" render={props => <BasicLayout {...props} />} />
           {/*<Route path="/driver" render={ props => <DriverIndex {...props} />} />*/}

@@ -25,8 +25,21 @@ export default class Index extends PureComponent {
   componentDidMount () {
     this.props.selectedTab('index')
     AMap = Object.AMap
-    this.getPos()
+    // this.getPos()
+    this.createMap()
   }
+  /*
+  *  这里有两种方案待选择，一是定位出客户的位置，展现是地图 二是只展示地图，像顺丰快递一样
+  * */
+  // 测试，  直接生成地图
+  createMap=()=>{
+    this.map = new AMap.Map(this.refs.map, {
+      resizeEnable: true,
+      zoom:7,
+      center: [107.05683,27.70846]
+    });
+  }
+
   //获取客户定位
   getPos=()=>{
     let self = this
@@ -133,7 +146,7 @@ export default class Index extends PureComponent {
             visible: this.state.loadMap?'hidden':'visible'
           }} ref='map' >
           </div>
-          <ActivityIndicator text='正在确定您的位置' animating={this.state.loadMap} />
+          {/*<ActivityIndicator text='正在确定您的位置' animating={this.state.loadMap} />*/}
           <div style={{
             position: 'absolute', width: '100%', height: 30,
             bottom: 0, left: 0, zIndex: 199, lineHeight: '30px',

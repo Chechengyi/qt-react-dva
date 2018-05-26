@@ -4,14 +4,18 @@ import { Link } from 'dva/router';
 import logo from '../../assets/logo.svg';
 import styles from './index.less';
 import { getMenuData } from '../../common/menu';
+import { connect } from 'dva'
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
+@connect( state=>({
+  roleId: state.admin_login.roleId
+}) )
 export default class SiderMenu extends PureComponent {
   constructor(props) {
     super(props);
-    this.menus = getMenuData();
+    this.menus = getMenuData(this.props.roleId);
     this.state = {
       openKeys: this.getDefaultCollapsedSubMenus(props),
     };
@@ -143,7 +147,7 @@ export default class SiderMenu extends PureComponent {
         <div className={styles.logo}>
           <Link to="/">
             {/*<img src={'http://h50007.www5.hpe.com/caas-static/images/hpe-logo-printable.png'} alt="logo" />*/}
-            <h1>菜多美</h1>
+            <h1>强通快递</h1>
           </Link>
         </div>
         <Menu

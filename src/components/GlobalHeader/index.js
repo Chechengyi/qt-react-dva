@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Layout, Menu, Icon, Spin, Tag, Dropdown, Avatar, message, Divider } from 'antd';
+import { Layout, Menu, Icon, Spin, Tag, Dropdown, Popconfirm,
+  Avatar, message, Divider, Modal, Form, Input } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import Debounce from 'lodash-decorators/debounce';
@@ -8,14 +9,29 @@ import NoticeIcon from '../../components/NoticeIcon';
 import HeaderSearch from '../../components/HeaderSearch';
 import logo from '../../assets/logo.svg';
 import styles from './index.less';
+import { connect } from 'dva'
+import { dealerUpdatePsw } from '../../services/api'
+import {routerRedux} from "dva/router";
 
 const { Header } = Layout;
+const FormItem = Form.Item
 
+@connect(state=>({
+  admin_name: state.admin_login.admin_name,
+  roleId: state.admin_login.roleId,
+  admin_id: state.admin_login.admin_id
+}))
+@Form.create()
 export default class GlobalHeader extends PureComponent {
+  constructor(props){
+    super(props)
+    this.state={
+      modalType: false,
+      loading: false
+    }
+  }
   componentDidMount() {
-    // this.props.dispatch({
-    //   type: 'user/fetchCurrent',
-    // });
+
   }
   componentWillUnmount() {
     this.triggerResizeEvent.cancel();
@@ -80,18 +96,70 @@ export default class GlobalHeader extends PureComponent {
     event.initEvent('resize', true, false);
     window.dispatchEvent(event);
   }
+  handleModal=(e)=>{
+    this.setState({
+      modalType: e
+    })
+  }
+  handleSubmit=e=>{
+    // dealerUpdatePsw()
+    this.props.form.validateFields( (err, values)=>{
+      if(err){
+        message.error('密码填写错误', 1)
+        return
+      }
+      if( values.password!==values.rePassword ){
+        message.error('两次输入密码不一致', 1)
+        return
+      }
+      dealerUpdatePsw({
+        id: this.props.admin_id,
+        password: values.password
+      })
+        .then( res=>{
+          this.setState({
+            modalType: false
+          })
+          if ( res.status==='OK' ) {
+            const modal = Modal.success({
+              title: '修改密码成功',
+              content: '修改密码后要重新登录',
+               onOk: e=>{
+                // 发送退出登录的请求 接口还没写
+                this.props.dispatch(routerRedux.push('/admin/user/login'))
+                 modal.destroy()
+               }
+            });
+            // setTimeout(() => modal.destroy(), 1000);
+          }
+        } )
+        .catch( res=>{
+          this.setState({
+            modalType: false
+          })
+        } )
+    } )
+  }
   render() {
     const {
       currentUser, collapsed, fetchingNotices, isMobile,
     } = this.props;
-    // const menu = (
-    //   <Menu className={styles.menu} selectedKeys={[]} onClick={this.handleMenuClick}>
-    //     <Menu.Item disabled><Icon type="user" />个人中心</Menu.Item>
-    //     <Menu.Item disabled><Icon type="setting" />设置</Menu.Item>
-    //     <Menu.Divider />
-    //     <Menu.Item key="logout"><Icon type="logout" />退出登录</Menu.Item>
-    //   </Menu>
-    // );
+    const { getFieldDecorator } = this.props.form;
+    const menu = (
+      <Menu className={styles.menu} selectedKeys={[]} onClick={this.handleMenuClick}>
+        {/*<Menu.Item disabled><Icon type="user" />个人中心</Menu.Item>*/}
+        {/*<Menu.Item disabled><Icon type="setting" />设置</Menu.Item>*/}
+        {/*rgba(0, 0, 0, 0.65)*/}
+        {this.props.roleId!==0&&<Menu.Item >
+          <a style={{color: 'rgba(0, 0, 0, 0.65)'}} href='/#/admin/else/updateMsg' ><Icon type="edit" />修改信息</a>
+        </Menu.Item>}
+        <Menu.Item>
+          <a onClick={ ()=>this.handleModal(true) } style={{color: 'rgba(0, 0, 0, 0.65)'}} ><Icon type="unlock" />修改密码</a>
+        </Menu.Item>
+        <Menu.Divider />
+        <Menu.Item key="logout"><Icon type="logout" />退出登录</Menu.Item>
+      </Menu>
+    );
     const noticeData = this.getNoticeData();
 
     const spanStyle= {
@@ -104,6 +172,46 @@ export default class GlobalHeader extends PureComponent {
 
     return (
       <Header className={styles.header}>
+        <Modal
+          visible={this.state.modalType}
+          onCancel={ ()=>this.handleModal(false)}
+          onOk={ this.handleSubmit }
+        >
+          <h3 style={{textAlign: 'center'}} >修改密码</h3>
+          <div style={{marginTop: 30}} >
+            <Form>
+              <FormItem
+                {...formItemLayout}
+                label="新密码"
+              >
+                {getFieldDecorator('password', {
+                  rules: [{
+                    required: true, message: '请输入密码',
+                  }],
+                })(
+                  <Input type='password' style={{width: 200}} />
+                )}
+              </FormItem>
+              <FormItem
+                {...formItemLayout}
+                label="重复密码"
+              >
+                {getFieldDecorator('rePassword', {
+                  rules: [{
+                    required: true, message: '请重复输入密码！',
+                  }],
+                })(
+                  <Input type='password' style={{width: 200}} />
+                )}
+              </FormItem>
+              {/*<FormItem {...tailFormItemLayout}>*/}
+                {/*<Button loading={this.state.loading}*/}
+                        {/*onClick={this.submit}*/}
+                        {/*type="primary">修改</Button>*/}
+              {/*</FormItem>*/}
+            </Form>
+          </div>
+        </Modal>
         {isMobile && (
           [(
             <Link to="/" className={styles.logo} key="logo">
@@ -118,17 +226,38 @@ export default class GlobalHeader extends PureComponent {
           onClick={this.toggle}
         />
         <div className={styles.right}>
-          {/*<a href="">供货商系统消息</a>*/}
-          {/*<span style={spanStyle} ></span>*/}
-          {/*<a href="">系统消息</a>*/}
-          {/*<span style={spanStyle} ></span>*/}
-          {/*<a href="">修改密码</a>*/}
-          {/*<span style={spanStyle} ></span>*/}
-          {/*<a href="">账号信息</a>*/}
-          {/*<span style={spanStyle} ></span>*/}
-          <a key='logout' onClick={ e => {this.handleMenuClick(e) } } >退出</a>
+          <Dropdown overlay={menu} >
+            {/*{this.props.admin_name}*/}
+            <div style={{width: 200, cursor: 'pointer'}} >
+              <img style={{width: 25, height: 25}} src="/admin.png" alt=""/>
+              <span style={{marginLeft: 10}} >{this.props.admin_name}</span>
+            </div>
+          </Dropdown>
         </div>
       </Header>
     );
   }
+}
+
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 8 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 16 },
+  },
+}
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0,
+    },
+    sm: {
+      span: 16,
+      offset: 8,
+    },
+  },
 }

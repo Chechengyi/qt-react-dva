@@ -63,7 +63,7 @@ enquireScreen((b) => {
 });
 
 @connect( state => ({
-  login: state.login
+  login: state.admin_login
 }) )
 
 class BasicLayout extends React.PureComponent {
@@ -85,7 +85,7 @@ class BasicLayout extends React.PureComponent {
   componentDidMount() {
     if ( this.props.login.admin_status !== 'OK' ) {
       this.props.history.push('/admin/user/login')
-      return false;
+      return
     }
     enquireScreen((b) => {
       this.setState({
@@ -96,15 +96,15 @@ class BasicLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = '菜多美';
+    let title = '强通快递';
     if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - 菜多美`;
+      title = `${routerData[pathname].name} - 强通快递`;
     }
     return title;
   }
   render() {
     const {
-      currentUser, collapsed, fetchingNotices, notices, routerData, match, location, dispatch,
+       collapsed, fetchingNotices, notices, routerData, match, location, dispatch,
     } = this.props;
     const layout = (
       <Layout>
@@ -116,7 +116,7 @@ class BasicLayout extends React.PureComponent {
         />
         <Layout>
           <GlobalHeader
-            currentUser={currentUser}
+            // currentUser={currentUser}
             fetchingNotices={fetchingNotices}
             notices={notices}
             collapsed={collapsed}
@@ -142,7 +142,7 @@ class BasicLayout extends React.PureComponent {
                     />
                   ))
                 }
-                <Redirect exact from="/" to="/dashboard/analysis" />
+                {/*<Redirect exact from="/" to="/dashboard/analysis" />*/}
                 <Route render={NotFound} />
               </Switch>
             </div>
@@ -174,7 +174,7 @@ class BasicLayout extends React.PureComponent {
 }
 
 export default connect(state => ({
-  currentUser: state.user.currentUser,
+  // currentUser: state.user.currentUser,
   collapsed: state.global.collapsed,
   fetchingNotices: state.global.fetchingNotices,
   notices: state.global.notices,

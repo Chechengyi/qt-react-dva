@@ -24,7 +24,6 @@ export default class UpdateAddress extends PureComponent {
 
   componentDidMount(){
   }
-
   submit=()=>{
     if ( this.state.loading ) {
       return

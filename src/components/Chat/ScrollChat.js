@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
-import Iscroll from 'iscroll/build/iscroll'
+// import Iscroll from 'iscroll/build/iscroll'
+import Iscroll from 'iscroll/build/iscroll-probe'
 import styles from './Chat.less'
 import { NavBar } from 'antd-mobile'
 import { getMsg } from '../../services/api'
@@ -20,23 +21,23 @@ export default class ScrollChat extends PureComponent {
 
   componentDidMount(){
     let self = this
-    // this.refs.warp.addEventListener('touchmove', function(e) {
-    //   e.preventDefault();
-    // }, false);
-    console.log(document.getElementById('#scrollWarp'))
-    console.log(this.refs.scrollWarp)
     this.Scroll = new Iscroll(this.refs.scrollWarp, {
       scrollbars: true,
-      tab: 'scrollClick'
+      preventDefault: false,
+      mouseWheel: true,
+      probeType: 2
     })
-    // console.log(this.props)
-    console.log(Scroll)
     getMsg()
       .then( res=> {
         this.setState({
           text: res
         })
       } )
+    this.Scroll.on('scroll', function (e) {
+      if ( this.y>50 ) {
+        console.log('加载吧')
+      }
+    } );
   }
 
   componentDidUpdate(){
