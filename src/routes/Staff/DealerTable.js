@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Table, Input, Select, Popconfirm, message, Form, Modal} from 'antd';
-import { updateCourier, resetCourierPsw } from '../../services/api'
+import { setCourierActive } from '../../services/api'
 
 const Option = Select.Option
 const WriteInput = ({getFieldDecorator, value, text}) => (
@@ -32,8 +32,8 @@ const SelectInput = ({getFieldDecorator, value, text, selectArr, width}) => (
 
 @Form.create()
 @connect(state => ({
-  data: state.courier.data,
-  loading: state.courier.loading,
+  data: state.dealer.data,
+  loading: state.dealer.loading,
   // total: state.courier.total,
   admin_id: state.admin_login.admin_id,
   roleId: state.admin_login.roleId,
@@ -91,18 +91,15 @@ export default class FrontDesk_table extends  PureComponent {
         })
         return
       }
-      updateCourier({
-        adminId: parseInt(this.props.admin_id),  // 管理员id
-        id: val.id,  // 需要修改状态的快递员的id
-        roleId: parseInt(this.props.roleId), //当前管理员的权限id
-        // isActive: values.is_active
-        ...values
+      setCourierActive({
+        id: this.props.admin_id,  // 管理员id
+        courierId: val.id,  // 需要修改状态的快递员的id
+        roleId: this.props.roleId, //当前管理员的权限id
+        isActive: values.is_active
       })
         .then( res=>{
           let next_data = [...this.state.data]
-          next_data[index].isActive = values.isActive
-          next_data[index].username = values.username
-          next_data[index].tel = values.tel
+          next_data[index].is_active = values.is_active
           if (res.status==='OK') {
             message.success('修改成功',1)
             this.setState({
@@ -137,19 +134,6 @@ export default class FrontDesk_table extends  PureComponent {
     this.props.history.push(`/admin/cont/goods/goodsDetails/${val.id}`)
   }
 
-  resetPsw=id=>{
-    resetCourierPsw({
-      id
-    })
-      .then(res=>{
-          if (res.status==="OK") {
-            message.success('重置成功', 1)
-          } else {
-            message.error('重置失败', 1)
-          }
-        })
-  }
-
   render () {
     const { getFieldDecorator } = this.props.form
     const columns = [
@@ -169,7 +153,7 @@ export default class FrontDesk_table extends  PureComponent {
         width:150,
         render: (val, text, index) => (
           <div>
-            {this.state.selectWriteKey===index?this.renderWriteInput(getFieldDecorator,val,'username'): val}
+            {this.state.selectWriteKey===index?this.renderWriteInput(getFieldDecorator,val,'user_name'): val}
           </div>
         )
       },
@@ -185,18 +169,22 @@ export default class FrontDesk_table extends  PureComponent {
       },
       {
         title: '状态',
-        dataIndex: 'isActive',
+        dataIndex: 'is_active',
         render: (val, text, index) => (
           <div>
-            {this.state.selectWriteKey===index?this.renderSlectInput(getFieldDecorator,val,'isActive', [{id: 0, category_name: '禁用'},{id:1,category_name: '启用'}], 100): this.idToName(val, [{id: 0, category_name: '禁用'},{id:1,category_name: '启用'}], 'category_name')}
+            {this.state.selectWriteKey===index?this.renderSlectInput(getFieldDecorator,val,'is_active', [{id: 0, category_name: '未激活'},{id:1,category_name: '激活'}], 100): this.idToName(val, [{id: 0, category_name: '未激活'},{id:1,category_name: '激活'}], 'category_name')}
           </div>
         )
       },
+      // {
+      //   title: '创建时间',
+      //   dataIndex: 'create_time',
+      //   // width:80,
+      //   render: val => <span>{new Date(val).toLocaleDateString()}</span>
+      // },
       {
-        title: '创建时间',
-        dataIndex: 'createTime',
-        // width:80,
-        render: val => <span>{new Date(val).toLocaleDateString()}</span>
+        title: '管辖地区',
+        dataIndex: 'adress'
       },
       {
         title: '操作',
@@ -209,9 +197,7 @@ export default class FrontDesk_table extends  PureComponent {
                 <a style={{marginLeft: '5px'}} onClick={ () => { this.setState({ selectWriteKey: null }) } } >取消</a></div>:
               <div>
                 <a onClick={ () => {this.handleWrite(index)} } >修改</a>
-                <Popconfirm title="确定重置密码？" onConfirm={ ()=>{ this.resetPsw(val.id) } } >
-                  <a style={{marginLeft: '5px'}} >重置密码</a>
-                </Popconfirm>
+                <a style={{marginLeft: '5px'}} onClick={ () => { this.gotoDetails(val) } } >查看详情</a>
               </div>
             }
           </div>

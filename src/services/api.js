@@ -7,6 +7,14 @@ export async function getCode(params) {
 }
 
 /*
+* 公共API
+* */
+// 验证快递员账户是否重复
+export async function courierIsRepeat(parmas) {
+  return request(`/dealer/getCourierByAccount?${stringify(parmas)}`)
+}
+
+/*
 *   管理员端API  经销商API也大部分适用， 可能做一点身份字段识别
 * */
 // 超级管理员的登录
@@ -45,9 +53,12 @@ export async function getDealer(params) {
 export async function getCourier(params) {
   return request(`/dealer/getCouriers?${stringify(params)}`)
 }
-// 经销商或管理员禁用快递员
-export async function setCourierActive(params) {
-  return request(`/dealer/delCourier?${stringify(params)}`)
+// 经销商或管理员更新快递员
+export async function updateCourier(params) {
+  return request('/dealer/updateCourier', {
+    method: 'POST',
+    body: params
+  })
 }
 // 经销商或者管理员添加快递员
 export async function addCourier(params) {
@@ -56,6 +67,18 @@ export async function addCourier(params) {
     body: params
   })
 }
+// 经销商或管理员重置密码
+export async function resetCourierPsw(parmas) {
+  return request('/dealer/resetPwd', {
+    method: 'POST',
+    body: parmas
+  })
+}
+// 经销商查看下级经销商信息, (管理是查看所有)
+export async function getDealers(params) {
+  return request(`/dealer/getDealers?${stringify(params)}`)
+}
+
 
 /*
 *   客户端API
@@ -124,7 +147,11 @@ export async function driverLogin(params) {
 }
 // 快递员 上班不断发送位置
 export async function sendPos(params) {
-  return request(`/courier/toWork?${stringify(params)}`)
+  // return request(`/courier/toWork?${stringify(params)}`)
+  return request('/courier/toWork', {
+    method: 'POST',
+    body: params
+  })
 }
 // 快递员下班请求
 export async function offWork(parmas) {

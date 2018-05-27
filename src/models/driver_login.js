@@ -11,7 +11,8 @@ export default {
     driver_status: store.get('driverData')?store.get('driverData').driver_status:null,
     driver_name: store.get('driverData')?store.get('driverData').driver_name:null,
     loading: false,
-    moneyAccount: {}
+    moneyAccount: {},
+    cash: null
   },
   effects: {
     // 获取快递员已有的提现账户
@@ -21,10 +22,22 @@ export default {
         payload: true
       })
       const res = yield call(getDriverMoneyAccount, payload)
-      yield put({
-        type: 'saveMoneyAccount',
-        payload: res
-      })
+      console.log(res)
+      if (res.data) {
+        yield put({
+          type: 'saveMoneyAccount',
+          payload: res.data
+        })
+        yield put({
+          type: 'saveCash',
+          payload: res.data.cash
+        })
+      } else {
+        yield put({
+          type: 'saveMoneyAccount',
+          payload: {}
+        })
+      }
       yield put({
         type: 'changeLoading',
         payload: false
@@ -101,6 +114,13 @@ export default {
     }
   },
   reducers: {
+    // 保存快递员的余额
+    saveCash(state, {payload}){
+      return {
+        ...state,
+        cash: payload
+      }
+    },
     //  保存快递员的提现的账户
     saveMoneyAccount( state, {payload} ){
       return {

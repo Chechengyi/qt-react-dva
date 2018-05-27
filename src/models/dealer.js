@@ -1,21 +1,21 @@
-import { getAdressList } from '../services/api'
+import { getDealers } from '../services/api'
 
 export default {
-  namespace: 'client_address',
+  namespace: 'dealer',
   state: {
-    data: [],
-    loading: false
+    loading: false,
+    data: []
   },
   effects: {
-    *getData({payload}, {call,put}){
+    *getData({payload}, {call, put}){
       yield put({
         type: 'changeLoading',
         payload: true
       })
-      const res = yield call(getAdressList, payload)
+      const res = yield call( getDealers, payload )
       yield put({
         type: 'saveData',
-        payload: res.data
+        payload: res
       })
       yield put({
         type: 'changeLoading',
@@ -24,13 +24,13 @@ export default {
     }
   },
   reducers: {
-    saveData(state, {payload}){
+    saveData( state, {payload} ){
       return {
         ...state,
         data: payload
       }
     },
-    changeLoading(state, {payload}){
+    changeLoading( state, {payload} ){
       return {
         ...state,
         loading: payload

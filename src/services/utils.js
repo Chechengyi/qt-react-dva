@@ -30,3 +30,14 @@ export function throttle(func, wait, context) {
 export function AnimateNumber(num,add=3) {
   return num + add
 }
+
+// 去抖函数
+export function debouce(wait, func, ctx, e) {
+  let timeout
+  return function () {
+    clearTimeout(timeout)
+    timeout = setTimeout( ()=>{
+      func.apply(ctx, e)
+    }, wait )
+  }
+}

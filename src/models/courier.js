@@ -15,7 +15,7 @@ export default {
       const res = yield call(getCourier, payload)
       yield put({
         type: 'saveData',
-        payload: res
+        payload: res.data.content
       })
       yield put({
         type: 'changeLoading',

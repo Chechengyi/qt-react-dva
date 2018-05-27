@@ -49,6 +49,9 @@ export const getRouterData = (app) => {
     '/admin/cont/people/addCourier': {
       component: dynamicWrapper(app, ['admin_login'], ()=>import('../routes/Staff/AddCourier'))
     },
+    '/admin/cont/people/dealer': {
+      component: dynamicWrapper(app, ['dealer','admin_login'], ()=>import('../routes/Staff/Dealer'))
+    },
     '/admin/cont/home/frontdesk': {
       component: dynamicWrapper(app, ['frontdesk', 'global_drop'], ()=>import('../routes/Frontdesk/TableList'))
     },

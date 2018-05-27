@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Row, Col, Card, Form, Input, Select, Button, message} from 'antd';
-import Frontdesk_table from './CourierTable'
+import Frontdesk_table from './DealerTable'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TableList.less';
 
@@ -10,8 +10,7 @@ const { Option } = Select;
 
 @connect(state => ({
   // categoryList: state.drop.category
-  roleId: state.admin_login.roleId,
-  admin_id: state.admin_login.admin_id
+  roleId: state.admin_login.roleId
 }))
 @Form.create()
 export default class Cai extends PureComponent {
@@ -26,12 +25,11 @@ export default class Cai extends PureComponent {
 
   componentDidMount() {
     this.props.dispatch({
-      type: 'courier/getData',
+      type: 'dealer/getData',
       payload: {
         pageNo: this.state.pageNo,
         pageSize: this.state.pageSize,
-        roleId: this.props.roleId,
-        adminId: this.props.admin_id
+        roleId: this.props.roleId
       }
     })
   }
@@ -45,13 +43,11 @@ export default class Cai extends PureComponent {
 
   handle_page_change = (page, pageSize) => {
     this.props.dispatch({
-      type: 'courier/getData',
+      type: 'dealer/getData',
       payload: {
         pageNo: page,
         pageSize: this.state.pageSize,
-        ...this.state.formValues,
-        roleId: this.props.roleId,
-        adminId: this.props.admin_id
+        ...this.state.formValues
       }
     })
     this.setState({
@@ -83,13 +79,11 @@ export default class Cai extends PureComponent {
         pageSize: 1
       });
       this.props.dispatch({
-        type: 'courier/getData',
+        type: 'dealer/getData',
         payload: {
           pageNo: 1,
           pageSize: 10,
-          ...fieldsValue,
-          roleId: this.props.roleId,
-          adminId: this.props.admin_id
+          ...fieldsValue
         }
       })
     });
@@ -102,12 +96,10 @@ export default class Cai extends PureComponent {
       pageNo: 1
     })
     this.props.dispatch({
-      type: 'courier/getData',
+      type: 'dealer/getData',
       payload: {
         pageNo: 1,
         pageSize: 10,
-        roleId: this.props.roleId,
-        adminId: this.props.admin_id
       }
     })
   }
@@ -144,7 +136,7 @@ export default class Cai extends PureComponent {
           </Col>
           <Col md={5} sm={10} >
             <FormItem label="激活／未激活">
-              {getFieldDecorator('isActive')(
+              {getFieldDecorator('is_active')(
                 <Select>
                   <Option value={0} >未激活</Option>
                   <Option value={1} >激活</Option>

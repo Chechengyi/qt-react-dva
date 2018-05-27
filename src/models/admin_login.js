@@ -21,9 +21,16 @@ export default {
       let res
       // 1是超级管理员登录操作 2是经销尚登录操作
       if ( payload.type===1 ) {
-        res = yield call(adminLogin, payload)
+        // res = yield call(adminLogin, payload)
+        res = yield call(adminLogin, {
+          account: payload.account,
+          password: payload.password
+        })
       } else {
-        res = yield call(dealerLogin, payload)
+        res = yield call(dealerLogin, {
+          account: payload.account,
+          password: payload.password
+        })
       }
       if ( res.status==='OK' ) {
         window.sessionStorage.setItem('admin_id',res.data.id)
@@ -42,7 +49,10 @@ export default {
         yield put(routerRedux.push('/admin/cont/home/frontdesk'))
       } else {
         yield put({
-          admin_status: 'ERROR'
+          type: 'saveLogin',
+          payload: {
+            admin_status: 'ERROR'
+          }
         })
       }
       yield put({

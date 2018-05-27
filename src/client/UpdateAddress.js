@@ -40,8 +40,8 @@ export default class UpdateAddress extends PureComponent {
         updateAddress({
           id: this.props.location.query.id,
           address: this.refs.text.value,
-          isDefault: this.state.isDefault,
-          cus_id: this.props.client_id
+          // isDefault: this.state.isDefault,
+          cusId: this.props.client_id
         })
           .then( res=>{
             Toast.hide()

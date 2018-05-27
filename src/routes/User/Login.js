@@ -34,7 +34,7 @@ export default class Login extends Component {
             type: 'admin_login/login',
             payload: {
               password: values.password,
-              name: values.username,
+              account: values.username,
               type: values.type
             },
           });
@@ -62,12 +62,12 @@ export default class Login extends Component {
       <div className={styles.main}>
         <Form onSubmit={this.handleSubmit}>
               {
-                login.status === 'ERROR' && this.renderMessage('账户或密码错误')
+                login.admin_status === 'ERROR' && this.renderMessage('账户或密码错误')
               }
               <FormItem>
                 {getFieldDecorator('username', {
                   rules: [{
-                    required: type === 'account', message: '请输入账户名！',
+                    required: true, message: '请输入账户名！',
                   }],
                 })(
                   <Input
@@ -80,7 +80,7 @@ export default class Login extends Component {
               <FormItem>
                 {getFieldDecorator('password', {
                   rules: [{
-                    required: type === 'account', message: '请输入密码！',
+                    required: true, message: '请输入密码！',
                   }],
                 })(
                   <Input

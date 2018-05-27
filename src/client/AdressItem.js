@@ -3,6 +3,7 @@ import { Checkbox, Flex, Modal, Toast } from 'antd-mobile'
 import { Icon } from 'antd'
 import { deleteAddress } from '../services/api'
 import { connect } from 'dva'
+import { updateAddress } from '../services/api'
 
 @connect(state=>({
   client_id: state.client_login.client_id
@@ -13,13 +14,18 @@ export default class AdressItem extends PureComponent {
     super(props)
     this.state = {
       display: 'block',
-      checked: false
+      checked: this.props.defaultId
+    }
+  }
+
+  componentDidMount(){
+    // 如何当前项是默认地址， 则吧页面中默认id状态改为当前项的id
+    if (this.props.data.isDefault===1) {
+      this.props.setDefaultId(this.props.data.id)
     }
   }
 
   handleDelete=(id)=>{
-    // console.log(id)
-    // console.log(this.props.client_id)
     Modal.alert('确认删除该项？', '', [{
       text: '取消', onPress: ()=>{}
     }, {
@@ -46,6 +52,21 @@ export default class AdressItem extends PureComponent {
     }])
   }
 
+  handleMoren=(type)=>{
+    this.setState({
+      checked: type
+    })
+    this.props.setDefaultId(this.props.data.id)
+    updateAddress({
+      cusId: this.props.client_id,
+      id: this.props.data.id,
+      isDefault: 1
+    })
+      .then( res=>{
+        console.log(res)
+      } )
+  }
+
   render () {
     const {data} = this.props
     return <div style={{backgroundColor: '#fff', marginBottom: 7,
@@ -55,8 +76,9 @@ export default class AdressItem extends PureComponent {
       </div>
       <Flex align='center' style={{}} >
         <div style={{flex:6, paddingLeft: 10}}>
-          <a onClick={e=>{this.setState({checked:true})}}  >
-            <Checkbox checked={this.state.checked} /> 设为默认</a>
+          <a onClick={ e=>{this.handleMoren(true)} }  >
+            <Checkbox checked={this.props.defaultId==data.id} />
+            设为默认</a>
         </div>
         <div style={{flex:4}} >
           <a onClick={e=>this.props.history.push({

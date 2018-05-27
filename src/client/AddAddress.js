@@ -30,9 +30,9 @@ export default class AddAddress extends PureComponent {
       text: '确定', onPress: ()=>{
         Toast.loading()
         addAddress({
-          id: this.props.client_id,
-          adress: this.refs.text.value,
-          isDefault: this.state.isDefault
+          cusId: this.props.client_id,
+          address: this.refs.text.value,
+          // isDefault: this.state.isDefault
         })
           .then( res=>{
             Toast.hide()

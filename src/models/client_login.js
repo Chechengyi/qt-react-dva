@@ -13,21 +13,22 @@ export default {
   effects: {
     *login ( {payload}, {call, put} ) {
       yield put({
-        type: 'changLoading',
+        type: 'changeLoading',
         payload: true
       })
       const res = yield call( clientLogin, payload )
+      console.log(res)
       if ( res.status === 'OK' ) {
         store.set('clientData', {
           client_id: res.data.id,
-          client_name: res.data.name,
+          client_name: res.data.username,
           client_status: 'OK'
         })
         yield put({
           type: 'saveLogin',
           payload: {
             client_id: res.data.id,
-            client_name: res.data.name,
+            client_name: res.data.username,
             client_status: 'OK'
           }
         })
@@ -41,7 +42,7 @@ export default {
         })
       }
       yield put({
-        type: 'changLoading',
+        type: 'changeLoading',
         payload: false
       })
     },
@@ -58,7 +59,7 @@ export default {
         client_status: payload.client_status
       }
     },
-    changLoading ( state, {paylaod} ) {
+    changeLoading ( state, {paylaod} ) {
       return {
         ...state,
         loading: paylaod

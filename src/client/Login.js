@@ -5,7 +5,8 @@ import { Alert } from 'antd'
 import { createForm } from 'rc-form';
 @createForm()
 @connect( state =>({
-  client_status: state.client_login.client_status
+  client_status: state.client_login.client_status,
+  loading: state.client_login.loading
 }) )
 export default class Login extends PureComponent {
 
@@ -50,7 +51,7 @@ export default class Login extends PureComponent {
           >密码</InputItem>
         </List>
         <WhiteSpace></WhiteSpace>
-        <Button type='primary' onClick={ this.submit } >登录</Button>
+        <Button type='primary' loading={this.props.loading} onClick={ this.submit } >登录</Button>
         <WhiteSpace></WhiteSpace>
         <Button onClick={ () => { this.props.history.push('/clientUser/reg') } } type='ghost' >注册</Button>
         <WhiteSpace />

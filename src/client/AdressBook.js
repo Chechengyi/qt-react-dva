@@ -12,11 +12,18 @@ import globalStyles from '../index.less'
 }))
 export default class AdressBook extends Component {
 
+  constructor(props){
+    super(props)
+    this.state = {
+      defaultId: null
+    }
+  }
+
   componentDidMount(){
     this.props.dispatch({
       type: 'client_address/getData',
       payload: {
-        cus_id: this.props.client_id
+        cusId: this.props.client_id,
       }
     })
     this.scroll = new Iscroll(this.refs.warp, {
@@ -24,6 +31,12 @@ export default class AdressBook extends Component {
       // fadeScrollbars: true
       // click: true，
       preventDefault: false,
+    })
+  }
+  // 设置默认id
+  setDefaultId = (id) => {
+    this.setState({
+      defaultId: id
     })
   }
 
@@ -59,10 +72,17 @@ export default class AdressBook extends Component {
                         height: 50, justifyContent: 'center', alignItems: 'center',
                         position: 'absolute', top: 0, left: 0
           }} >
-            <ActivityIndicator animating={this.props.loading} />
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%'
+            }} >
+              <ActivityIndicator animating={this.props.loading} />
+            </div>
           </div>
           {this.props.data.map( (item,i)=>(
-            <AddressItem history={this.props.history} data={item} key={i} />
+            <AddressItem defaultId={this.state.defaultId} setDefaultId={this.setDefaultId} history={this.props.history} data={item} key={i} />
           ) )}
         </div>
       </div>

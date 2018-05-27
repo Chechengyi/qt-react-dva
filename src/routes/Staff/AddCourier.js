@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Form, Input, Row, Col, Button, message } from 'antd'
 import { connect } from 'dva'
-import { addCourier } from '../../services/api'
+import { addCourier, courierIsRepeat } from '../../services/api'
+import { debouce } from '../../services/utils'
 
 const FormItem = Form.Item
 @Form.create()
@@ -12,10 +13,14 @@ export default class AddCourier extends Component {
   constructor(props){
     super(props)
     this.state={
-      loading: false
+      loading: false,
+      isRepeat: null
     }
   }
-  handleSubmit=()=>{
+  handleSubmit= ()=>{
+    if (this.state.isRepeat) {
+      return
+    }
     this.props.form.validateFields( (err,values)=>{
       if(err){
         message.error('请完善所有表单的信息', 1)
@@ -25,7 +30,7 @@ export default class AddCourier extends Component {
         loading: true
       })
       addCourier({
-        id: this.props.admin_id,
+        adminId: parseInt(this.props.admin_id),
         ...values
       })
         .then(res=>{
@@ -47,6 +52,30 @@ export default class AddCourier extends Component {
         })
     } )
   }
+  handleChange=e=>{
+    console.log(e.target.value)
+  }
+  handleBlur=e=>{
+    return
+    // this.props.form.getFieldsValue(('account',values)=>{
+    //   console.log(values)
+    // })
+    let account = this.props.form.getFieldValue('account')
+    courierIsRepeat({
+      account
+    })
+      .then( res=>{
+        if(res.status==='REPEAT'){
+          this.setState({
+            isRepeat: true
+          })
+        } else {
+          this.setState({
+            isRepeat: false
+          })
+        }
+      } )
+  }
   render(){
     const { getFieldDecorator } = this.props.form;
     return <div style={{
@@ -61,7 +90,11 @@ export default class AddCourier extends Component {
           <Col span={2} ></Col>
           <Col span={16} >
             <Form style={{marginTop: '50px'}}>
-              <FormItem {...formItemLayout} label='登录账户'>
+              <FormItem {...formItemLayout}
+                        label='登录账户'
+                        validateStatus={this.state.isRepeat?'error':'success'}
+                        help={!this.state.isRepeat===false?'该用户名已重复！':'该用户名可以使用'}
+              >
                 {getFieldDecorator('account', {
                   rules: [{
                     //pattern: '\\s', message: '请输入正确的用户名'
@@ -69,11 +102,11 @@ export default class AddCourier extends Component {
                     required: true, message: '请输入用户名',
                   }],
                 })(
-                  <Input />
+                  <Input onChange={ e=> { debouce(300,this.handleChange,this, e.target.value) } } />
                 )}
               </FormItem>
               <FormItem {...formItemLayout} label='用户名称' >
-                {getFieldDecorator('user_name', {
+                {getFieldDecorator('username', {
                   rules: [{
                   }, {
                     required: true, message: '请输入用户名称',

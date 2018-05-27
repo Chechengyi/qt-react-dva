@@ -50,16 +50,17 @@ export default class DrawCont extends PureComponent {
   // 下班
   noWork = () => {
     //  发送下班请求
-    offWork()
+    offWork({
+      id: this.props.driver_id
+    })
       .then( res => {
         if (timer) {
           clearInterval(timer)
           // 发送下班请求
-          this.props.dispatch({
-            type: 'driver_login/noWork',
-            payload: e
-          })
         }
+        this.props.dispatch({
+          type: 'driver_login/noWork',
+        })
       } )
   }
   //  上班
@@ -105,17 +106,19 @@ export default class DrawCont extends PureComponent {
   senPos = (e) => {
     if (this.props.isWork){
       geolocation.getCurrentPosition()
-    }
-    console.log(e.position.lng)
-    sendPos({
-      id: this.props.driver_id,
-      createTime: new Date(),
-      latitude: e.position.lat,
-      longitude: e.position.lng
-    })
-      .then( res=>{
+      console.log(e.position.lng)
+      sendPos({
+        id: this.props.driver_id,
+        createTime: new Date(),
+        latitude: e.position.lat,
+        longitude: e.position.lng
+      })
+        .then( res=>{
 
-      } )
+        } )
+    } else {
+      console.log('已经下班了')
+    }
   }
 
   // goUpPsw = ()=> {
@@ -131,7 +134,7 @@ export default class DrawCont extends PureComponent {
           <Flex style={{width: '100%'}} >
             <FlexItem style={{fontSize: '1.2em'}} >{this.props.driver_name}</FlexItem>
             <FlexItem>
-              <span>{this.props.isWork?'下班':'下班'}</span>&nbsp;&nbsp;
+              <span>{this.props.isWork?'下班':'上班'}</span>&nbsp;&nbsp;
               <Switch checked={this.props.isWork} onChange={ this.handle_work } />
             </FlexItem>
           </Flex>

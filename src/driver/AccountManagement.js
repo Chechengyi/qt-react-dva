@@ -42,21 +42,31 @@ export default class AccountManagement extends PureComponent {
                     }
                   },{
                     text: '确定', onPress: ()=>{
-                      console.log({
-                        id: this.props.driver_id,
-                        [type]: value
-                      })
-                      addAccount({
-                        id: this.props.driver_id,
-                        [type]: value,
-                        sign: type==='alipay'?'ali':'wx'
-                      })
-                        .then(res=>{
-                          if (res.status==='OK'){
-                            Toast.success('添加成功！',1)
-                            this.props.history.replace('/driverElseCont/account')
-                          }
+                      // 判断两个账户的存在情况
+                      if ( this.props.moneyAccount['alipay'] || this.props.moneyAccount['wxpay'] ) {
+                        updateAccount({  // 对接口有疑问，
+                          couId: this.props.driver_id,
+                          [type]: value,
                         })
+                          .then(res=>{
+                            if(res.status==='OK'){
+                              Toast.success('添加成功成功！',1)
+                              this.props.history.replace('/driverElseCont/account')
+                            }
+                          })
+                      } else {
+                        addAccount({
+                          couId: this.props.driver_id,
+                          [type]: value,
+                          sign: type==='alipay'?'ali':'wx'
+                        })
+                          .then(res=>{
+                            if (res.status==='OK'){
+                              Toast.success('添加成功！',1)
+                              this.props.history.replace('/driverElseCont/account')
+                            }
+                          })
+                      }
                       reslove()
                     }
                   }])
@@ -83,12 +93,12 @@ export default class AccountManagement extends PureComponent {
             },{
               text: '确定', onPress: ()=>{
                 console.log({
-                  id: this.props.driver_id,
+                  couId: this.props.driver_id,
                   [type]: value,
                   sign: type==='alipay'?'ali':'wx'
                 })
                 updateAccount({  // 对接口有疑问，
-                  id: this.props.driver_id,
+                  couId: this.props.driver_id,
                   [type]: value,
                 })
                   .then(res=>{

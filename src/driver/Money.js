@@ -14,7 +14,8 @@ const alert = Modal.alert
 @connect(state=>({
   driver_id: state.driver_login.driver_id,
   moneyAccount: state.driver_login.moneyAccount,
-  loading: state.driver_login.loading
+  loading: state.driver_login.loading,
+  cash: state.driver_login.cash
 }))
 @createForm()
 export default class Money extends PureComponent {
@@ -49,13 +50,13 @@ export default class Money extends PureComponent {
   renderMoneyAccountList=()=>{
     return <List renderHeader={() => '选择提现账户'} >
       {Object.keys(this.props.moneyAccount).map( item=>(
-        <div key={item} >{item==='wxpay'||item==='alipay'?<RadioItem
+        this.props.moneyAccount[item]?<div key={item} >{item==='wxpay'||item==='alipay'?<RadioItem
           key={item}
           name={item}
           checked={this.state.aaccountType===item}
           onChange={this.handleRadioChoose}
           thumb={<img style={{width:30,height:30}} src={item==='wxpay'?'/wechat.png':'/apy.png'} />}
-        >{this.props.moneyAccount[item]}</RadioItem>:null}</div>
+        >{this.props.moneyAccount[item]}</RadioItem>:null}</div>:null
       ) )}
     </List>
   }
@@ -87,6 +88,10 @@ export default class Money extends PureComponent {
       Toast.fail('提现金额不能为空！', 1)
       return
     }
+    if (money>this.props.cash) {
+      Toast.fail('提现金额超出总金额', 1)
+      return
+    }
     alert(<div>
       <div>提现金额{money}元</div>
       <div>提现账户为{this.state.aaccountType==='wxpay'?'微信':'支付宝'}</div>
@@ -99,7 +104,7 @@ export default class Money extends PureComponent {
         })
         // 发起提现的请求
         driverTixian({
-          id: this.props.driver_id,
+          couId: this.props.driver_id,
           putCash: money,
           putAccount: this.state.aaccountType
         })
@@ -173,7 +178,8 @@ export default class Money extends PureComponent {
         flexDirection: 'column'
       }} >
         <div style={{width: 129, height: 63, display: 'flex', justifyContent: 'center',alignItems:'center'}} >
-          {this.props.loading?<ActivityIndicator animating={this.props.loading} />:<span style={{fontSize: '3em', color: '#fff'}} >{this.props.moneyAccount.cash}</span>}
+          {this.props.loading?<ActivityIndicator animating={this.props.loading} />:
+            <span style={{fontSize: '3em', color: '#fff'}} >{this.props.cash}</span>}
         </div>
         <div style={{
           width: 100, borderRadius: 3,

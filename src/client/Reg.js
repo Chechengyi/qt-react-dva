@@ -65,14 +65,34 @@ export default class Reg extends PureComponent {
       Toast.fail('两次输入密码不一致，请检查密码',1)
       return
     }
+    this.setState({
+      loading: true
+    })
+    let phone = tel.replace(/\s+/g,"");
     clientReg({
-      tel,  //电话号码
+      // tel: phone,  //电话号码
+      account: phone,
       username, // 用户姓名
       password,
       authCode  //验证码
     })
       .then( res=> {
-
+        console.log(res)
+        this.setState({
+          loading: false
+        })
+        if (res.status==="OK") {
+          Toast.success('注册成功！', 1)
+        } else if (res.status==="REPEAT") {
+          Toast.fail('电话已经注册，请直接登录', 1)
+        } else {
+          Toast.fail('注册失败,重新尝试',1)
+        }
+      } )
+      .catch( err=>{
+        this.setState({
+          laoding: false
+        })
       } )
   }
 
