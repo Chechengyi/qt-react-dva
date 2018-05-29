@@ -1,14 +1,18 @@
 import React, { PureComponent } from 'react';
-import { Drawer, Flex, ActivityIndicator } from 'antd-mobile'
+import { Drawer, Flex, ActivityIndicator, Modal } from 'antd-mobile'
 import DrawCont from './DrawCont'
 import { connect } from 'dva'
 import NavBar from '../components/NavBar/Index'
+import styles from './index.less'
 
 let AMap = null
 let mapObj = null
 
 @connect(state=>({
-  client_name: state.client_login
+  client_name: state.client_login,
+  orderData: state.orderType.data,
+  orderLoading: state.orderType.loading,
+  client_status: state.client_login.client_status
 }))
 export default class Index extends PureComponent {
 
@@ -18,7 +22,8 @@ export default class Index extends PureComponent {
       isOpen: false,
       longitude: 107.05683,
       latitude: 27.70846,
-      loadMap: true
+      loadMap: true,
+      selectOrderTypeId: 1
     }
   }
 
@@ -26,7 +31,14 @@ export default class Index extends PureComponent {
     this.props.selectedTab('index')
     AMap = Object.AMap
     // this.getPos()
-    this.createMap()
+    // 如果订单类型列表长度为0 ， 则向后台请求获取订单类型列表
+    if (this.props.orderData.length===0) {
+      this.props.dispatch({
+        type: 'orderType/getData',
+      })
+    }
+    this.createMap()   // 直接创建地图
+    // this.getPos()   // 根据客户定位创建地图
   }
   /*
   *  这里有两种方案待选择，一是定位出客户的位置，展现是地图 二是只展示地图，像顺丰快递一样
@@ -36,7 +48,7 @@ export default class Index extends PureComponent {
     this.map = new AMap.Map(this.refs.map, {
       resizeEnable: true,
       zoom:7,
-      center: [107.05683,27.70846]
+      // center: [107.05683,27.70846]
     });
   }
 
@@ -93,7 +105,7 @@ export default class Index extends PureComponent {
     });
     let marker = new AMap.Marker({
       // position: [position.longitude, position.latitude],
-      map: this.map
+      map: this.map,
     })
   }
 
@@ -112,6 +124,12 @@ export default class Index extends PureComponent {
         isOpen: e
       })
     }
+  }
+
+  handleRadio=e=>{
+    this.setState({
+      selectOrderTypeId: e
+    })
   }
 
   render () {
@@ -145,6 +163,43 @@ export default class Index extends PureComponent {
             bottom: 0, width: '100%', left: 0,
             visible: this.state.loadMap?'hidden':'visible'
           }} ref='map' >
+          </div>
+          <div style={{
+            display: 'flex', flexDirection: 'row',
+            justifyContent: 'space-between', alignItems: 'center',
+            position: 'absolute', backgroundColor: '#fff',
+            width: 300, left: document.documentElement.clientWidth/2-150,
+            top: 60, padding: '0 20px', lineHeight: '80px',
+            height: 80, zIndex: 1, borderRadius: 4
+          }} onTouchMove={ e=>e.preventDefault() } >
+            {this.props.orderData.map( (item,i)=>(
+              <div key={i} onClick={ ()=>this.handleRadio(item.id)}  >
+                <input type="radio"
+                       onChange={ e=>this.handleRadio(e.target.value) }
+                       checked={this.state.selectOrderTypeId==item.id}
+                       name='orderType' value={item.id} /> {item.type}
+              </div>
+            ) )}
+          </div>
+          <div
+            onClick={ ()=>{
+              if(this.props.client_status==='OK'){
+                this.props.history.push(`/cont/byOrder/${this.state.selectOrderTypeId}`)
+              }else{
+                Modal.alert('还没有登录','去登录了在下单', [{
+                  text: '取消', onPress: ()=>{}
+                }, {
+                  text: '确认', onPress: ()=>this.props.history.push('/clientUser/login')
+                }])
+              }
+            } }
+            style={{
+            position: 'absolute', textAlign: 'center', lineHeight: '30px',
+            width: 80, height: 30, backgroundColor: '#000',
+            top: '50%', left: '50%', marginLeft: -40, borderRadius: '20px'
+          }} onTouchMove={ e=>e.preventDefault() } >
+            <div className={styles.xuanzhuan}></div>
+            <span style={{color: '#fff'}}>下单</span>
           </div>
           {/*<ActivityIndicator text='正在确定您的位置' animating={this.state.loadMap} />*/}
           <div style={{

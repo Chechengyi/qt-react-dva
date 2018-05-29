@@ -43,6 +43,7 @@ export default class Login extends PureComponent {
         { this.props.client_status==='ERROR'&&this.renderMessage('用户名或密码错误') }
         <List>
           <InputItem
+            // type='phone'
             {...getFieldProps('username')}
           >用户名</InputItem>
           <InputItem

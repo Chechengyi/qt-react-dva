@@ -13,6 +13,10 @@ export async function getCode(params) {
 export async function courierIsRepeat(parmas) {
   return request(`/dealer/getCourierByAccount?${stringify(parmas)}`)
 }
+// 获取订单类型列表
+export async function getOrderType(params) {
+  return request(`/oreder/getOrederTypes?${stringify(params)}`)
+}
 
 /*
 *   管理员端API  经销商API也大部分适用， 可能做一点身份字段识别
@@ -23,6 +27,10 @@ export async function adminLogin(params) {
     method: 'POST',
     body: params
   })
+}
+//  管理员查看用户信息
+export async function adminGetCus(params) {
+  return request(`/admin/getCuss?${stringify(params)}`)
 }
 // 经销商登录
 export async function dealerLogin(params) {
@@ -48,6 +56,20 @@ export async function DealerUpdateInfo(params) {
 // 经销商查询
 export async function getDealer(params) {
   return request(`/dealer/getDealers?${stringify(params)}`)
+}
+// 管理员修改经销商信息
+export async function updateDealer(params) {
+  return request('/admin/modifyInfo', {
+    method: 'POST',
+    body: params
+  })
+}
+// 管理员重置经销商密码
+export async function resetDealerPsw(params) {
+  return request('/admin/modifyCourierPwd', {
+    method: 'POST',
+    body: params
+  })
 }
 // 经销商或者管理员查看平台快递员
 export async function getCourier(params) {

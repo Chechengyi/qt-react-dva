@@ -32,12 +32,17 @@ export function AnimateNumber(num,add=3) {
 }
 
 // 去抖函数
-export function debouce(wait, func, ctx, e) {
+export function debouce(wait, func, ctx) {
+  ctx = ctx || this
   let timeout
-  return function () {
+  let value
+  return function (e) {
     clearTimeout(timeout)
+    console.log(timeout)
+    // console.log(e.target.value)
+    value = e.target.value
     timeout = setTimeout( ()=>{
-      func.apply(ctx, e)
+      func.call(this, value)
     }, wait )
   }
 }

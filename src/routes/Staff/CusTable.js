@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Table, Input, Select, Popconfirm, message, Form, Modal} from 'antd';
-import { updateDealer, resetDealerPsw } from '../../services/api'
+import { updateCourier, resetCourierPsw } from '../../services/api'
 
 const Option = Select.Option
 const WriteInput = ({getFieldDecorator, value, text}) => (
@@ -32,8 +32,8 @@ const SelectInput = ({getFieldDecorator, value, text, selectArr, width}) => (
 
 @Form.create()
 @connect(state => ({
-  data: state.dealer.data,
-  loading: state.dealer.loading,
+  data: state.customer.data,
+  loading: state.customer.loading,
   // total: state.courier.total,
   admin_id: state.admin_login.admin_id,
   roleId: state.admin_login.roleId,
@@ -50,11 +50,11 @@ export default class FrontDesk_table extends  PureComponent {
   }
 
   componentDidMount () {
-    if (this.props.total === 0) {
-      this.props.dispatch({
-        type: 'goods/getTotal'
-      })
-    }
+    // if (this.props.total === 0) {
+    //   this.props.dispatch({
+    //     type: 'goods/getTotal'
+    //   })
+    // }
   }
 
   handleWrite = (index) => {
@@ -91,33 +91,36 @@ export default class FrontDesk_table extends  PureComponent {
         })
         return
       }
-      if (!/^(([1-9]\d*)|0)$/.test(values.tel)) {
-        message.error('请输入正确的电话号码')
-        return
-      }
-      updateDealer({
-        id: val.id,
-        username: values.username,
-        tel: values.tel,
-        address: values.address
+      updateCourier({
+        adminId: parseInt(this.props.admin_id),  // 管理员id
+        id: val.id,  // 需要修改状态的快递员的id
+        roleId: parseInt(this.props.roleId), //当前管理员的权限id
+        // isActive: values.is_active
+        ...values
       })
         .then( res=>{
+          let next_data = [...this.state.data]
+          next_data[index].isActive = values.isActive
+          next_data[index].username = values.username
+          next_data[index].tel = values.tel
           if (res.status==='OK') {
-            let next_data = [...this.state.data]
-            message.success('修改成功！', 1)
-            next_data[index].is_active = values.isActive
-            next_data[index].tel = values.tel
-            next_data[index].username = values.username
+            message.success('修改成功',1)
             this.setState({
               selectWriteKey: null,
               data: next_data
             })
           } else {
-            message.success('修改失败，请重新尝试', 1)
+            message.error('修改失败，请重新尝试',1)
+            this.setState({
+              selectWriteKey: null,
+            })
           }
         } )
-        .catch( err=>{
-          message.error('服务器发生错误， 请重新尝试', 1)
+        .catch( res=>{
+          message.error('修改出错',1)
+          this.setState({
+            selectWriteKey: null,
+          })
         } )
     } )
   }
@@ -135,31 +138,28 @@ export default class FrontDesk_table extends  PureComponent {
   }
 
   resetPsw=id=>{
-    resetDealerPsw({
+    resetCourierPsw({
       id
     })
-      .then( res=>{
-        if(res.status==='OK'){
-          message.success('密码重置成功', 1)
+      .then(res=>{
+        if (res.status==="OK") {
+          message.success('重置成功', 1)
         } else {
-          message.error('密码重置失败，请重新尝试', 1)
+          message.error('重置失败', 1)
         }
-      } )
-      .catch( err=>{
-        message.error('服务器发生错误，请重新尝试', 1)
-      } )
+      })
   }
 
   render () {
     const { getFieldDecorator } = this.props.form
-    let columns = [
+    const columns = [
       {
         title: '编号',
         dataIndex: 'id',
         width:50
       },
       {
-        title: '经销商账户',
+        title: '用户账户',
         dataIndex: 'account',
         width: 150
       },
@@ -188,42 +188,36 @@ export default class FrontDesk_table extends  PureComponent {
         dataIndex: 'isActive',
         render: (val, text, index) => (
           <div>
-            {this.state.selectWriteKey===index?this.renderSlectInput(getFieldDecorator,val,'isActive', [{id: 0, category_name: '未激活'},{id:1,category_name: '激活'}], 100): this.idToName(val, [{id: 0, category_name: '未激活'},{id:1,category_name: '激活'}], 'category_name')}
+            {this.state.selectWriteKey===index?this.renderSlectInput(getFieldDecorator,val,'isActive', [{id: 0, category_name: '禁用'},{id:1,category_name: '启用'}], 100): this.idToName(val, [{id: 0, category_name: '禁用'},{id:1,category_name: '启用'}], 'category_name')}
           </div>
         )
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'createTime',
+        // width:80,
+        render: val => <span>{new Date(val).toLocaleDateString()}</span>
       },
       // {
-      //   title: '创建时间',
-      //   dataIndex: 'create_time',
-      //   // width:80,
-      //   render: val => <span>{new Date(val).toLocaleDateString()}</span>
-      // },
-      {
-        title: '管辖地区',
-        dataIndex: 'adress'
-      },
+      //   title: '操作',
+      //   width: 150,
+      //   render: (val, text, index) => (
+      //     <div>
+      //       {this.state.selectWriteKey===index?
+      //         <div>
+      //           <Popconfirm title='确定保存修改信息？' onConfirm={ () => { this.handleSave(val, index) } } ><a>保存</a></Popconfirm>
+      //           <a style={{marginLeft: '5px'}} onClick={ () => { this.setState({ selectWriteKey: null }) } } >取消</a></div>:
+      //         <div>
+      //           <a onClick={ () => {this.handleWrite(index)} } >修改</a>
+      //           <Popconfirm title="确定重置密码？" onConfirm={ ()=>{ this.resetPsw(val.id) } } >
+      //             <a style={{marginLeft: '5px'}} >重置密码</a>
+      //           </Popconfirm>
+      //         </div>
+      //       }
+      //     </div>
+      //   )
+      // }
     ]
-    if (this.props.roleId===0) {
-      columns.push({
-        title: '操作',
-        width: 150,
-        render: (val, text, index) => (
-          <div>
-            {this.state.selectWriteKey===index?
-              <div>
-                <Popconfirm title='确定保存修改信息？' onConfirm={ () => { this.handleSave(val, index) } } ><a>保存</a></Popconfirm>
-                <a style={{marginLeft: '5px'}} onClick={ () => { this.setState({ selectWriteKey: null }) } } >取消</a></div>:
-              <div>
-                <a onClick={ () => {this.handleWrite(index)} } >修改</a>
-                <Popconfirm title='确定重置密码？' onConfirm={ () => { this.resetPsw(val.id) } } >
-                  <a style={{marginLeft: '5px'}} >重置密码</a>
-                </Popconfirm>
-              </div>
-            }
-          </div>
-        )
-      })
-    }
     var self = this
     const rowSelection = {
       onChange (selectedRowKeys, selectedRows) {

@@ -1,26 +1,22 @@
 const menuData = [
   {
-    isAdmin: true, // isAdmin代表只有管理员可以看到该菜单栏， 经销商看不到
-    name: '用户管理',
-    icon: 'user',
-    path: 'admin/cont/client'
-  },
-  {
     name: '平台人员管理',
     icon: 'usergroup-add',
     path: 'admin/cont/people',
     children: [
       {
         name: '经销商管理',
-        path: 'admin/cont/people/dealer'
+        path: 'dealer'
       },
-      // {
-      //   name: '用户管理',
-      //   path: 'client'
-      // },
+      {
+        isAdmin: true, // isAdmin代表只有管理员可以看到该菜单栏， 经销商看不到
+        name: '用户管理',
+        // icon: 'user',
+        path: 'cus'
+      },
       {
         name: '快递员管理',
-        path: 'admin/cont/people/courier'
+        path: 'courier'
       }
     ]
   },
@@ -53,12 +49,12 @@ function formatter(data, roleId, parentPath = '') {
       list.push({
         ...item,
         path: `${parentPath}${item.path}`,
-        children: formatter(item.children, `${parentPath}${item.path}/`),
+        children: formatter(item.children, roleId, `${parentPath}${item.path}/`),
       });
     } else {
       if (item.isAdmin) {
         // 验证roleId， 管理员具有的一些操作权限经销商不能看到
-        if (roleId===0) {
+        if (roleId===0){
           list.push({
             ...item,
             path: `${parentPath}${item.path}`,

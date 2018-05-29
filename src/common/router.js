@@ -43,6 +43,9 @@ export const getRouterData = (app) => {
     '/admin/cont': {
       component: dynamicWrapper(app, ['admin_login'], () => import('../layouts/BasicLayout')),
     },
+    '/admin/cont/people/cus': {
+      component: dynamicWrapper(app, ['admin_login', 'customer'], ()=>import('../routes/Staff/Cus'))
+    },
     '/admin/cont/people/courier': {
       component: dynamicWrapper(app, ['courier','admin_login'], ()=>import('../routes/Staff/Courier'))
     },
@@ -51,6 +54,9 @@ export const getRouterData = (app) => {
     },
     '/admin/cont/people/dealer': {
       component: dynamicWrapper(app, ['dealer','admin_login'], ()=>import('../routes/Staff/Dealer'))
+    },
+    '/admin/cont/people/addDealer': {
+      component: dynamicWrapper(app, ['admin_login'], ()=>import('../routes/Staff/AddDealer'))
     },
     '/admin/cont/home/frontdesk': {
       component: dynamicWrapper(app, ['frontdesk', 'global_drop'], ()=>import('../routes/Frontdesk/TableList'))
@@ -89,8 +95,11 @@ export const getRouterData = (app) => {
     '/cont': {
       component: dynamicWrapper(app, ['client_login'], () => import('../client/Cont')),
     },
+    '/cont/byOrder/:id': {
+      component: dynamicWrapper(app, ['client_login', 'orderType'], () => import('../client/ByOrder')),
+    },
     '/cont/index': {
-      component: dynamicWrapper(app, ['client_login'], () => import('../client/Index')),
+      component: dynamicWrapper(app, ['client_login', 'orderType'], () => import('../client/Index')),
     },
     '/cont/my': {
       component: dynamicWrapper(app, ['client_login'], () => import('../client/My')),

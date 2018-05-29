@@ -1,82 +1,16 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react';
 import { Form, Input, Row, Col, Button, message } from 'antd'
 import { connect } from 'dva'
-import { addCourier, courierIsRepeat } from '../../services/api'
-import { debouce } from '../../services/utils'
 
 const FormItem = Form.Item
 @Form.create()
-@connect( state=>({
-  admin_id: state.admin_login.admin_id
-}) )
-export default class AddCourier extends Component {
+export default class AddDealer extends PureComponent {
   constructor(props){
     super(props)
     this.state={
       loading: false,
       isRepeat: null
     }
-  }
-  handleSubmit= ()=>{
-    if (this.state.isRepeat) {
-      return
-    }
-    this.props.form.validateFields( (err,values)=>{
-      if(err){
-        message.error('请完善所有表单的信息', 1)
-        return
-      }
-      this.setState({
-        loading: true
-      })
-      addCourier({
-        adminId: parseInt(this.props.admin_id),
-        ...values
-      })
-        .then(res=>{
-          this.setState({
-            loading: false
-          })
-          if(res.status==='OK'){
-            message.success('添加成功！', 1)
-            this.props.form.resetFields()
-          } else {
-            message.error('添加失败, 请重新尝试', 1)
-          }
-        })
-        .catch(err=>{
-          this.setState({
-            loading: false
-          })
-          message.error('添加出错。。。', 1)
-        })
-    } )
-  }
-  handleChange=e=>{
-    clearTimeout(this.timer)
-    this.timer = setTimeout( ()=>{
-      let account = this.props.form.getFieldValue('account')
-      if (account.length===0){
-        this.setState({
-          isRepeat: null
-        })
-        return
-      }
-      courierIsRepeat({
-        account
-      })
-        .then( res=>{
-          if(res.status==='REPEAT'){
-            this.setState({
-              isRepeat: 'REPEAT'
-            })
-          } else {
-            this.setState({
-              isRepeat: 'OK'
-            })
-          }
-        } )
-    },500 )
   }
   render(){
     const { getFieldDecorator } = this.props.form
@@ -166,6 +100,7 @@ export default class AddCourier extends Component {
     </div>
   }
 }
+
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -188,3 +123,4 @@ const tailFormItemLayout = {
     },
   },
 }
+

@@ -1,77 +1,58 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 // import Iscroll from 'iscroll/build/iscroll'
 import Iscroll from 'iscroll/build/iscroll-probe'
 import styles from './Chat.less'
-import { NavBar } from 'antd-mobile'
+import { NavBar, Modal } from 'antd-mobile'
 import { getMsg } from '../../services/api'
 
 let Scroll = null
 
-export default class ScrollChat extends PureComponent {
+export default class ScrollChat extends Component {
 
   constructor(props){
     super(props)
     this.state = {
-      focus: false,
       count: 10,
-      text: [],
-      ItemChange: false
+      text: null,
     }
   }
 
   componentDidMount(){
+    console.log('zi')
     let self = this
     this.Scroll = new Iscroll(this.refs.scrollWarp, {
       scrollbars: true,
       preventDefault: false,
       mouseWheel: true,
-      probeType: 2
+      probeType: 2,
+      click: true
     })
-    getMsg()
-      .then( res=> {
-        this.setState({
-          text: res
-        })
-      } )
     this.Scroll.on('scroll', function (e) {
       if ( this.y>50 ) {
         console.log('加载吧')
       }
-    } );
+    } )
+    this.Scroll.refresh()
   }
 
-  componentDidUpdate(){
-    this.Scroll.refresh();
+  componentDidUpdate(e){
+    console.log(e)
+    this.Scroll.refresh()
   }
 
-  stop = (e) => {
-    e.preventDefault();
-  }
-  // 输入框获得焦点的回调
-  focus = () => {
+  inputText=e=>{
     this.setState({
-      focus: true
-    })
-  }
-  // 输入框失去焦点的回调
-  blur = () => {
-    this.setState({
-      focus: false
+      text: e.target.value
     })
   }
 
-  tap = ()=>{
-    console.log(1)
-    // 为兼容安卓手机，触摸iscroll输入框有焦点时视角
-    this.refs.input.blur()
-  }
-
-  ceshi = ()=>{
-    var arr = []
-    for (var i=0; i<this.state.count; i++) {
-      arr.push(<div key={i} >sdasdsada</div>)
+  send=e=>{
+    console.log(/^[\s]*$/.test(this.state.text))
+    if (/^[\s]*$/.test(this.state.text) || !this.state.text ) {
+      Modal.alert('不能输入空白消息！', '', [{
+        text: '确定', onPress: ()=>{}
+      }])
     }
-    return arr
   }
 
   render () {
@@ -85,18 +66,26 @@ export default class ScrollChat extends PureComponent {
                   // e.stopPropagation()
                 this.refs.input.blur();} }
             >
-      {/*<NavBar>客服1</NavBar>*/}
-      <div id='#scrollWarp' ref='scrollWarp' className={styles.warp}>
+      <div id='#scrollWarp'
+           style={{backgroundColor: this.props.backgroundColor?this.props.backgroundColor:'#fff'}}
+           onClick={ e=>this.refs.input.blur() } ref='scrollWarp' className={styles.warp}>
         sdaas
-        <div ref='scroll' className={styles.cont}>
-          {this.state.text.map( (item,i)=>(
-            <div key={i} >asdsadd</div>
+        <div ref='scroll'
+             style={{backgroundColor: this.props.backgroundColor?this.props.backgroundColor:'#fff'}}
+             className={styles.cont}>
+          {this.props.message.map( (item,i)=>(
+            <div key={i} style={{fontSize: 50}} >asdsadd</div>
           ) )}
         </div>
       </div>
       <div className={styles.footer} >
-        <input ref='input' type="text"/>
-        <button>发送</button>
+        <input placeholder={this.props.placeholder} className={styles.input}
+               ref='input' type="text"
+               onChange={this.inputText}
+        />
+        <button
+          onClick={ this.send }
+          className={styles.button} >发送</button>
       </div>
     </div>
   }

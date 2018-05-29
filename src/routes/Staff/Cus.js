@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Row, Col, Card, Form, Input, Select, Button, message} from 'antd';
-import Frontdesk_table from './DealerTable'
+import Frontdesk_table from './CusTable'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TableList.less';
 
@@ -25,7 +25,7 @@ export default class Cai extends PureComponent {
 
   componentDidMount() {
     this.props.dispatch({
-      type: 'dealer/getData',
+      type: 'customer/getData',
       payload: {
         pageNo: this.state.pageNo,
         pageSize: this.state.pageSize,
@@ -43,7 +43,7 @@ export default class Cai extends PureComponent {
 
   handle_page_change = (page, pageSize) => {
     this.props.dispatch({
-      type: 'dealer/getData',
+      type: 'customer/getData',
       payload: {
         pageNo: page,
         pageSize: this.state.pageSize,
@@ -79,7 +79,7 @@ export default class Cai extends PureComponent {
         pageSize: 1
       });
       this.props.dispatch({
-        type: 'dealer/getData',
+        type: 'customer/getData',
         payload: {
           pageNo: 1,
           pageSize: 10,
@@ -96,7 +96,7 @@ export default class Cai extends PureComponent {
       pageNo: 1
     })
     this.props.dispatch({
-      type: 'dealer/getData',
+      type: 'customer/getData',
       payload: {
         pageNo: 1,
         pageSize: 10,
@@ -123,14 +123,21 @@ export default class Cai extends PureComponent {
                   return v;
                 },
               })(
-                <Input placeholder="输入快递员电话查询" />
+                <Input placeholder="输入用户电话查询" />
               )}
             </FormItem>
           </Col>
           <Col md={6} sm={10} >
             <FormItem label="姓名">
               {getFieldDecorator('username')(
-                <Input placeholder="输入快递员姓名查询" />
+                <Input placeholder="输入用户姓名查询" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={6} sm={10} >
+            <FormItem label="地址">
+              {getFieldDecorator('address')(
+                <Input placeholder="输入用户地址查询" />
               )}
             </FormItem>
           </Col>
@@ -166,9 +173,6 @@ export default class Cai extends PureComponent {
           <div className={styles.tableList}>
             <div className={styles.tableListForm} style={{marginBottom: '15px'}} >
               { this.renderSimpleForm() }
-              {this.props.roleId==0&&
-              <Button onClick={ ()=>this.props.history.push('/admin/cont/people/addDealer') } >添加经销商</Button>
-              }
             </div>
             <Frontdesk_table
               // data={this.props.data}

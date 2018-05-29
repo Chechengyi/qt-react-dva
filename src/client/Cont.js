@@ -4,6 +4,9 @@ import { getRoutes } from '../utils/utils'
 import { TabBar } from 'antd-mobile'
 import { connect } from 'dva'
 
+@connect(state=>({
+  client_status: state.client_login.client_status
+}))
 export default class Cont extends PureComponent {
 
   constructor (props) {
@@ -15,9 +18,9 @@ export default class Cont extends PureComponent {
   }
 
   componentDidMount(){
-    // this.refs.clientRoot.addEventListener('touchmove', function (e) {
-    //   e.preventDefault()
-    // })
+    // if (this.props.client_status!=='OK') {
+    //   this.props.history.push('/clientUser/login')
+    // }
   }
 
   link = (url) => {
@@ -33,7 +36,7 @@ export default class Cont extends PureComponent {
 
   render () {
     const {routerData, match} = this.props
-    return <div ref='clientRoot' >
+    return <div ref='clientRoot'>
       <div onClick={ () => { this.setState( (prevState, props) => ({
         hidden: !prevState.hidden
       }) ) } } >
@@ -56,25 +59,25 @@ export default class Cont extends PureComponent {
         </Switch>
       </div>
        {/*<div style={{position: 'fixed', bottom: 0, width: '100%'}} >*/}
-         {/*<TabBar hidden={this.state.hidden} >*/}
-           {/*<TabBar.Item*/}
-             {/*icon={{ uri: '/all.png' }}*/}
-             {/*selectedIcon={{ uri: '/all1.png' }}*/}
-             {/*title="首页"*/}
-             {/*key="首页"*/}
-             {/*selected={this.state.selectedTab === 'index'}*/}
-             {/*onPress={ () => { this.link('index') } }*/}
-            {/*/>*/}
-           {/*<TabBar.Item*/}
-             {/*icon={{ uri: '/my.png' }}*/}
-             {/*selectedIcon={{ uri: '/my1.png' }}*/}
-             {/*title="我的"*/}
-             {/*key="我的"*/}
-             {/*selected={this.state.selectedTab === 'my'}*/}
-             {/*onPress={ () => { this.link('my') } }*/}
-           {/*/>*/}
-         {/*</TabBar>*/}
-       {/*</div>*/}
+      {/*<TabBar hidden={this.state.hidden} >*/}
+      {/*<TabBar.Item*/}
+      {/*icon={{ uri: '/all.png' }}*/}
+      {/*selectedIcon={{ uri: '/all1.png' }}*/}
+      {/*title="首页"*/}
+      {/*key="首页"*/}
+      {/*selected={this.state.selectedTab === 'index'}*/}
+      {/*onPress={ () => { this.link('index') } }*/}
+      {/*/>*/}
+      {/*<TabBar.Item*/}
+      {/*icon={{ uri: '/my.png' }}*/}
+      {/*selectedIcon={{ uri: '/my1.png' }}*/}
+      {/*title="我的"*/}
+      {/*key="我的"*/}
+      {/*selected={this.state.selectedTab === 'my'}*/}
+      {/*onPress={ () => { this.link('my') } }*/}
+      {/*/>*/}
+      {/*</TabBar>*/}
+      {/*</div>*/}
     </div>
   }
 }
