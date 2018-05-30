@@ -10,6 +10,21 @@ export async function socket(url) {
     }
   } )
 }
+
+export async function promise_( action, payload ) {
+  return new Promise( (reslove, reject)=>{
+    action({...payload})
+      .then( res=>{
+        reslove(res)
+      } )
+      .catch( err=>{
+        reject({
+          status:'ERROR'
+        })
+      } )
+  } )
+}
+
 //  节流函数
 export function throttle(func, wait, context) {
   context = context || this

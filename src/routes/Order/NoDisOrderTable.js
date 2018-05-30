@@ -32,8 +32,8 @@ const SelectInput = ({getFieldDecorator, value, text, selectArr, width}) => (
 
 @Form.create()
 @connect(state => ({
-  data: state.courier.data,
-  loading: state.courier.loading,
+  data: state.noDisOrder.data,
+  loading: state.noDisOrder.loading,
   // total: state.courier.total,
   admin_id: state.admin_login.admin_id,
   roleId: state.admin_login.roleId,
@@ -50,7 +50,11 @@ export default class FrontDesk_table extends  PureComponent {
   }
 
   componentDidMount () {
-
+    if (this.props.total === 0) {
+      this.props.dispatch({
+        type: 'goods/getTotal'
+      })
+    }
   }
 
   handleWrite = (index) => {
@@ -138,12 +142,12 @@ export default class FrontDesk_table extends  PureComponent {
       id
     })
       .then(res=>{
-          if (res.status==="OK") {
-            message.success('重置成功', 1)
-          } else {
-            message.error('重置失败', 1)
-          }
-        })
+        if (res.status==="OK") {
+          message.success('重置成功', 1)
+        } else {
+          message.error('重置失败', 1)
+        }
+      })
   }
 
   render () {

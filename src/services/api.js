@@ -17,6 +17,26 @@ export async function courierIsRepeat(parmas) {
 export async function getOrderType(params) {
   return request(`/oreder/getOrederTypes?${stringify(params)}`)
 }
+// 获取省级列表
+export async function getProvince(params) {
+  return request(`/dealer/getAllProvinces`)
+}
+// 参数 code  省的code  后台接应此参数后首先确定该省有无经销商，若没有，则只能添加当前的，若有返回该省所有市
+export async function getProvinceDealers(parmas) {
+  return request(`/dealer/getProvinceDealers?${stringify(parmas)}`)
+}
+// 参数 code
+export async function getCityDealers(params) {
+  return request(`/dealer/getCityDealers?${stringify(params)}`)
+}
+// 参数 code
+export async function getdistrictDealers(params) {
+  return request(`/dealer/getdistrictDealers?${stringify(params)}`)
+}
+// 参数code
+
+
+
 
 /*
 *   管理员端API  经销商API也大部分适用， 可能做一点身份字段识别
@@ -64,12 +84,23 @@ export async function updateDealer(params) {
     body: params
   })
 }
+// 管理员添加经销商
+export async function addDealer(params) {
+  return request('/admin/addDealer', {
+    method: 'POST',
+    body: params
+  })
+}
 // 管理员重置经销商密码
 export async function resetDealerPsw(params) {
   return request('/admin/modifyCourierPwd', {
     method: 'POST',
     body: params
   })
+}
+// 管理员添加经销商时先验证账户是否重复
+export async function dealerReapet(parmas) {
+  return request(`/admin/getDealerByAccount?${stringify(parmas)}`)
 }
 // 经销商或者管理员查看平台快递员
 export async function getCourier(params) {
@@ -100,7 +131,14 @@ export async function resetCourierPsw(parmas) {
 export async function getDealers(params) {
   return request(`/dealer/getDealers?${stringify(params)}`)
 }
-
+// 经销商获取未分配的订单
+export async function getNoDisOrder(params) {
+  return request(`/order/getDistributes?${stringify(params)}`)
+}
+// 获取未分配订单的个数 参数：id 经销商的id
+export async function getNoDisOrderCount(params) {
+  return request(`/order/getDistributesCount?${stringify(params)}`)
+}
 
 /*
 *   客户端API

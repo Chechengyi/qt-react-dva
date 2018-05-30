@@ -1,3 +1,6 @@
+
+const ROLEID = window.sessionStorage.getItem('roleId')
+
 const menuData = [
   {
     name: '平台人员管理',
@@ -21,20 +24,31 @@ const menuData = [
     ]
   },
   {
-    name: '首页',
-    icon: 'dashboard',
-    path:'admin/cont/home',
+    name: '订单模块',
+    icon: 'profile',
+    path: 'admin/cont/order',
     children: [
       {
-        name: '前台用户',
-        path: 'admin/cont/home/frontdesk'
-      },
-      {
-        name: '测试',
-        path: 'admin/cont/home/getPosition'
+        name: '未分配订单',
+        path: 'noDisOrder'
       }
     ]
   },
+  // {
+  //   name: '首页',
+  //   icon: 'dashboard',
+  //   path:'admin/cont/home',
+  //   children: [
+  //     {
+  //       name: '前台用户',
+  //       path: 'admin/cont/home/frontdesk'
+  //     },
+  //     {
+  //       name: '测试',
+  //       path: 'admin/cont/home/getPosition'
+  //     }
+  //   ]
+  // },
   {
     name: '订单定位',
     icon: 'user',
@@ -54,7 +68,7 @@ function formatter(data, roleId, parentPath = '') {
     } else {
       if (item.isAdmin) {
         // 验证roleId， 管理员具有的一些操作权限经销商不能看到
-        if (roleId===0){
+        if (ROLEID==0){
           list.push({
             ...item,
             path: `${parentPath}${item.path}`,

@@ -41,7 +41,10 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['admin_login'], () => import('../routes/Else/UpdateMsg'))
     },
     '/admin/cont': {
-      component: dynamicWrapper(app, ['admin_login'], () => import('../layouts/BasicLayout')),
+      component: dynamicWrapper(app, ['admin_login', 'noDisOrder'], () => import('../layouts/BasicLayout')),
+    },
+    '/admin/cont/order/noDisOrder': {
+      component: dynamicWrapper(app, ['admin_login', 'noDisOrder'], () => import('../routes/Order/NoDisOrder'))
     },
     '/admin/cont/people/cus': {
       component: dynamicWrapper(app, ['admin_login', 'customer'], ()=>import('../routes/Staff/Cus'))

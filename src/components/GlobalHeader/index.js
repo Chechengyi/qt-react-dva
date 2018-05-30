@@ -1,6 +1,8 @@
 import React, { PureComponent } from 'react';
 import { Layout, Menu, Icon, Spin, Tag, Dropdown, Popconfirm,
-  Avatar, message, Divider, Modal, Form, Input } from 'antd';
+  Avatar, message, Divider, Modal, Form, Input,
+  Badge
+} from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import Debounce from 'lodash-decorators/debounce';
@@ -19,7 +21,8 @@ const FormItem = Form.Item
 @connect(state=>({
   admin_name: state.admin_login.admin_name,
   roleId: state.admin_login.roleId,
-  admin_id: state.admin_login.admin_id
+  admin_id: state.admin_login.admin_id,
+  orderCount: state.noDisOrder.count
 }))
 @Form.create()
 export default class GlobalHeader extends PureComponent {
@@ -33,54 +36,15 @@ export default class GlobalHeader extends PureComponent {
   componentDidMount() {
 
   }
+  // 发送获取未分配订单个数的请求
+  getOrderCount(){
+    this.props.dispatch({
+      type: 'noDisOrder/backGetCount',
+      id: this.props.admin_id
+    })
+  }
   componentWillUnmount() {
     this.triggerResizeEvent.cancel();
-  }
-  getNoticeData() {
-    const { notices = [] } = this.props;
-    if (notices.length === 0) {
-      return {};
-    }
-    const newNotices = notices.map((notice) => {
-      const newNotice = { ...notice };
-      if (newNotice.datetime) {
-        newNotice.datetime = moment(notice.datetime).fromNow();
-      }
-      // transform id to item key
-      if (newNotice.id) {
-        newNotice.key = newNotice.id;
-      }
-      if (newNotice.extra && newNotice.status) {
-        const color = ({
-          todo: '',
-          processing: 'blue',
-          urgent: 'red',
-          doing: 'gold',
-        })[newNotice.status];
-        newNotice.extra = <Tag color={color} style={{ marginRight: 0 }}>{newNotice.extra}</Tag>;
-      }
-      return newNotice;
-    });
-    return groupBy(newNotices, 'type');
-  }
-  handleNoticeClear = (type) => {
-    message.success(`清空了${type}`);
-    this.props.dispatch({
-      type: 'global/clearNotices',
-      payload: type,
-    });
-  }
-  handleNoticeVisibleChange = (visible) => {
-    if (visible) {
-      this.props.dispatch({
-        type: 'global/fetchNotices',
-      });
-    }
-  }
-  handleMenuClick = (e) => {
-      this.props.dispatch({
-        type: 'login/logout',
-      });
   }
   toggle = () => {
     const { collapsed } = this.props;
@@ -146,10 +110,7 @@ export default class GlobalHeader extends PureComponent {
     } = this.props;
     const { getFieldDecorator } = this.props.form;
     const menu = (
-      <Menu className={styles.menu} selectedKeys={[]} onClick={this.handleMenuClick}>
-        {/*<Menu.Item disabled><Icon type="user" />个人中心</Menu.Item>*/}
-        {/*<Menu.Item disabled><Icon type="setting" />设置</Menu.Item>*/}
-        {/*rgba(0, 0, 0, 0.65)*/}
+      <Menu className={styles.menu} selectedKeys={[]}>
         {this.props.roleId!==0&&<Menu.Item >
           <a style={{color: 'rgba(0, 0, 0, 0.65)'}} href='/#/admin/else/updateMsg' ><Icon type="edit" />修改信息</a>
         </Menu.Item>}
@@ -160,7 +121,6 @@ export default class GlobalHeader extends PureComponent {
         <Menu.Item key="logout"><Icon type="logout" />退出登录</Menu.Item>
       </Menu>
     );
-    const noticeData = this.getNoticeData();
 
     const spanStyle= {
       display: 'inline-block',
@@ -204,11 +164,6 @@ export default class GlobalHeader extends PureComponent {
                   <Input type='password' style={{width: 200}} />
                 )}
               </FormItem>
-              {/*<FormItem {...tailFormItemLayout}>*/}
-                {/*<Button loading={this.state.loading}*/}
-                        {/*onClick={this.submit}*/}
-                        {/*type="primary">修改</Button>*/}
-              {/*</FormItem>*/}
             </Form>
           </div>
         </Modal>
@@ -226,6 +181,13 @@ export default class GlobalHeader extends PureComponent {
           onClick={this.toggle}
         />
         <div className={styles.right}>
+          <div style={{marginRight: 50}} >
+            <Badge count={this.props.orderCount} >
+              <a style={{paddingRight: 10, color: 'rgba(0,0,0,0.65)'}} >
+                <Icon type="notification" /> 未分配订单
+              </a>
+            </Badge>
+          </div>
           <Dropdown overlay={menu} >
             {/*{this.props.admin_name}*/}
             <div style={{width: 200, cursor: 'pointer'}} >

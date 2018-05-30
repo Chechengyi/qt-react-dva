@@ -18,7 +18,7 @@ export default class AddCourier extends Component {
     }
   }
   handleSubmit= ()=>{
-    if (this.state.isRepeat) {
+    if (this.state.isRepeat==='REPEAT'||!this.state.isRepeat) {
       return
     }
     this.props.form.validateFields( (err,values)=>{

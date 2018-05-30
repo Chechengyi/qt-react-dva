@@ -87,11 +87,24 @@ class BasicLayout extends React.PureComponent {
       this.props.history.push('/admin/user/login')
       return
     }
+    // 轮询获取未分配订单展示
+    this.props.dispatch({
+      type: 'noDisOrder/backGetCount',
+      id: this.props.admin_id
+    })
+    window.timer = setInterval( this.getOrderCount.bind(this), 180000 ) //  三分钟 180，000
     enquireScreen((b) => {
       this.setState({
         isMobile: !!b,
       });
     });
+  }
+  // 发送获取未分配订单个数的请求
+  getOrderCount(){
+    this.props.dispatch({
+      type: 'noDisOrder/backGetCount',
+      id: this.props.admin_id
+    })
   }
   getPageTitle() {
     const { routerData, location } = this.props;
