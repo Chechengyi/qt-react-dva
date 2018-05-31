@@ -6,6 +6,7 @@ import dynamic from 'dva/dynamic';
 import { getRouterData } from './common/router';
 import styles from './index.less';
 import NotFound from './routes/Exception/404'
+import NoCheck from './routes/Exception/403'
 
 dynamic.setDefaultLoadingComponent(() => {
   return <Spin size="large" className={styles.globalSpin} />;

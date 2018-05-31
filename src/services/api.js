@@ -9,6 +9,13 @@ export async function getCode(params) {
 /*
 * 公共API
 * */
+// 根据两点之间的距离和货物重量核算订单预计价格
+export async function getExpectedPrice(params) {
+  return request('/order/expectedPrice', {
+    method: 'POST',
+    body: params
+  })
+}
 // 验证快递员账户是否重复
 export async function courierIsRepeat(parmas) {
   return request(`/dealer/getCourierByAccount?${stringify(parmas)}`)
@@ -193,7 +200,13 @@ export async function updateAddress(params) {
     body: params
   })
 }
-
+// 客户下单
+export async function addOrder(params) {
+  return request('/order/add', {
+    method: 'POST',
+    body: params
+  })
+}
 
 /*
 *   快递员端API

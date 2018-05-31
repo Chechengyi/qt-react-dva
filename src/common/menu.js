@@ -34,21 +34,6 @@ const menuData = [
       }
     ]
   },
-  // {
-  //   name: '首页',
-  //   icon: 'dashboard',
-  //   path:'admin/cont/home',
-  //   children: [
-  //     {
-  //       name: '前台用户',
-  //       path: 'admin/cont/home/frontdesk'
-  //     },
-  //     {
-  //       name: '测试',
-  //       path: 'admin/cont/home/getPosition'
-  //     }
-  //   ]
-  // },
   {
     name: '订单定位',
     icon: 'user',
@@ -63,7 +48,7 @@ function formatter(data, roleId, parentPath = '') {
       list.push({
         ...item,
         path: `${parentPath}${item.path}`,
-        children: formatter(item.children, roleId, `${parentPath}${item.path}/`),
+        children: formatter(item.children, ROLEID, `${parentPath}${item.path}/`),
       });
     } else {
       if (item.isAdmin) {

@@ -98,8 +98,20 @@ export const getRouterData = (app) => {
     '/cont': {
       component: dynamicWrapper(app, ['client_login'], () => import('../client/Cont')),
     },
+    '/cont/chooseLocation/:type': {
+      component: dynamicWrapper(app, ['client_login', 'orderAddress'], () => import('../client/ChooseLocation')),
+    },
+    '/cont/chooseEndLocation': {
+      component: dynamicWrapper(app, ['client_login', 'orderAddress'], () => import('../client/ChooseEndLocation')),
+    },
+    '/cont/startAddress': {
+      component: dynamicWrapper(app, ['client_login', 'orderAddress'], () => import('../client/StartAddress')),
+    },
+    '/cont/endAddress': {
+      component: dynamicWrapper(app, ['client_login', 'orderAddress'], () => import('../client/EndAddress')),
+    },
     '/cont/byOrder/:id': {
-      component: dynamicWrapper(app, ['client_login', 'orderType'], () => import('../client/ByOrder')),
+      component: dynamicWrapper(app, ['client_login', 'orderType', 'orderAddress'], () => import('../client/ByOrder')),
     },
     '/cont/index': {
       component: dynamicWrapper(app, ['client_login', 'orderType'], () => import('../client/Index')),
