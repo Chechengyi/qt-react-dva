@@ -10,6 +10,7 @@ export default {
   },
   effects: {
     *setStartPos({payload}, {call, put}){
+      console.log('起点位置 ')
       yield put({
         type: 'saveStartPoint',
         payload
@@ -22,14 +23,13 @@ export default {
       })
     },
     *setEndPos({payload}, {call,put}){
-      console.log(payload)
+      console.log('终点位置')
       yield put({
         type: 'saveEndPoint',
         payload
       })
     },
     *setEndMsg({payload}, {call, put}){
-      console.log(payload)
       yield put({
         type: 'saveEndMsg',
         payload

@@ -6,23 +6,28 @@ import { connect } from 'dva'
 export default class ChooseEndLocation extends PureComponent {
 
   componentDidMount(){
+    let self = this
     this.drawMap()
+    // 因是单页web结构，所以判断是否监听过选址事件，如果监听过就不在重复监听
+    if ( !window.isEndLis ) {
+      window.isEndLis = true
+      window.addEventListener("message", function(e){
+        // 判断这个message事件是否是当前页面触发的，如果是其他页面触发则不执行函数
+        if (e.target.location.hash=='#/cont/chooseEndLocation') {
+          self.sendPos(e.data)
+        }
+      }, false);
+    }
   }
 
   // 绘制选址组件
   drawMap=()=>{
     let self = this;
     (function(){
-      var iframe = document.getElementById('test').contentWindow;
+      window.end_iframe = document.getElementById('test').contentWindow;
       document.getElementById('test').onload = function(){
-        iframe.postMessage('hello','https://m.amap.com/picker/');
-      };
-      window.addEventListener("message", function(e){
-        clearTimeout(self.timer)
-        self.timer = setTimeout( function () {
-          self.sendPos(e.data)
-        },300 )
-      }, false);
+        window.end_iframe.postMessage('hello','https://m.amap.com/picker/');
+      }
     })()
   }
 

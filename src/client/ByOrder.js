@@ -24,6 +24,7 @@ export default class ByOrder extends PureComponent {
     this.state = {
       expectedPrice: null
     }
+    this.AMap = Object.AMap
     this.orderType=this.props.match.params.id||window.sessionStorage.getItem('orderType')
   }
 
@@ -49,10 +50,12 @@ export default class ByOrder extends PureComponent {
     let startLnt = this.props.startPoint.lnt,
       starLat = this.props.startPoint.lat,
       endLnt = this.props.endPoint.lnt,
-      endLat = this.props.endPoint.lat
-    console.log(startLnt&&starLat&&endLnt&&endLat)
+      endLat = this.props.endPoint.lat,
+      distance = null    // 终点和起点之间的距离
     if ( this.orderType==2 ) {
       if (startLnt&&starLat&&endLnt&&endLat) {
+        distance = this.getDistance(this.props.startPoint, this.props.endPoint)
+        console.log('距离为。。。'  + distance)
         getExpectedPrice()  //参数对接在填写
           .then( res=>{
             if (res.status==='OK') {
@@ -66,6 +69,8 @@ export default class ByOrder extends PureComponent {
     } else {
       let {weight} = this.props.form.getFieldsValue()
       if (startLnt&&starLat&&endLnt&&endLat&&weight) {
+        distance = this.getDistance(this.props.startPoint, this.props.endPoint)
+        console.log('距离为。。。'  + distance)
         getExpectedPrice()  //参数对接在填写
           .then( res=>{
             console.log(res)
@@ -77,6 +82,13 @@ export default class ByOrder extends PureComponent {
           } )
       }
     }
+  }
+  // 求两点之间的距离
+  getDistance = ( startPoint, endPoint )=>{
+    let start = new this.AMap.LngLat(startPoint.lnt, startPoint.lat)
+    let end = new this.AMap.LngLat(endPoint.lnt, endPoint.lat)
+    let distance = this.AMap.GeometryUtil.distance(start,end)
+    return parseFloat((distance/1000).toFixed(2))
   }
   // 发送下单请求
   sendAddOrder=(params)=>{

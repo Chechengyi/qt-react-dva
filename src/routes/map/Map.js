@@ -1,23 +1,101 @@
 import React, { PureComponent } from 'react';
-import { Select } from 'antd'
+import { Select, Spin } from 'antd'
+import { connect } from 'dva'
+import { getCourierPos } from '../../services/api'
+import { promise_ } from '../../services/utils'
 
 const Option = Select.Option
 let AMap = Object.map  // 地图对象
 let gloabalMap = null  // 全局地图实例
 // let circle = null      // 圆
 
+@connect( state=>({
+  data: state.courierPos.data
+}) )
 export default class Map extends PureComponent {
 
+  constructor(props){
+    super(props)
+    this.state = {
+      loading: false
+    }
+    this.markers = {}
+  }
+  // 获取快递员位置信息请求
+  getPosition = async e=>{
+    this.setState({
+      loading: true
+    })
+    const res = await getCourierPos()
+    console.log(res.data)
+    if (res.data) {
+      // 绘制点
+      res.data.forEach( item => {
+        this.drawMarker(item.courierId, item.longitude, item.latitude, item.username, item.tel)
+      } )
+      let markerArr = Object.keys(this.markers).map( item=>{
+        return this.markers[item]
+      } )
+      // console.log(markerArr)
+      gloabalMap.add(markerArr)
+    }
+    this.setState({
+      loading: false
+    })
+  }
+  // 绘制地图点
+  drawMarker = (courierId, lnt, lat, username, tel) => {
+    // var marker = new AMap.Marker({
+    //   position: new AMap.LngLat(116.39, 39.9),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+    //   title: '北京'    new AMap.LngLat(lnt, lat)
+    // });
+    let Dom = document.createElement('div')
+    Dom.style.cssText=' background-color: rgba(255,255,255,0.8); padding: 5px;'
+    Dom.innerHTML = `
+      <img src="/1.png" /> ${username}
+    `
+    this.markers[courierId] = new AMap.Marker({
+      position: new AMap.LngLat(lnt, lat),
+      icon: '/1.png',
+      content: Dom,
+      title: username,
+      clickable: true,
+      autoRotation: true,  // 路径。方向发生改变是自动转向
+      // draggable: true,   //标记是否可拖拽
+      // label: {
+      //   content: username,
+      //   offset: (0,100)
+      // },
+      extData: {
+        id: courierId,
+        username,
+        tel
+      }
+    }).on('click', function (e) {
+      console.log(e)
+      console.log(e.target.F.extData)
+    })
+    // this.markers[courierId].on('click', function (e) {
+    //   console.log(e)
+    // })
+  }
+
   componentDidMount () {
-    // console.log(this.props.match.params.id)
     //   27.70846  107.05683
+    this.id = this.props.match.params.id
+    this.lnt = this.props.match.params.location.split(',')[0]
+    this.lat = this.props.match.params.location.split(',')[1]
+    // 发送加载快递员位置信息action
+    // this.props.dispatch({
+    //   type: 'courierPos/getData'
+    // })
     let self = this
     AMap = Object.AMap
     gloabalMap = new AMap.Map(this.refs.map, {
       resizeEnable: true,
-      center: ["107.05683","27.70846"],
+      center: [this.lnt,this.lat],
       zoom: 15
-    });
+    })
     AMap.plugin(['AMap.ToolBar','AMap.Scale','AMap.OverView'],
       function(){
         gloabalMap.addControl(new AMap.ToolBar());
@@ -27,7 +105,7 @@ export default class Map extends PureComponent {
         gloabalMap.addControl(new AMap.OverView({isOpen:true}));
       });
     new AMap.Marker({
-      position: ["107.05683","27.70846"],
+      position: [this.lnt,this.lat],
       icon: '/place.png',
       title: '客户',
       // animation: 'AMAP_ANIMATION_BOUNCE',
@@ -36,6 +114,8 @@ export default class Map extends PureComponent {
     // 绘制圆  绘制的时候默认圆的半径为1公里
     this.changeR = this.drawRound()
     this.changeR(1000)
+    // 获取快递员经纬度
+    this.getPosition()
   }
 
   //  显示圆范围   r 为圆的半径
@@ -83,17 +163,19 @@ export default class Map extends PureComponent {
             this.changeR(e)
           } } >
             <Option key={1000} value={1000} >1000米</Option>
-            <Option key={1500} value={1500} >1500米</Option>
-            <Option key={2000} value={2000} >2000米</Option>
+            <Option key={2000} value={1500} >2000米</Option>
+            <Option key={3000} value={2000} >3000米</Option>
           </Select>
         </div>
       </div>
-      <div ref='map' id='map' style={{
-        width: '100%',
-        height: document.body.clientHeight || document.documentElement.clientHeight - 50,
-      }} >
+      <Spin spinning={this.state.loading} size='large' tip='正在加载快递员位置'  >
+        <div ref='map' id='map' style={{
+          width: '100%',
+          height: document.body.clientHeight || document.documentElement.clientHeight - 50,
+        }} >
 
-      </div>
+        </div>
+      </Spin>
     </div>
   }
 }

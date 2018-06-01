@@ -48,12 +48,12 @@ function formatter(data, roleId, parentPath = '') {
       list.push({
         ...item,
         path: `${parentPath}${item.path}`,
-        children: formatter(item.children, ROLEID, `${parentPath}${item.path}/`),
+        children: formatter(item.children, roleId, `${parentPath}${item.path}/`),
       });
     } else {
       if (item.isAdmin) {
         // 验证roleId， 管理员具有的一些操作权限经销商不能看到
-        if (ROLEID==0){
+        if (roleId==0){
           list.push({
             ...item,
             path: `${parentPath}${item.path}`,

@@ -50,11 +50,7 @@ export default class FrontDesk_table extends  PureComponent {
   }
 
   componentDidMount () {
-    if (this.props.total === 0) {
-      this.props.dispatch({
-        type: 'goods/getTotal'
-      })
-    }
+
   }
 
   handleWrite = (index) => {
@@ -203,17 +199,7 @@ export default class FrontDesk_table extends  PureComponent {
         width: 150,
         render: (val, text, index) => (
           <div>
-            {this.state.selectWriteKey===index?
-              <div>
-                <Popconfirm title='确定保存修改信息？' onConfirm={ () => { this.handleSave(val, index) } } ><a>保存</a></Popconfirm>
-                <a style={{marginLeft: '5px'}} onClick={ () => { this.setState({ selectWriteKey: null }) } } >取消</a></div>:
-              <div>
-                <a onClick={ () => {this.handleWrite(index)} } >修改</a>
-                <Popconfirm title="确定重置密码？" onConfirm={ ()=>{ this.resetPsw(val.id) } } >
-                  <a style={{marginLeft: '5px'}} >重置密码</a>
-                </Popconfirm>
-              </div>
-            }
+            <a href={`/#/orderMap/${val.id}/${val.cusLongitude},${val.cusLatitude}`} >查看周边快递员</a>
           </div>
         )
       }

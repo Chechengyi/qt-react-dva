@@ -117,6 +117,13 @@ export default class Cai extends PureComponent {
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={10}>
+          <Col md={6} sm={10} >
+            <FormItem label="订单编号">
+              {getFieldDecorator('ono')(
+                <Input placeholder="输入订单编号查询" />
+              )}
+            </FormItem>
+          </Col>
           <Col md={6} sm={10}>
             <FormItem label="电话">
               {getFieldDecorator('tel', {
@@ -131,24 +138,14 @@ export default class Cai extends PureComponent {
                   return v;
                 },
               })(
-                <Input placeholder="输入快递员电话查询" />
+                <Input placeholder="输入用户电话查询" />
               )}
             </FormItem>
           </Col>
           <Col md={6} sm={10} >
             <FormItem label="姓名">
               {getFieldDecorator('username')(
-                <Input placeholder="输入快递员姓名查询" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={5} sm={10} >
-            <FormItem label="激活／未激活">
-              {getFieldDecorator('isActive')(
-                <Select>
-                  <Option value={0} >未激活</Option>
-                  <Option value={1} >激活</Option>
-                </Select>
+                <Input placeholder="输入用户姓名查询" />
               )}
             </FormItem>
           </Col>

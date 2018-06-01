@@ -9,7 +9,8 @@ import { createForm } from 'rc-form'
 
 @connect( state=>({
   startPoint: state.orderAddress.startPoint,
-  startMsg: state.orderAddress.startMsg
+  startMsg: state.orderAddress.startMsg,
+  provinceData: state.pickerAddress.provinceData,
 }) )
 @createForm()
 export default class StartAddress extends PureComponent {
@@ -18,49 +19,22 @@ export default class StartAddress extends PureComponent {
     super(props)
     this.orderType = window.sessionStorage.getItem('orderType')
     this.state = {
-      pickerData: [
-        [{
-          value: 1,
-          label: '贵州',
-          code: 520000
-        }],
-        [{
-          value: 1,
-          label: '遵义',
-          code: 33344
-        }]
-      ],
-      value: []
+      value: ['520000'],
+      adminId: null
     }
   }
 
   componentDidMount(){
-    this.getData('all')
-  }
-
-  getData= async (type, code) =>{
-    if (type==='all'){
-      const res = await promise_(getProvince)
-      let arr = []
-      for ( var i=0; i<res.data.length; i++ ) {
-        arr.push({
-          value: res.data[i].code,
-          label: res.data[i].name,
-          code: res.data[i].code
-        })
-      }
-      let nextData=[...this.state.pickerData]
-      nextData[0]=arr
-      this.setState({
-        pickerData: nextData
+    if( this.props.provinceData.length===0 ){
+      this.props.dispatch({
+        type: 'pickerAddress/setProvinceData'
       })
-    } else if ( type==='province' ) {
-      const res = await promise_(getProvinceDealers, {code})
-      console.log(res)
     }
   }
 
   submit=()=>{
+    console.log(this.state.adminId)
+    return
     let {tel, receiverName} = this.props.form.getFieldsValue()
     if ( Object.keys(this.props.startPoint).length==0 ||!tel||!receiverName ) {
       Modal.alert('请将信息完善后在提交', '', [{
@@ -85,6 +59,47 @@ export default class StartAddress extends PureComponent {
     this.props.history.push(`/cont/byOrder/${this.orderType}`)
   }
 
+  onPickerChange=(e)=>{
+    console.log(e)
+    this.setState({
+      value: e
+    })
+    if (e.length===1) {  // 选省
+      this.props.dispatch({
+        type: 'pickerAddress/setCityData',
+        payload: e[0]
+      })
+      this.setAdmin(e[0])
+    } else if ( e.length===2 ) {  // 选市
+      this.setAdmin(e[1])
+      this.props.dispatch({
+        type: 'pickerAddress/setDistrictData',
+        payload: e
+      })
+    } else if ( e.length===3 ) {
+      this.setAdmin(e[2])
+    }
+  }
+
+  onChange=e=>{
+    this.setState({
+      value: e
+    })
+    if (e.length===1) {
+      this.setAdmin(e[0])
+    } else if ( e.length===2 ) {
+      this.setAdmin(e[1])
+    } else if (e.length===3) {
+      this.setAdmin(e[2])
+    }
+  }
+
+  setAdmin=e=>{
+    this.setState({
+      adminId: e.split(',')[1]
+    })
+  }
+
   render(){
     const { getFieldProps } = this.props.form
     return <div>
@@ -96,10 +111,12 @@ export default class StartAddress extends PureComponent {
       </NavBar>
       <List renderHeader={ ()=>'第一步：选择地理行政区域' } >
       <AddressPicker
-        cascade={false}
+        cascade={true}
+        cols={4}
+        format={ value=>(value.join(',')) }
         onChange={ this.onChange }
         title='选择最近服务区'
-        data={this.state.pickerData}
+        data={this.props.provinceData}
         children={ ()=>'选择最近服务区' }
         onPickerChange={ this.onPickerChange }
         value={this.state.value}

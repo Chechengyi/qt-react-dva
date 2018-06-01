@@ -146,6 +146,11 @@ export async function getNoDisOrder(params) {
 export async function getNoDisOrderCount(params) {
   return request(`/order/getDistributesCount?${stringify(params)}`)
 }
+// 经销商获取快递员位置信息
+export async function getCourierPos(parmas) {
+  return request(`/dealer/getCourierPos`)
+}
+
 
 /*
 *   客户端API

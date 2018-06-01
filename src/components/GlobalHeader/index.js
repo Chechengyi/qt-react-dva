@@ -34,7 +34,6 @@ export default class GlobalHeader extends PureComponent {
     }
   }
   componentDidMount() {
-
   }
   // 发送获取未分配订单个数的请求
   getOrderCount(){
@@ -183,7 +182,7 @@ export default class GlobalHeader extends PureComponent {
         <div className={styles.right}>
           <div style={{marginRight: 50}} >
             <Badge count={this.props.orderCount} >
-              <a style={{paddingRight: 10, color: 'rgba(0,0,0,0.65)'}} >
+              <a href='/#/admin/cont/order/noDisOrder' style={{paddingRight: 10, color: 'rgba(0,0,0,0.65)'}} >
                 <Icon type="notification" /> 未分配订单
               </a>
             </Badge>

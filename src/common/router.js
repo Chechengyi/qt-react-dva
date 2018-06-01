@@ -83,7 +83,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, [], () => import('../routes/User/RegisterResult')),
     },
     '/orderMap': {
-      component: dynamicWrapper(app, [], () => import('../routes/map/Map')),
+      component: dynamicWrapper(app, ['courierPos'], () => import('../routes/map/Map')),
     },
     // 客户端路由
     '/clientUser': {
@@ -105,7 +105,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['client_login', 'orderAddress'], () => import('../client/ChooseEndLocation')),
     },
     '/cont/startAddress': {
-      component: dynamicWrapper(app, ['client_login', 'orderAddress'], () => import('../client/StartAddress')),
+      component: dynamicWrapper(app, ['pickerAddress', 'client_login', 'orderAddress'], () => import('../client/StartAddress')),
     },
     '/cont/endAddress': {
       component: dynamicWrapper(app, ['client_login', 'orderAddress'], () => import('../client/EndAddress')),

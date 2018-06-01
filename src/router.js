@@ -41,7 +41,7 @@ function RouterConfig({ history, app }) {
           {/*<Route path="/login" render={ props => <ClientLogin {...props} /> } />*/}
           <Route path="/cont" render={ props => <ClientCont {...props} /> } />
           <Route path="/clientChat" render={ props => <ClientChat {...props} /> } />
-          <Route path="/orderMap/:id" render={ props => <OrderMap {...props} /> } />
+          <Route path="/orderMap/:id/:location" render={ props => <OrderMap {...props} /> } />
           <Route path="/*" component={NotFound}  />
         </Switch>
       </Router>

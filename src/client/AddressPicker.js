@@ -9,6 +9,7 @@ export default class AddressPicker extends PureComponent {
       onPickerChange={ (e)=>{ this.props.onPickerChange(e) } }
       onChange={ this.props.onChange }
       cascade={this.props.cascade}
+      cols={this.props.cols}
       value={this.props.value}
     >
       <List.Item>{this.props.children()}</List.Item>

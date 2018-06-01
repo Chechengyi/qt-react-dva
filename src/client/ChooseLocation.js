@@ -17,10 +17,20 @@ export default class ChooseLocation extends PureComponent {
   }
 
   componentDidMount(){
-    console.log(this.props.match.params.type)
+    let self = this
     this.getPos()
     // this.drawMap()
     Toast.loading('正在定位您的位置...', 20)
+    // 因是单页web结构，所以判断是否监听过选址事件，如果监听过就不在重复监听
+    if ( !window.isStartLs ) {
+      window.isStartLs = true
+      window.addEventListener("message", function(e){
+        // 判断这个message事件是否是当前页面触发的，如果是其他页面触发则不执行函数
+        if (e.target.location.hash==='#/cont/chooseLocation/start') {
+          self.sendPos(e.data)
+        }
+      }, false);
+    }
   }
 
   handleBack=e=>{
@@ -72,37 +82,25 @@ export default class ChooseLocation extends PureComponent {
   drawMap=()=>{
     let self = this;
     (function(){
-      var iframe = document.getElementById('test').contentWindow;
-      document.getElementById('test').onload = function(){
-        iframe.postMessage('hello','https://m.amap.com/picker/');
+      window.start_iframe = document.getElementById('start').contentWindow;
+      document.getElementById('start').onload = function(){
+        window.start_iframe.postMessage('hello','https://m.amap.com/picker/');
       };
-      window.addEventListener("message", function(e){
-        clearTimeout(self.timer)
-        self.timer = setTimeout( function () {
-          self.sendPos(e.data)
-        },300 )
-      }, false);
     })()
   }
 
   // 选址组件选择后调用
   sendPos=e=>{
     let pos = e.location.split(',')
-    if ( this.props.match.params.type==='start' ) {
-      // 触发改变起始位置的action
-      this.props.dispatch({
-        type: 'orderAddress/setStartPos',
-        payload: {
-          name: e.name,
-          address: e.address,
-          lnt: pos[0],
-          lat: pos[1]
-        }
-      })
-    } else {
-      // 触发改变终点位置的action
-
-    }
+    this.props.dispatch({
+      type: 'orderAddress/setStartPos',
+      payload: {
+        name: e.name,
+        address: e.address,
+        lnt: pos[0],
+        lat: pos[1]
+      }
+    })
     this.handleBack()
   }
 
@@ -112,7 +110,7 @@ export default class ChooseLocation extends PureComponent {
         <div onClick={ this.handleBack } >返回地址填写页面</div>
       </NavBar>
       <iframe
-        id='test'
+        id='start'
         src={`https://m.amap.com/picker/?keywords=写字楼,小区,学校&zoom=${this.state.zoom}&center=${this.state.lnt},${this.state.lat}&radius=1000&total=20&key=b807bced59e4c8d89a323ae23159e562`}
         style={{width: '100%',
                 height: document.documentElement.clientHeight-44
