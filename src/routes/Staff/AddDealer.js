@@ -36,7 +36,8 @@ export default class AddDealer extends PureComponent {
       },
       districtData: {
         id: null,
-        name: null
+        name: null,
+        code: null
       }
     }
   }
@@ -48,15 +49,27 @@ export default class AddDealer extends PureComponent {
           provinceList: res.data,
           getMore: true
         })
+        this.handleProvince('520000', {
+          props: {
+            id: 24, name: '贵州省'
+          }
+        }, 'province')
       } )
   }
 
   handleSubmit=()=>{
+    // console.log(this.state.districtData)
+    // return
     if (this.state.isRepeat==='REPEAT'||!this.state.isRepeat) {
       return
     }
     this.props.form.validateFields(['account','tel','username','address', 'street'], (err,values)=>{
+      this.setState({
+        loading: true
+      })
       if (/^\s*$/.test(values.street) || !values.street ){
+        const adminAddress = (this.state.provinceData.name || '') + (this.state.cityData.name || '') + (this.state.districtData.name || '')
+        console.log(adminAddress)
         // 表明这是添加前三级的经销商
         if (err) {
           message.error('请完善供应商基本信息' ,1)
@@ -64,21 +77,25 @@ export default class AddDealer extends PureComponent {
         }
         // 添加经销商的请求
         addDealer({
-          id: this.props.admin_id,
           roleId: this.state[`${this.state.type}Data`]['id'],
           account: values.account,
           username: values.username,
           tel: values.tel,
           area: this.state.type,
-          Address: values.address
+          adminAddress: adminAddress
         })
           .then( res=>{
+            this.setState({
+              loading: false
+            })
             console.log(res.status)  // 返回null？
             if (res.status==='OK') {
               message.success('添加成功', 1)
               this.props.history.replace('/admin/cont/people/addDealer')
+            } else if (res.status==='REPEAT') {  // 该区域已经存在经销商
+              message.error('该区域已经存在管理员，不能在添加', 1)
             } else {
-              message.error('添加失败，请重新尝试', 1)
+              message.error('添加失败，请重新操作', 1)
             }
           } )
           .catch( err=>{
@@ -86,6 +103,34 @@ export default class AddDealer extends PureComponent {
           } )
       } else {
         // 表明这是添加第四级经销商
+        const adminAddress = this.state.provinceData.name + this.state.cityData.name + this.state.districtData.name + values.street
+        console.log(adminAddress)
+        addDealer({
+          code: this.state.districtData.code,
+          // roleId: this.state[`${this.state.type}Data`]['id'],
+          address: values.street,
+          account: values.account,
+          username: values.username,
+          tel: values.tel,
+          area: 'street',
+          adminAddress: adminAddress
+        })
+          .then( res=>{
+            this.setState({
+              loading: false
+            })
+            if ( res.status==='OK' ) {
+              message.success('添加成功', 1)
+            } else {
+              message.error('添加')
+            }
+            console.log(res)
+          } )
+          .catch( res=> {
+            this.setState({
+              loading: false
+            })
+          } )
       }
       // 添加经销商请求
     } )
@@ -120,6 +165,8 @@ export default class AddDealer extends PureComponent {
 
   // 联动菜单选中之后
   handleProvince= async (code, e, type)=>{
+    // console.log(e)
+    // return
     if ( type==='province' ) {   // 省级下拉菜单选中
       const res = await promise_( getProvinceDealers, {code} )
       // 查询该省，有无经销商，若有则获取到该省所有市后赋值给state
@@ -154,7 +201,18 @@ export default class AddDealer extends PureComponent {
           type: 'district',
           districtData: {
             id: e.props.id,
-            name: e.props.name
+            name: e.props.name,
+            code
+          }
+        })
+      } else {
+        this.setState({
+          streetList: true,
+          type: 'district',
+          districtData: {
+            id: e.props.id,
+            name: e.props.name,
+            code
           }
         })
       }
@@ -178,6 +236,7 @@ export default class AddDealer extends PureComponent {
           <Select
             onSelect={ (value, e)=>this.handleProvince(value,e, 'province') }
                   // mode="combobox"
+            value={520000}
                   style={{width: 150}}>
               {this.state.provinceList.map( (item,i)=>(
                 <Option
@@ -254,16 +313,6 @@ export default class AddDealer extends PureComponent {
                   rules: [{
                   }, {
                     required: true, message: '请输入用户名称',
-                  }],
-                })(
-                  <Input />
-                )}
-              </FormItem>
-              <FormItem {...formItemLayout} label='地址' >
-                {getFieldDecorator('address', {
-                  rules: [{
-                  }, {
-                    // required: true, message: '请输入地址',
                   }],
                 })(
                   <Input />

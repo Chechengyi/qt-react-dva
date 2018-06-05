@@ -2,6 +2,7 @@ import React from 'react';
 import dynamic from 'dva/dynamic';
 import { getMenuData } from './menu';
 import AccountManagement from "../driver/AccountManagement";
+import Ships from "../routes/Order/Ships";
 
 // wrapper of dynamic
 const dynamicWrapper = (app, models, component) => dynamic({
@@ -44,7 +45,16 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['admin_login', 'noDisOrder'], () => import('../layouts/BasicLayout')),
     },
     '/admin/cont/order/noDisOrder': {
-      component: dynamicWrapper(app, ['admin_login', 'noDisOrder'], () => import('../routes/Order/NoDisOrder'))
+      component: dynamicWrapper(app, ['admin_login', 'noDisOrder', 'orderType'], () => import('../routes/Order/NoDisOrder'))
+    },
+    '/admin/cont/order/ships': {
+      component: dynamicWrapper(app, ['admin_login', 'shipOrder', 'orderType'], () => import('../routes/Order/Ships'))
+    },
+    '/admin/cont/order/dones': {
+      component: dynamicWrapper(app, ['admin_login', 'donesOrder', 'orderType'], () => import('../routes/Order/DoneOrder'))
+    },
+    '/admin/cont/order/cancel': {
+      component: dynamicWrapper(app, ['admin_login', 'cancelOrder', 'orderType'], () => import('../routes/Order/CancelOrder'))
     },
     '/admin/cont/people/cus': {
       component: dynamicWrapper(app, ['admin_login', 'customer'], ()=>import('../routes/Staff/Cus'))
@@ -110,6 +120,12 @@ export const getRouterData = (app) => {
     '/cont/endAddress': {
       component: dynamicWrapper(app, ['client_login', 'orderAddress'], () => import('../client/EndAddress')),
     },
+    '/cont/byOrder/tongcheng': {
+      component: dynamicWrapper(app, ['client_login', 'orderType', 'orderAddress'], () => import('../client/ByOrder/ByOrderTongcheng')),
+    },
+    '/cont/byOrder/daigou': {
+      component: dynamicWrapper(app, ['client_login', 'orderType', 'orderAddress'], () => import('../client/ByOrder/ByOrderDaigou')),
+    },
     '/cont/byOrder/:id': {
       component: dynamicWrapper(app, ['client_login', 'orderType', 'orderAddress'], () => import('../client/ByOrder')),
     },
@@ -134,20 +150,31 @@ export const getRouterData = (app) => {
     '/cont/updateAddress': {
       component: dynamicWrapper(app, ['client_login'], () => import('../client/UpdateAddress'))
     },
-
+    '/cont/ceshi': {
+      component: dynamicWrapper(app, ['client_login'], () => import('../client/ByOrder/Ceshi')),
+    },
 
     // 快递员端路由
     '/driverLogin': {
       component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Login')),
     },
     '/driverCont': {
-      component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Cont')),
+      component: dynamicWrapper(app, ['driver_login', 'courierNoAccept'], () => import('../driver/Cont')),
     },
     '/driverCont/index': {
       component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Index')),
     },
     '/driverCont/updatePsw': {
       component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Psw')),
+    },
+    '/driverCont/weichuli': {
+      component: dynamicWrapper(app, ['driver_login', 'courierNoAccept', 'orderType'], () => import('../driver/Order/Weichuli')),
+    },
+    '/driverCont/daiqueren': {
+      component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Order/Daiqueren')),
+    },
+    '/driverCont/peisongzhong': {
+      component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Order/Peisongzhong')),
     },
     '/driverElseCont': {
       component: dynamicWrapper(app, ['driver_login'], () => import('../driver/ElesCont')),

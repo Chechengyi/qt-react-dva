@@ -14,7 +14,9 @@ const Brief = List.Item.Brief
   startPoint: state.orderAddress.startPoint,
   startMsg: state.orderAddress.startMsg,
   endPoint: state.orderAddress.endPoint,
-  endMsg: state.orderAddress.endMsg
+  endMsg: state.orderAddress.endMsg,
+  adminId: state.orderAddress.adminId,
+  startAddress: state.orderAddress.startAddress
 }))
 @createForm()
 export default class ByOrder extends PureComponent {
@@ -22,7 +24,8 @@ export default class ByOrder extends PureComponent {
   constructor(props){
     super(props)
     this.state = {
-      expectedPrice: null
+      expectedPrice: null,
+      distance: null
     }
     this.AMap = Object.AMap
     this.orderType=this.props.match.params.id||window.sessionStorage.getItem('orderType')
@@ -56,7 +59,12 @@ export default class ByOrder extends PureComponent {
       if (startLnt&&starLat&&endLnt&&endLat) {
         distance = this.getDistance(this.props.startPoint, this.props.endPoint)
         console.log('距离为。。。'  + distance)
-        getExpectedPrice()  //参数对接在填写
+        this.setState({
+          distance: distance
+        })
+        getExpectedPrice({
+          typeId: this.props.match.params.id,
+        })  //参数对接在填写
           .then( res=>{
             if (res.status==='OK') {
               console.log(res)
@@ -71,12 +79,16 @@ export default class ByOrder extends PureComponent {
       if (startLnt&&starLat&&endLnt&&endLat&&weight) {
         distance = this.getDistance(this.props.startPoint, this.props.endPoint)
         console.log('距离为。。。'  + distance)
-        getExpectedPrice()  //参数对接在填写
+        getExpectedPrice({
+          orderTypeId: parseInt(this.props.match.params.id),
+          weight: parseFloat(weight),
+          distance: parseFloat(distance)
+        })  //参数对接在填写
           .then( res=>{
             console.log(res)
             if (res.status==='OK') {
               this.setState({
-                expectedPrice: res.price
+                expectedPrice: res.data.fee
               })
             }
           } )
@@ -108,6 +120,9 @@ export default class ByOrder extends PureComponent {
   }
   // 下单操作
   submit=()=>{
+    console.log(this.props.adminId)
+    // return
+    console.log(this.porps.startAddress)
     console.log(this.props.startPoint)
     console.log(this.props.startMsg)
     if ( this.orderType==2 ) {  // 代购订单
@@ -125,8 +140,17 @@ export default class ByOrder extends PureComponent {
         typeId: this.orderType,
         receiverName: this.props.endMsg.receiverName, //收货人姓名
         receiverTel: this.props.endMsg.tel,  //收货人电话
-        cusLongitude: this.props.startPoint.lnt,  //取货地址经纬度
-        cusLatitude: this.props.startPoint.lat    //取货地址经纬度
+        receiverAddr: this.props.endPoint.address+this.props.endPoint.name, //收货人地址
+        senderName: this.props.startMsg.receiverName,
+        senderTel: this.props.startMsg.tel,
+        senderAddr: this.props.startPoint.address+this.props.startPoint.name,
+        cusLongitude: parseFloat(this.props.startPoint.lnt),  //取货地址经纬度
+        cusLatitude: parseFloat(this.props.startPoint.lat),    //取货地址经纬度
+        distance: this.state.distance || 10,
+        feeRate: 0.03,  // 订单提成比例，
+        // goosType: ''  商品类型
+        // comment  订单备注
+        weight: parseFloat(weight)
       })
     } else { // 物流订单
       let {weight} = this.props.form.getFieldsValue()
@@ -146,13 +170,25 @@ export default class ByOrder extends PureComponent {
       }
       // 发送下单请求
       this.sendAddOrder({
-        cusId: this.props.client_id,
+        cusId: parseInt(this.props.client_id),
         adminId: 5,   //经销商
-        typeId: this.orderType,
+        typeId: parseInt(this.orderType),
         receiverName: this.props.endMsg.receiverName, //收货人姓名
         receiverTel: this.props.endMsg.tel,  //收货人电话
-        cusLongitude: this.props.startPoint.lnt,  //取货地址经纬度
-        cusLatitude: this.props.startPoint.lat    //取货地址经纬度
+        receiverAddr: this.props.endPoint.address+this.props.endPoint.name, //收货人地址
+        endLongitude: parseFloat(this.props.endPoint.lnt),  // 收货人经度
+        endLatitude: parseFloat(this.props.endPoint.lat),  // 收货人纬度
+        senderName: this.props.startMsg.receiverName, // 寄件人名字
+        senderTel: this.props.startMsg.tel,  // 寄件人电话
+        senderAddr: this.props.startPoint.address+this.props.startPoint.name, // 寄件人地址
+        cusLongitude: parseFloat(this.props.startPoint.lnt),  //取货地址经纬度
+        cusLatitude: parseFloat(this.props.startPoint.lat),    //取货地址经纬度
+        distance: this.state.distance || 10 , // 订单类型
+        feeRate: 0.03,  // 订单提成比例，
+        // goosType: ''  商品类型
+        // comment  订单备注
+        weight: parseFloat(weight),
+        fee: parseFloat(this.state.expectedPrice)
       })
     }
   }

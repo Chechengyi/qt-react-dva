@@ -25,12 +25,13 @@ export default class UpdateMsg extends Component {
     getDealer({
       id: this.props.admin_id,
       roleId: 0,
-      pageNo: 0,
+      pageNo: 1,
       pageSize: 10
     })
       .then( res=>{
+        console.log(res)
         this.setState({
-          data: res[0]
+          data: res.data.content[0]
         })
       } )
   }
@@ -116,19 +117,6 @@ export default class UpdateMsg extends Component {
                 }],
               })(
                 <Input type='phone' style={{width: 300}} />
-              )}
-            </FormItem>
-            <FormItem
-              {...formItemLayout}
-              label="地址"
-            >
-              {getFieldDecorator('address', {
-                initialValue: this.state.data.address,
-                rules: [{
-                  required: true, message: '地址不能为空！',
-                }],
-              })(
-                <Input style={{width: 300}} />
               )}
             </FormItem>
             <FormItem {...tailFormItemLayout}>

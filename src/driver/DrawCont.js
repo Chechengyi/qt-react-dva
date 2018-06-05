@@ -127,7 +127,8 @@ export default class DrawCont extends PureComponent {
 
 
   render () {
-    return <div  style={{width: '100%', position: 'absolute', top: 0, bottom: 0}}>
+    return <div  style={{width: '100%', position: 'absolute',
+      top: 0, bottom: 0, zIndex: 55 }}>
       <WhiteSpace />
       <div className={pubStyle.onePxBor} style={{padding: '10px 0'}} >
         <WingBlank>

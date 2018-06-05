@@ -11,10 +11,11 @@ export async function getCode(params) {
 * */
 // 根据两点之间的距离和货物重量核算订单预计价格
 export async function getExpectedPrice(params) {
-  return request('/order/expectedPrice', {
-    method: 'POST',
-    body: params
-  })
+  // return request('/order/expectedPrice', {
+  //   method: 'POST',
+  //   body: params
+  // })
+  return request(`/order/expectedPrice?${stringify(params)}`)
 }
 // 验证快递员账户是否重复
 export async function courierIsRepeat(parmas) {
@@ -22,7 +23,7 @@ export async function courierIsRepeat(parmas) {
 }
 // 获取订单类型列表
 export async function getOrderType(params) {
-  return request(`/oreder/getOrederTypes?${stringify(params)}`)
+  return request(`/order/getOrderTypes`)
 }
 // 获取省级列表
 export async function getProvince(params) {
@@ -38,10 +39,21 @@ export async function getCityDealers(params) {
 }
 // 参数 code
 export async function getdistrictDealers(params) {
-  return request(`/dealer/getdistrictDealers?${stringify(params)}`)
+  return request(`/dealer/getDistrictDealers?${stringify(params)}`)
 }
-// 参数code
+// 参数 code  获取区县下面的街道级地址列表
+export async function getStreetDealers(params) {
+  return request(`/dealer`)
+}
 
+// 管理员，客户， 快递员取消订单
+export async function cancelOrder(params) {
+  return request('/order/addCancel', {
+    method: 'POST',
+    body:params
+  })
+}
+// 查询所有配送中的订单
 
 
 
@@ -100,7 +112,7 @@ export async function addDealer(params) {
 }
 // 管理员重置经销商密码
 export async function resetDealerPsw(params) {
-  return request('/admin/modifyCourierPwd', {
+  return request('/admin/modifyDealerPwd', {
     method: 'POST',
     body: params
   })
@@ -142,7 +154,7 @@ export async function getDealers(params) {
 export async function getNoDisOrder(params) {
   return request(`/order/getDistributes?${stringify(params)}`)
 }
-// 获取未分配订单的个数 参数：id 经销商的id
+// 获取未分配订单的个数 参数：admiId 经销商的id
 export async function getNoDisOrderCount(params) {
   return request(`/order/getDistributesCount?${stringify(params)}`)
 }
@@ -150,7 +162,25 @@ export async function getNoDisOrderCount(params) {
 export async function getCourierPos(parmas) {
   return request(`/dealer/getCourierPos`)
 }
-
+// 经销商分配订单
+export async function dealerDistributeOrder(params) {
+  return request('/order/addDistribute', {
+    method: 'POST',
+    body: params
+  })
+}
+// 经销商查看所有配送中的订单
+export async function dealerShpisOrder(params) {
+  return request(`/order/getShips?${stringify(params)}`)
+}
+// 经销商查看以完成的订单
+export async function dealerDoneOrder(params) {
+  return request(`/order/getDones?${stringify(params)}`)
+}
+// 经销商查看以取消的订单
+export async function dealerCancelOrder(params) {
+  return request(`/order/getCancels?${stringify(params)}`)
+}
 
 /*
 *   客户端API
@@ -205,6 +235,23 @@ export async function updateAddress(params) {
     body: params
   })
 }
+// 客户获取所有省列表
+export async function cusGetAllProvince(params) {
+  return request(`/cus/getAreaProvince`)
+}
+// 客户获取市区列表
+export async function cusGetCity(params) {
+  return request(`/cus/getAreaCity?${stringify(params)}`)
+}
+// 客户获取区现列表
+export async function cusGetDistrict(params) {
+  return request(`/cus/getAreaDistrict?${stringify(params)}`)
+}
+// 客户获取区县列表
+export async function cusGetStreet(params) {
+  return request(`/cus/getAreaStreet?${stringify(params)}`)
+}
+
 // 客户下单
 export async function addOrder(params) {
   return request('/order/add', {
@@ -266,4 +313,12 @@ export async function updateAccount(params) {
     method: 'POST',
     body: params
   })
+}
+// 快递员获取未处理订单条数
+export async function courierNoAccpetCount(params) {
+  return request(`/order/getAcceptesCount?${stringify(params)}`)
+}
+// 快递员获取未处理订单列表
+export async function getCourierNoAccpet(params) {
+  return request(`/order/getAcceptes?${stringify(params)}`)
 }

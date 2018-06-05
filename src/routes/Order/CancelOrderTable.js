@@ -33,8 +33,8 @@ const SelectInput = ({getFieldDecorator, value, text, selectArr, width}) => (
 
 @Form.create()
 @connect(state => ({
-  data: state.noDisOrder.data,
-  loading: state.noDisOrder.loading,
+  data: state.cancelOrder.data,
+  loading: state.cancelOrder.loading,
   // total: state.courier.total,
   admin_id: state.admin_login.admin_id,
   roleId: state.admin_login.roleId,
@@ -214,12 +214,12 @@ export default class FrontDesk_table extends  PureComponent {
       },
       {
         title: '客户姓名',
-        dataIndex: 'senderName',
+        dataIndex: 'cusUsername',
         width: 100
       },
       {
         title: '联系电话 ',
-        dataIndex: 'senderTel',
+        dataIndex: 'tel',
         width: 150,
         render: (val, text, index) => (
           <div>
@@ -228,11 +228,8 @@ export default class FrontDesk_table extends  PureComponent {
         )
       },
       {
-        title: '订单类型',
-        dataIndex: 'typeId',
-        render: (val, text, index)=>(
-          this.idToName(val, [{id: 1, category_name: '同城急送'},{id:2,category_name: '代购服务'}, {id: 3,category_name: '快递物流'}], 'category_name')
-        )
+        title: '配送快递员',
+        dataIndex: 'couUsername'
       },
       {
         title: '下单时间',
@@ -242,13 +239,10 @@ export default class FrontDesk_table extends  PureComponent {
       },
       {
         title: '操作',
-        width: 200,
+        width: 100,
         render: (val, text, index) => (
           <div>
-            <a href={`/#/orderMap/${val.id}/${val.cusLongitude},${val.cusLatitude}`} >查看周边快递员</a>
-            <a style={{color: 'red', marginLeft: 5}}
-                onClick={ ()=>{ this.handleModal(val.id, index) } }
-            >取消订单</a>
+
           </div>
         )
       }

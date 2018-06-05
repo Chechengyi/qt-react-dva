@@ -9,16 +9,19 @@ let Scroll = null
 
 export default class ScrollChat extends Component {
 
-  constructor(props){
-    super(props)
-    this.state = {
-      count: 10,
-      text: null,
-    }
+  // constructor(props){
+  //   super(props)
+  //   this.state = {
+  //     count: 10,
+  //     text: null,
+  //     message: []
+  //   }
+  // }
+  componentWillMount(){
+    console.log('孩子， willmount')
   }
 
   componentDidMount(){
-    console.log('zi')
     let self = this
     this.Scroll = new Iscroll(this.refs.scrollWarp, {
       scrollbars: true,
@@ -32,13 +35,15 @@ export default class ScrollChat extends Component {
         console.log('加载吧')
       }
     } )
+    console.log('zi')
+  }
+
+  componentWillReceiveProps(){
+    console.log('receiveProps')
     this.Scroll.refresh()
   }
 
-  componentDidUpdate(e){
-    console.log(e)
-    this.Scroll.refresh()
-  }
+
 
   inputText=e=>{
     this.setState({

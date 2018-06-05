@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react';
-import { Select, Spin } from 'antd'
+import { Select, Spin, message } from 'antd'
 import { connect } from 'dva'
-import { getCourierPos } from '../../services/api'
+import { getCourierPos, dealerDistributeOrder } from '../../services/api'
 import { promise_ } from '../../services/utils'
+
 
 const Option = Select.Option
 let AMap = Object.map  // 地图对象
@@ -27,11 +28,17 @@ export default class Map extends PureComponent {
       loading: true
     })
     const res = await getCourierPos()
-    console.log(res.data)
+    console.log(res)
     if (res.data) {
+      // console.log(Object.keys(res.data))
       // 绘制点
-      res.data.forEach( item => {
-        this.drawMarker(item.courierId, item.longitude, item.latitude, item.username, item.tel)
+      // return
+      // Object.keys(res.data).forEach( item=>{
+      //   console.log(res.data[item])
+      // } )
+      // return
+      Object.keys(res.data).forEach( item => {
+        this.drawMarker(res.data[item].id, res.data[item].longitude, res.data[item].latitude, res.data[item].username, res.data[item].tel)
       } )
       let markerArr = Object.keys(this.markers).map( item=>{
         return this.markers[item]
@@ -67,17 +74,25 @@ export default class Map extends PureComponent {
       //   offset: (0,100)
       // },
       extData: {
-        id: courierId,
+        courierId,
         username,
         tel
       }
-    }).on('click', function (e) {
-      console.log(e)
-      console.log(e.target.F.extData)
+    }).on('click', this.handleMarkerClick)
+  }
+
+  handleMarkerClick = e=> {
+    dealerDistributeOrder({
+      id: this.id,
+      couId: e.target.F.extData.courierId
     })
-    // this.markers[courierId].on('click', function (e) {
-    //   console.log(e)
-    // })
+      .then( res=>{
+        if (res.status==='OK'){
+          message.success('订单分配成功！', 1, ()=>{
+            this.props.history.goBack()
+          } )
+        }
+      } )
   }
 
   componentDidMount () {
@@ -85,10 +100,7 @@ export default class Map extends PureComponent {
     this.id = this.props.match.params.id
     this.lnt = this.props.match.params.location.split(',')[0]
     this.lat = this.props.match.params.location.split(',')[1]
-    // 发送加载快递员位置信息action
-    // this.props.dispatch({
-    //   type: 'courierPos/getData'
-    // })
+
     let self = this
     AMap = Object.AMap
     gloabalMap = new AMap.Map(this.refs.map, {

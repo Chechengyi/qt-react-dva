@@ -7,7 +7,7 @@ export default class Index extends PureComponent {
   }
 
   render () {
-    return <div style={{height: 800, backgroundColor: 'red'}} >
+    return <div style={{height: 800}} >
       shouyesds
     </div>
   }

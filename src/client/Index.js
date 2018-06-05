@@ -132,6 +132,26 @@ export default class Index extends PureComponent {
     })
   }
 
+  handleOrderLink = ()=> {
+    if ( this.state.selectOrderTypeId===1 ) { //去往同城急送下单页面
+      this.props.history.push('/cont/byOrder/tongcheng')
+    } else if ( this.state.selectOrderTypeId===2 ) { // 代购服务下单页面
+      this.props.history.push('/cont/byOrder/daigou')
+    } else if (this.state.selectOrderTypeId===3) { // 物流服务下单页面
+
+    }
+    return
+    if(this.props.client_status==='OK'){
+      this.props.history.push(`/cont/byOrder/${this.state.selectOrderTypeId}`)
+    }else{
+      Modal.alert('还没有登录','去登录了在下单', [{
+        text: '取消', onPress: ()=>{}
+      }, {
+        text: '确认', onPress: ()=>this.props.history.push('/clientUser/login')
+      }])
+    }
+  }
+
   render () {
     const sidebar=(<DrawCont history={this.props.history} />)
     return <div>
@@ -182,17 +202,7 @@ export default class Index extends PureComponent {
             ) )}
           </div>
           <div
-            onClick={ ()=>{
-              if(this.props.client_status==='OK'){
-                this.props.history.push(`/cont/byOrder/${this.state.selectOrderTypeId}`)
-              }else{
-                Modal.alert('还没有登录','去登录了在下单', [{
-                  text: '取消', onPress: ()=>{}
-                }, {
-                  text: '确认', onPress: ()=>this.props.history.push('/clientUser/login')
-                }])
-              }
-            } }
+            onClick={ this.handleOrderLink }
             style={{
             position: 'absolute', textAlign: 'center', lineHeight: '30px',
             width: 80, height: 30, backgroundColor: '#000',

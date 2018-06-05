@@ -1,22 +1,25 @@
-import { adminGetCus } from '../services/api'
+/*
+* 配送中的订单
+* */
+import { dealerShpisOrder } from '../services/api'
 
 export default {
-  namespace: 'customer',
+  namespace: 'shipOrder',
   state: {
-    data: [],
-    loading: false
+    loading: false,
+    data: []
   },
   effects: {
-    *getData({payload}, {call,put}){
+    *getData( {payload}, {call, put} ){
       yield put({
         type: 'changeLoading',
         payload: true
       })
-      const res = yield call(adminGetCus, payload)
-      if (res.status==='OK') {
+      const res = yield call( dealerShpisOrder, payload )
+      if (res.data) {
         yield put({
           type: 'saveData',
-          payload: res.data.content
+          payload: res.data
         })
       } else {
         yield put({
@@ -31,16 +34,16 @@ export default {
     }
   },
   reducers: {
-    saveData(state, {payload}){
+    saveData( state, {payload} ){
       return {
         ...state,
         data: payload
       }
     },
-    changeLoading(state, {paylaod}){
+    changeLoading ( state, {payload} ) {
       return {
         ...state,
-        loading: paylaod
+        loading: payload
       }
     }
   }

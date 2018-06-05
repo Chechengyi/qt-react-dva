@@ -134,16 +134,16 @@ export default class Cai extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={5} sm={10} >
-            <FormItem label="激活／未激活">
-              {getFieldDecorator('is_active')(
-                <Select>
-                  <Option value={0} >未激活</Option>
-                  <Option value={1} >激活</Option>
-                </Select>
-              )}
-            </FormItem>
-          </Col>
+          {/*<Col md={5} sm={10} >*/}
+            {/*<FormItem label="激活／未激活">*/}
+              {/*{getFieldDecorator('is_active')(*/}
+                {/*<Select>*/}
+                  {/*<Option value={0} >未激活</Option>*/}
+                  {/*<Option value={1} >激活</Option>*/}
+                {/*</Select>*/}
+              {/*)}*/}
+            {/*</FormItem>*/}
+          {/*</Col>*/}
           <Col md={4} sm={10}>
             <FormItem>
             <span className={styles.submitButtons}>

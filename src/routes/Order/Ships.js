@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Row, Col, Card, Form, Input, Select, Button, message} from 'antd';
-import Frontdesk_table from './NoDisOrderTable'
+import Frontdesk_table from './ShipsTable'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TableList.less';
 
@@ -32,7 +32,7 @@ export default class Cai extends PureComponent {
       })
     }
     this.props.dispatch({
-      type: 'noDisOrder/getData',
+      type: 'shipOrder/getData',
       payload: {
         pageNo: this.state.pageNo,
         pageSize: this.state.pageSize,
@@ -51,7 +51,7 @@ export default class Cai extends PureComponent {
 
   handle_page_change = (page, pageSize) => {
     this.props.dispatch({
-      type: 'noDisOrder/getData',
+      type: 'shipOrder/getData',
       payload: {
         pageNo: page,
         pageSize: this.state.pageSize,
@@ -89,7 +89,7 @@ export default class Cai extends PureComponent {
         pageSize: 1
       });
       this.props.dispatch({
-        type: 'noDisOrder/getData',
+        type: 'shipOrder/getData',
         payload: {
           pageNo: 1,
           pageSize: 10,
@@ -102,7 +102,7 @@ export default class Cai extends PureComponent {
   }
 
   handle_reset = () => {
-    this.props.history.replace('/admin/cont/order/noDisOrder')
+    this.props.history.replace('/admin/cont/order/ships')
     // return
     // this.props.form.resetFields()
     // this.setState({

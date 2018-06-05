@@ -1,7 +1,10 @@
-import { getDealers } from '../services/api'
+/*
+* 以完成的订单
+* */
+import { dealerDoneOrder } from '../services/api'
 
 export default {
-  namespace: 'dealer',
+  namespace: 'donesOrder',
   state: {
     loading: false,
     data: []
@@ -12,11 +15,18 @@ export default {
         type: 'changeLoading',
         payload: true
       })
-      const res = yield call( getDealers, payload )
-      yield put({
-        type: 'saveData',
-        payload: res.data.content
-      })
+      const res = yield call( dealerDoneOrder, payload )
+      if (res.data) {
+        yield put({
+          type: 'saveData',
+          payload: res.data
+        })
+      } else {
+        yield put({
+          type: 'saveData',
+          payload: []
+        })
+      }
       yield put({
         type: 'changeLoading',
         payload: false

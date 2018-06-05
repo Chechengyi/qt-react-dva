@@ -83,31 +83,16 @@ export default class FrontDesk_table extends  PureComponent {
   }
 
   handleSave = (val, index) => {
-    // console.log('ok')
     this.props.form.validateFields( (err,values)=>{
-      if (err) {
-        Modal.error({
-          title: '输入的信息不能为空！'
-        })
-        return
-      }
-      if (!/^(([1-9]\d*)|0)$/.test(values.tel)) {
-        message.error('请输入正确的电话号码')
-        return
-      }
       updateDealer({
         id: val.id,
-        username: values.username,
-        tel: values.tel,
-        address: values.address
+        isActive: values.isActive
       })
         .then( res=>{
           if (res.status==='OK') {
             let next_data = [...this.state.data]
             message.success('修改成功！', 1)
-            next_data[index].is_active = values.isActive
-            next_data[index].tel = values.tel
-            next_data[index].username = values.username
+            next_data[index].isActive = values.isActive
             this.setState({
               selectWriteKey: null,
               data: next_data
@@ -167,21 +152,21 @@ export default class FrontDesk_table extends  PureComponent {
         title: '姓名',
         dataIndex: 'username',
         width:150,
-        render: (val, text, index) => (
-          <div>
-            {this.state.selectWriteKey===index?this.renderWriteInput(getFieldDecorator,val,'username'): val}
-          </div>
-        )
+        // render: (val, text, index) => (
+        //   <div>
+        //     {this.state.selectWriteKey===index?this.renderWriteInput(getFieldDecorator,val,'username'): val}
+        //   </div>
+        // )
       },
       {
         title: '联系电话 ',
         dataIndex: 'tel',
         width: 150,
-        render: (val, text, index) => (
-          <div>
-            {this.state.selectWriteKey===index?this.renderWriteInput(getFieldDecorator,val,'tel'): val}
-          </div>
-        )
+        // render: (val, text, index) => (
+        //   <div>
+        //     {this.state.selectWriteKey===index?this.renderWriteInput(getFieldDecorator,val,'tel'): val}
+        //   </div>
+        // )
       },
       {
         title: '状态',
@@ -200,13 +185,13 @@ export default class FrontDesk_table extends  PureComponent {
       // },
       {
         title: '管辖地区',
-        dataIndex: 'adress'
+        dataIndex: 'adminAddress'
       },
     ]
-    if (this.props.roleId===0) {
+    if (this.props.roleId==0) {
       columns.push({
         title: '操作',
-        width: 150,
+        width: 120,
         render: (val, text, index) => (
           <div>
             {this.state.selectWriteKey===index?
@@ -256,7 +241,6 @@ export default class FrontDesk_table extends  PureComponent {
         }
         size='small'
         loading={this.props.loading}
-        //rowSelection={rowSelection}
       />
     </div>
   }

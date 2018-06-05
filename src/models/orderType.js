@@ -15,7 +15,7 @@ export default {
       const res = yield call(getOrderType, payload)
       yield put({
         type: 'saveData',
-        payload: res
+        payload: res.data
       })
       yield put({
         type: 'changeLoading',

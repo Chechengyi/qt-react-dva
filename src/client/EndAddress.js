@@ -16,27 +16,29 @@ export default class EndAddress extends PureComponent {
 
   constructor(props){
     super(props)
-    this.orderType = window.sessionStorage.getItem('orderType')
+    this.typeId = window.sessionStorage.getItem('typeId')
     this.title = this.orderType==2?'购货地址':'收货地址'
   }
 
+  renderModal( title='', content='', text='确认', onPress=()=>{} ){
+    Modal.alert(title, content, [{
+      text, onPress
+    }])
+  }
+
   submit=()=>{
-    if(this.orderType==2){
-      // 代购服务的提交终点信息
-      this.props.history.push(`/cont/byOrder/${this.orderType}`)
-    }else{
-      // 非代购服务的提交终点信息
+    if ( this.typeId==1 ) {
       let {tel, receiverName} = this.props.form.getFieldsValue()
       if (Object.keys(this.props.endPoint).length==0 ||!tel||!receiverName) {
-        Modal.alert('请将信息完善后在提交', '', [{
-          text: '确定', onPress: ()=>{}
-        }])
+        this.renderModal('请将信息完善后在提交')
         return
       }
       if (/^[\s]*$/.test(receiverName)) {
-        Modal.alert('姓名信息不能为空白！', '', [{
-          text: '确定', onPress: ()=>{}
-        }])
+        this.renderModal('姓名信息不能为空白')
+        return
+      }
+      if (/^[\s]*$/.test(this.refs.address.value)) {
+        this.renderModal('收货地址不能为空白')
         return
       }
       tel = tel.replace(/\s+/g,"")
@@ -47,8 +49,16 @@ export default class EndAddress extends PureComponent {
           receiverName
         }
       })
+      this.props.dispatch({
+        type: 'orderAddress/endAddress',
+        payload: this.refs.address.value
+      })
+      this.props.history.push('/cont/byOrder/tongcheng')
     }
-    this.props.history.push(`/cont/byOrder/${this.orderType}`)
+    if(this.orderType==2){
+      // 代购服务的提交终点信息
+      this.props.history.push(`/cont/byOrder/${this.orderType}`)
+    }
   }
 
   render(){
@@ -92,6 +102,12 @@ export default class EndAddress extends PureComponent {
             </InputItem>
           </List>
       }
+      <WingBlank>
+        <div style={{margin: '7px 0'}} >详细地址：</div>
+        <textarea style={{width: '100%', borderRadius: 0,
+                          border: '1px solid #d9d9d9'
+        }} rows="3" ref='address' ></textarea>
+      </WingBlank>
       <WhiteSpace />
       <WingBlank>
         <Button onClick={ this.submit } type='primary'>确定</Button>

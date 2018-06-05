@@ -8,6 +8,7 @@ const menuData = [
     path: 'admin/cont/people',
     children: [
       {
+        isAdmin: true,
         name: '经销商管理',
         path: 'dealer'
       },
@@ -31,6 +32,18 @@ const menuData = [
       {
         name: '未分配订单',
         path: 'noDisOrder'
+      },
+      {
+        name: '配送中订单',
+        path: 'ships'
+      },
+      {
+        name: '以完成订单',
+        path: 'dones'
+      },
+      {
+        name: '以取消订单',
+        path: 'cancel'
       }
     ]
   },

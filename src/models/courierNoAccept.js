@@ -1,45 +1,33 @@
-/*
-*  未分配的订单
-* */
-import { getNoDisOrder, getNoDisOrderCount } from '../services/api'
+import { courierNoAccpetCount, getCourierNoAccpet } from '../services/api'
 
 export default {
-  namespace: 'noDisOrder',
+  namespace: 'courierNoAccept',
   state: {
     loading: false,
     data: [],
     count: 0
   },
   effects: {
-    // 进入页面获取data
+    *getCount( {payload}, {call, put} ){
+      const res = yield call( courierNoAccpetCount, payload )
+      yield put({
+        type: 'saveCount',
+        payload: res.data
+      })
+    },
     *getData( {payload}, {call, put} ){
-      console.log('...')
       yield put({
         type: 'changeLoading',
         payload: true
       })
-      const res = yield call(getNoDisOrder, payload)
-      console.log(res)
-      let arr = []
-      for ( var i=0; i<res.data.length; i++ ) {
-        arr.push(res.data[i][0])
-      }
+      const res = yield call( getCourierNoAccpet, payload )
       yield put({
         type: 'saveData',
-        // payload: res.data[0]
-        payload: arr
+        payload: res.data
       })
       yield put({
         type: 'changeLoading',
         payload: false
-      })
-    },
-    // 轮询获取未分配订单的个数
-    *backGetCount({payload}, {call, put}){
-      const res = yield call(getNoDisOrderCount, payload)
-      yield put({
-        type: 'saveCount',
-        payload: res.data
       })
     }
   },
