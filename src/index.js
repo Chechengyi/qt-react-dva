@@ -6,6 +6,7 @@ import './rollbar';
 // import browserHistory from 'history/createBrowserHistory';
 import './index.less';
 import 'antd-mobile/dist/antd-mobile.css'
+import './theme.less'
 
 // 1. Initialize
 const app = dva({

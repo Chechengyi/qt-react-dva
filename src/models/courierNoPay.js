@@ -1,24 +1,21 @@
-import { courierNoAccpetCount, getCourierNoAccpet } from '../services/api'
+/*
+*  快递员获取用户未付款的订单
+*  isShip为1， isPay为0的订单
+* */
+
+import {courierGetCusNoPay} from '../services/api'
 
 export default {
-  namespace: 'courierNoAccept',
+  namespace: 'courierNoPay',
   state: {
     loading: false,
-    data: [],
-    count: 0
+    data: []
   },
   effects: {
     *refresh( {payload}, {call, put} ){
-      const res = yield call( getCourierNoAccpet, payload )
+      const res = yield call( courierGetCusNoPay, payload )
       yield put({
         type: 'saveData',
-        payload: res.data
-      })
-    },
-    *getCount( {payload}, {call, put} ){
-      const res = yield call( courierNoAccpetCount, payload )
-      yield put({
-        type: 'saveCount',
         payload: res.data
       })
     },
@@ -27,7 +24,7 @@ export default {
         type: 'changeLoading',
         payload: true
       })
-      const res = yield call( getCourierNoAccpet, payload )
+      const res = yield call( courierGetCusNoPay, payload )
       yield put({
         type: 'saveData',
         payload: res.data
@@ -39,12 +36,6 @@ export default {
     }
   },
   reducers: {
-    saveCount( state, {payload} ){
-      return {
-        ...state,
-        count: payload
-      }
-    },
     saveData( state, {payload} ){
       return {
         ...state,

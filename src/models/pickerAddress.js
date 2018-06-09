@@ -8,9 +8,16 @@ export default {
   namespace: 'pickerAddress',
   state: {
     provinceData: [],
-    value: ['520000']
+    value: ['520000'],
+    adminId: null
   },
   effects: {
+    *setValue( {payload}, {call, put} ){
+      yield put({
+        type: 'saveValue',
+        payload
+      })
+    },
     *setProvinceData( {payload}, {call, put} ){
       console.log('获取省级列表')
       const res = yield call( cusGetAllProvince )
@@ -72,6 +79,12 @@ export default {
     }
   },
   reducers: {
+    saveValue( state, {payload} ){
+      return {
+        ...state,
+        value: payload
+      }
+    },
     saveStreetData( state, {payload} ){
       const {provinceValue, cityValue, districtValue, data} = payload
       let provinceData = [...state.provinceData]  // 复制地址列表

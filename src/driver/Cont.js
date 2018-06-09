@@ -35,6 +35,16 @@ export default class Cont extends PureComponent {
     //   // e.stopPropagation()
     // })
     // 获取快递员未处理订单条数
+    // 判断是ios系统还是andior系统
+    var u = navigator.userAgent;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    if (isAndroid) {
+      this.xitong = 'and'
+    }
+    if (isiOS) {
+      this.xitong = 'ios'
+    }
     this.props.dispatch({
       type: 'courierNoAccept/getCount',
       payload: {
@@ -77,23 +87,24 @@ export default class Cont extends PureComponent {
     const {routerData, match} = this.props
     return <div ref='driverRoot' >
       <NavBar
-        // onTouchMove={ e=> e.preventDefault() }
+        onTouchMove={ e=> e.preventDefault() }
         icon={this.state.writePsw?<Icon type="left" />:<Icon type="ellipsis" />} onLeftClick={ ()=>{ this.onOpenChange('click') }}>
         {this.state.writePsw?'修改密码':this.state.title}
       </NavBar>
       <Drawer
         className={styles.myDrawer}
-        style={{ minHeight: document.documentElement.clientHeight-44}}
+        style={{ minHeight: document.documentElement.clientHeight-45}}
         sidebar={sidebar}
         sidebarStyle={{
           position: 'absolute', top: 0, left: 0, zIndex: 55,
           backgroundColor: '#fff',
           width: document.documentElement.clientWidth * 0.8,
         }}
+        onTouchMove={ e=>e.stopPropagation() }
         onOpenChange={ e=>this.onOpenChange(e) }
         open={this.state.docked}
       >
-        <div style={{height: document.documentElement.clientHeight-44-50}} >
+        <div style={{height: document.documentElement.clientHeight-45-50}} >
           <Switch>
             <Route exact path="/driverCont" render={ () => (
               <Redirect to="/driverCont/weichuli"  />
@@ -103,7 +114,7 @@ export default class Cont extends PureComponent {
                 <Route
                   key={item.key}
                   path={item.path}
-                  render={ (props) => <item.component {...props} changeSelect={this.changeSelect} changeWritePsw={this.changeWritePsw} onOpenChange={this.onOpenChange} /> }
+                  render={ (props) => <item.component {...props} xitong={this.xitong} changeSelect={this.changeSelect} changeWritePsw={this.changeWritePsw} onOpenChange={this.onOpenChange} /> }
                   exact={item.exact}
                   link={this.link}
                 >
@@ -112,38 +123,46 @@ export default class Cont extends PureComponent {
             }
           </Switch>
         </div>
+        <div
+          // onTouchMove={ e=> e.preventDefault() }
+          style={{position: 'absolute', width: '100%', bottom: 0, left: 0, zIndex: 1}} >
+          <TabBar>
+            <TabBar.Item
+              badge={this.props.count}
+              onPress={ ()=>this.tabLink('weichuli') }
+              title='未处理'
+              icon={<img style={{width: 20, height: 20}} src="/weichuli.png" alt=""/> }
+              key={1}
+              selected={this.state.selectTab=='weichuli'}
+              selectedIcon={<img style={{width: 20, height: 20}} src="/weichuli1.png" alt=""/> }
+            />
+            <TabBar.Item
+              onPress={ ()=>this.tabLink('daiqueren') }
+              title='待确认'
+              selected={this.state.selectTab=='daiqueren'}
+              icon={<img style={{width: 20, height: 20}} src="/daiqueren.png" alt=""/>}
+              selectedIcon={<img style={{width: 20, height: 20}} src="/daiqueren1.png" alt=""/>}
+              key={2}
+            />
+            <TabBar.Item
+              onPress={ ()=>this.tabLink('daifukuan') }
+              title='待付款'
+              selected={this.state.selectTab=='daifukuan'}
+              icon={<img style={{width: 20, height: 20}} src="/daifukuan.png" alt=""/>}
+              selectedIcon={<img style={{width: 20, height: 20}} src="/daifukuan1.png" alt=""/>}
+              key={3}
+            />
+            <TabBar.Item
+              onPress={ ()=>this.tabLink('peisongzhong') }
+              title='配送中'
+              selected={this.state.selectTab=='peisongzhong'}
+              icon={<img style={{width: 20, height: 20}} src="/peisongzhong.png" alt=""/>}
+              selectedIcon={<img style={{width: 20, height: 20}} src="/peisongzhong1.png" alt=""/>}
+              key={4}
+            />
+          </TabBar>
+        </div>
       </Drawer>
-      <div
-        // onTouchMove={ e=> e.preventDefault() }
-        style={{position: 'absolute', width: '100%', bottom: 0, left: 0}} >
-        <TabBar>
-          <TabBar.Item
-            badge={this.props.count}
-            onPress={ ()=>this.tabLink('weichuli') }
-            title='未处理'
-            icon={<img style={{width: 20, height: 20}} src="/weichuli.png" alt=""/> }
-            key={1}
-            selected={this.state.selectTab=='weichuli'}
-            selectedIcon={<img style={{width: 20, height: 20}} src="/weichuli1.png" alt=""/> }
-          />
-          <TabBar.Item
-            onPress={ ()=>this.tabLink('daiqueren') }
-            title='待确认'
-            selected={this.state.selectTab=='daiqueren'}
-            icon={<img style={{width: 20, height: 20}} src="/daiqueren.png" alt=""/>}
-            selectedIcon={<img style={{width: 20, height: 20}} src="/daiqueren1.png" alt=""/>}
-            key={2}
-          />
-          <TabBar.Item
-            onPress={ ()=>this.tabLink('peisongzhong') }
-            title='配送中'
-            selected={this.state.selectTab=='peisongzhong'}
-            icon={<img style={{width: 20, height: 20}} src="/peisongzhong.png" alt=""/>}
-            selectedIcon={<img style={{width: 20, height: 20}} src="/peisongzhong1.png" alt=""/>}
-            key={3}
-          />
-        </TabBar>
-      </div>
     </div>
   }
 }

@@ -133,12 +133,12 @@ export default class Index extends PureComponent {
   }
 
   handleOrderLink = ()=> {
-    if ( this.state.selectOrderTypeId===1 ) { //去往同城急送下单页面
+    if ( this.state.selectOrderTypeId==1 ) { //去往同城急送下单页面
       this.props.history.push('/cont/byOrder/tongcheng')
-    } else if ( this.state.selectOrderTypeId===2 ) { // 代购服务下单页面
+    } else if ( this.state.selectOrderTypeId==2 ) { // 代购服务下单页面
       this.props.history.push('/cont/byOrder/daigou')
-    } else if (this.state.selectOrderTypeId===3) { // 物流服务下单页面
-
+    } else if (this.state.selectOrderTypeId==3) { // 物流服务下单页面
+      this.props.history.push('/cont/byOrder/wuliu')
     }
     return
     if(this.props.client_status==='OK'){

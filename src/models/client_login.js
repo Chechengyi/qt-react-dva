@@ -8,6 +8,7 @@ export default {
     client_id: store.get('clientData')?store.get('clientData').client_id:null,
     client_name: store.get('clientData')?store.get('clientData').client_name:null,
     client_status: store.get('clientData')?store.get('clientData').client_status:null,
+    client_tel: store.get('clientData')?store.get('clientData').client_tel:null,
     loading: false
   },
   effects: {
@@ -22,14 +23,16 @@ export default {
         store.set('clientData', {
           client_id: res.data.id,
           client_name: res.data.username,
-          client_status: 'OK'
+          client_status: 'OK',
+          client_tel: res.data.tel
         })
         yield put({
           type: 'saveLogin',
           payload: {
             client_id: res.data.id,
             client_name: res.data.username,
-            client_status: 'OK'
+            client_status: 'OK',
+            client_tel: res.data.tel
           }
         })
         yield put(routerRedux.push('/cont'))
@@ -56,7 +59,8 @@ export default {
         ...state,
         client_id: payload.client_id,
         client_name: payload.client_name,
-        client_status: payload.client_status
+        client_status: payload.client_status,
+        client_tel: payload.client_tel
       }
     },
     changeLoading ( state, {paylaod} ) {

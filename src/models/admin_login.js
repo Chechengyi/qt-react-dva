@@ -46,7 +46,7 @@ export default {
             roleId: res.data.roleId
           }
         })
-        yield put(routerRedux.push('/admin/cont/home/frontdesk'))
+        yield put(routerRedux.push('/admin/cont/order/noDisOrder'))
       } else {
         yield put({
           type: 'saveLogin',

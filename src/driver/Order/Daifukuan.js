@@ -1,11 +1,7 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'dva'
-import { List, ListView, PullToRefresh,
-  ActivityIndicator, Modal
-} from 'antd-mobile'
-import RowItem from './Weichuli_Item'
-// import ListView from '../../components/ListView/ListView'
-import { cancelOrder } from '../../services/api'
+import { ListView, PullToRefresh, ActivityIndicator } from 'antd-mobile'
+import Daifukuan_Item from './Daifukuan_Item'
 
 function MyBody(props) {
   return (
@@ -15,16 +11,13 @@ function MyBody(props) {
   );
 }
 
-const ListItem = List.Item
-const Brief = List.Item.Brief
 @connect( state=>({
   driver_id: state.driver_login.driver_id,
-  loading: state.courierNoAccept.loading,
-  data: state.courierNoAccept.data,
-  orderType: state.orderType.data,
-  count: state.courierNoAccept.count
+  loading: state.courierNoPay.loading,
+  data: state.courierNoPay.data,
+  orderType: state.orderType.data
 }) )
-export default class Weichuli extends PureComponent {
+export default class Daifukuan extends Component {
 
   constructor(props){
     super(props)
@@ -37,23 +30,6 @@ export default class Weichuli extends PureComponent {
       dataSource,
       refreshing: false
     }
-
-  }
-
-  componentDidMount(){
-    if ( this.props.orderType.length===0 ) {
-      this.props.dispatch({
-        type: 'orderType/getData'
-      })
-    }
-    this.props.changeSelect('weichuli', '未处理订单')
-    // 发送获取未处理订单请求
-    this.props.dispatch({
-      type: 'courierNoAccept/getData',
-      payload: {
-        couId: this.props.driver_id
-      }
-    })
   }
 
   componentWillReceiveProps(nextProps){
@@ -67,12 +43,20 @@ export default class Weichuli extends PureComponent {
     }
   }
 
-  renderOrderType =id=> {
-    for ( var i=0; i<this.props.orderType.length; i++ ) {
-      if (id==this.props.orderType[i].id) {
-        return this.props.orderType[i].type
-      }
+  componentDidMount(){
+    this.props.changeSelect('daifukuan', '待付款订单')
+    if ( this.props.orderType.length===0 ) {
+      this.props.dispatch({
+        type: 'orderType/getData'
+      })
     }
+    // 发送获取客户未付款订单请求
+    this.props.dispatch({
+      type: 'courierNoPay/getData',
+      payload: {
+        couId: this.props.driver_id
+      }
+    })
   }
 
   onRefresh=e=> {
@@ -80,35 +64,36 @@ export default class Weichuli extends PureComponent {
       refreshing: true
     })
     this.props.dispatch({
-      type: 'courierNoAccept/refresh',
+      type: 'courierNoPay/refresh',
       payload: {
         couId: this.props.driver_id
       }
     })
   }
 
-
-  render () {
-    const row = (item, i)=> (
-      <RowItem orderType={this.props.orderType} data={item} wrap={true} />
+  render(){
+    const row = (item)=> (
+      <Daifukuan_Item
+        history={this.props.history} xitong={this.props.xitong}
+        orderType={this.props.orderType} data={item} ></Daifukuan_Item>
     )
     return <div>
       <ListView
         style={{height: document.documentElement.clientHeight-45-50,
+          backgroundColor: '#f1f1f1',
           width: document.documentElement.clientWidth}}
         renderBodyComponent={() => <MyBody />}
         dataSource={this.state.dataSource}
         renderRow={row}
         renderHeader={ ()=> <div style={{display: 'flex',
           justifyContent: 'center', paddingTop: 10}} >
-          <ActivityIndicator animating={this.props.loading } ></ActivityIndicator>
+          <ActivityIndicator animating={this.props.loading} ></ActivityIndicator>
         </div> }
-        renderFooter={ ()=><div></div> }
         pullToRefresh={
           <PullToRefresh
             refreshing={this.state.refreshing}
-          onRefresh={this.onRefresh}
-        />}
+            onRefresh={this.onRefresh}
+          />}
       />
     </div>
   }

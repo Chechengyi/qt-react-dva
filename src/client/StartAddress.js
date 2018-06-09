@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { NavBar, Icon, List, Button, InputItem,
-  WhiteSpace, WingBlank, Modal, Picker } from 'antd-mobile'
+  WhiteSpace, WingBlank, Modal, Picker, TextareaItem } from 'antd-mobile'
 import AddressPicker from './AddressPicker'
 import { getProvince } from '../services/api'
 import { promise_ } from '../services/utils'
@@ -12,7 +12,10 @@ import { createForm } from 'rc-form'
   startMsg: state.orderAddress.startMsg,
   provinceData: state.pickerAddress.provinceData,
   startAddress: state.orderAddress.startAddress,
-  value: state.pickerAddress.value
+  value: state.pickerAddress.value,
+  client_name: state.client_login.client_name,
+  client_tel: state.client_login.client_tel,
+  adminId: state.orderAddress.adminId
 }) )
 @createForm()
 export default class StartAddress extends Component {
@@ -29,6 +32,10 @@ export default class StartAddress extends Component {
   handleLink=()=> {
     if ( this.typeId==1 ) {
       this.props.history.replace('/cont/byOrder/tongcheng')
+    } else if (this.typeId==2) {
+      this.props.history.replace('/cont/byOrder/daigou')
+    } else if (this.typeId==3) {
+      this.props.history.replace('/cont/byOrder/wuliu')
     }
   }
 
@@ -49,14 +56,19 @@ export default class StartAddress extends Component {
     }])
   }
   submit=()=>{
-    let address = this.refs.address.value   //用户填写的详细地址
-    let {tel, receiverName} = this.props.form.getFieldsValue()  // 用户填写的电话和寄件人姓名
+    // let address = this.refs.address.value   //用户填写的详细地址
+    let {tel, receiverName, address} = this.props.form.getFieldsValue()  // 用户填写的电话和寄件人姓名
     // 无论是哪类型的订单， 下面的信息不能少
-    if ( Object.keys(this.props.startPoint).length==0 ||!tel||!receiverName||/^[\s]*$/.test(this.refs.address.value)  ) {
+    if ( Object.keys(this.props.startPoint).length==0 ||!tel||!receiverName ) {
       this.renderModal('请将信息完善后在提交')
       return
     }
-    if (!this.state.adminId) {
+    // 订单类型为快递物流时， 寄货人地址不能为空
+    if (/^[\s]*$/.test(address) ) {
+      this.renderModal('寄货地址信息不能为空')
+      return
+    }
+    if (!this.props.adminId) {
       this.renderModal('选择区域不能为空', '请选择后在提交')
       return
     }
@@ -73,23 +85,24 @@ export default class StartAddress extends Component {
         receiverName
       }
     })
-    // 设置下单地点的详细地址
-    console.log(this.refs.address.value)
-    this.props.dispatch({
-      type: 'orderAddress/startAddress',
-      payload: this.refs.address.value
-    })
-    this.props.history.push(`/cont/byOrder/${this.orderType}`)
-
-    if ( this.typeId==1 ) {  // 同城急送
-      this.props.history.push('/cont/byOrder/tongcheng')
+    // 设置下单地点的详细地址  快递物流订单需要这个字段
+    if ( this.typeId==3 ) {
+      this.props.dispatch({
+        type: 'orderAddress/startAddress',
+        payload: address
+      })
     }
+    // 跳回下单的页面
+    this.handleLink()
   }
 
   onPickerChange= async (e)=>{
-    console.log(e)
     this.setState({
       value: e
+    })
+    this.props.dispatch({
+      type: 'pickerAddress/setValue',
+      payload: e
     })
     if (e.length===1) {  // 选省
       await this.props.dispatch({
@@ -118,9 +131,12 @@ export default class StartAddress extends Component {
   }
 
   onChange=e=>{
-    console.log(e)
     this.setState({
       value: e
+    })
+    this.props.dispatch({
+      type: 'pickerAddress/setValue',
+      payload: e
     })
     if (e.length===1) {
       this.setAdmin(e[0])
@@ -143,6 +159,20 @@ export default class StartAddress extends Component {
     })
   }
 
+  toTeltype= tel=> {
+    let index = 2
+    let telArr = tel.split('')
+    let endTel = ''
+    for ( var i=0; i<telArr.length; i++ ) {
+      if ( i==3 || i==7 ) {
+        endTel += ' '+telArr[i]
+      } else {
+        endTel += telArr[i]
+      }
+    }
+    return endTel
+  }
+
   render(){
     const { getFieldProps } = this.props.form
     return <div>
@@ -159,7 +189,7 @@ export default class StartAddress extends Component {
           data={this.props.provinceData}
           onPickerChange={ this.onPickerChange }
           onChange={ this.onChange }
-          value={this.state.value}
+          value={this.props.value}
         >
           <List.Item>选择区域</List.Item>
         </Picker>
@@ -185,23 +215,24 @@ export default class StartAddress extends Component {
       <List renderHeader={ ()=>'第三步：完善基本信息' } >
         <InputItem
           placeholder='请输入联系电话'
-          {...getFieldProps('tel')}
-          defaultValue={this.props.startMsg.tel}
+          {...getFieldProps('tel', {
+            initialValue: this.toTeltype(this.props.client_tel)
+          })}
+          // defaultValue={this.props.startMsg.tel}
           type='phone' >联系电话</InputItem>
         <InputItem
           placeholder='请输入姓名'
-          {...getFieldProps('receiverName')}
+          {...getFieldProps('receiverName', {
+            initialValue: this.props.client_name
+          })}
           defaultValue={this.props.startMsg.receiverName}
         >姓名</InputItem>
+        {this.typeId==3?<TextareaItem
+          {...getFieldProps('address')}
+          count={50}
+          clear rows={3}
+          title='寄件地址' />:null}
       </List>
-      <WingBlank>
-        <div>详细地址：</div>
-        <textarea
-          defaultValue={this.props.startAddress||' '}
-          ref='address'
-          style={{width: '100%'}} rows="3">
-        </textarea>
-      </WingBlank>
       <WhiteSpace />
       <WingBlank>
         <Button onClick={ this.submit } type='primary'>确定</Button>

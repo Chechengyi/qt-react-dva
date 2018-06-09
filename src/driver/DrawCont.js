@@ -146,14 +146,14 @@ export default class DrawCont extends PureComponent {
           <ListItem
             thumb="/money.png"
             arrow="horizontal"
-            onClick={() => { this.props.dispatch(routerRedux.push('/driverElseCont/money')) }}
+            onClick={() => this.props.dispatch(routerRedux.push('/driverElseCont/money')) }
           >
             账户余额
           </ListItem>
           <ListItem
             thumb="/tongji.png"
             arrow="horizontal"
-            onClick={() => {}}
+            onClick={() =>this.props.dispatch(routerRedux.push('/driverElseCont/done'))}
           >
             送单统计
           </ListItem>

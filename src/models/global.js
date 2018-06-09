@@ -72,5 +72,11 @@ export default {
         }
       });
     },
+    socketStep({history}){
+      // 初始化model的时候连接websocket
+      return history.listen( ({pathname})=> {
+        console.log(pathname)
+      } )
+    }
   },
 };

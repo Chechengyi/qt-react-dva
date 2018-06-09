@@ -1,23 +1,27 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'dva'
-import { NavBar, Icon, List, InputItem,
-  Button, WhiteSpace, WingBlank, Modal
+import { NavBar, Icon, List, InputItem, Picker,
+  Button, WhiteSpace, WingBlank, Modal, TextareaItem
 } from 'antd-mobile'
 import { createForm } from 'rc-form'
+
 
 const ListItem = List.Item
 
 @createForm()
 @connect( state=>({
   endPoint: state.orderAddress.endPoint,
-  endMsg: state.orderAddress.endMsg
+  endMsg: state.orderAddress.endMsg,
+  endAddress: state.orderAddress.endAddress,
+  provinceList: state.orderAddress.provinceList,
+  provinceCode: state.orderAddress.provinceCode
 }) )
 export default class EndAddress extends PureComponent {
 
   constructor(props){
     super(props)
     this.typeId = window.sessionStorage.getItem('typeId')
-    this.title = this.orderType==2?'购货地址':'收货地址'
+    this.title = this.typeId==2?'购货地址':'收货地址'
   }
 
   renderModal( title='', content='', text='确认', onPress=()=>{} ){
@@ -26,10 +30,23 @@ export default class EndAddress extends PureComponent {
     }])
   }
 
+  componentDidMount(){
+    if ( this.typeId==3&&this.props.provinceList.length===0 ) {
+      this.props.dispatch({
+        type: 'orderAddress/getProvinceList'
+      })
+    }
+  }
+
   submit=()=>{
-    if ( this.typeId==1 ) {
-      let {tel, receiverName} = this.props.form.getFieldsValue()
-      if (Object.keys(this.props.endPoint).length==0 ||!tel||!receiverName) {
+    let {tel, receiverName, address} = this.props.form.getFieldsValue()
+    if ( this.typeId==1 || this.typeId==3 ) { // 同城急送订单 快递物流订单
+      // 物流订单必须选择省code 验证
+      if (!this.props.provinceCode &&this.typeId==3 ) {
+        this.renderModal('目的地的省归属地不能为空！')
+        return
+      }
+      if (Object.keys(this.props.endPoint).length==0 ||!tel||!receiverName || !address ) {
         this.renderModal('请将信息完善后在提交')
         return
       }
@@ -37,7 +54,7 @@ export default class EndAddress extends PureComponent {
         this.renderModal('姓名信息不能为空白')
         return
       }
-      if (/^[\s]*$/.test(this.refs.address.value)) {
+      if (/^[\s]*$/.test(address)) {
         this.renderModal('收货地址不能为空白')
         return
       }
@@ -51,14 +68,48 @@ export default class EndAddress extends PureComponent {
       })
       this.props.dispatch({
         type: 'orderAddress/endAddress',
-        payload: this.refs.address.value
+        payload: address
       })
-      this.props.history.push('/cont/byOrder/tongcheng')
     }
-    if(this.orderType==2){
+    if(this.typeId==2){
       // 代购服务的提交终点信息
-      this.props.history.push(`/cont/byOrder/${this.orderType}`)
+      if (Object.keys(this.props.endPoint).length==0) {
+        this.renderModal('请选择代购的地点后在提交')
+        return
+      }
     }
+    this.handleBack()
+  }
+
+  toTeltype= tel=> {
+    let index = 2
+    let telArr = tel.split('')
+    let endTel = ''
+    for ( var i=0; i<telArr.length; i++ ) {
+      if ( i==3 || i==7 ) {
+        endTel += ' '+telArr[i]
+      } else {
+        endTel += telArr[i]
+      }
+    }
+    return endTel
+  }
+
+  handleBack= e=> {
+    if (this.typeId==1) {  // 同城急送
+      this.props.history.push('/cont/byOrder/tongcheng')
+    } else if (this.typeId==2) {
+      this.props.history.push('/cont/byOrder/daigou')
+    } else if (this.typeId==3) {
+      this.props.history.push('/cont/byOrder/wuliu')
+    }
+  }
+
+  onPickerChange= e=> {
+    this.props.dispatch({
+      type: 'orderAddress/setProvinceCode',
+      payload: e[0]
+    })
   }
 
   render(){
@@ -66,7 +117,7 @@ export default class EndAddress extends PureComponent {
     return <div>
       <NavBar
         icon={ <Icon type='left' /> }
-        onLeftClick={ e=>this.props.history.push(`/cont/byOrder/${this.orderType}`) }
+        onLeftClick={ e=>this.handleBack() }
       >{this.title}</NavBar>
       <List renderHeader={ ()=>`第一步，选择${this.title}` } >
         <div style={{display: this.props.endPoint.address?'none':'block',
@@ -87,27 +138,41 @@ export default class EndAddress extends PureComponent {
         </div>
       </List>
       {
-        this.orderType==2?null:
+        this.typeId==2?null:
           <List renderHeader={ ()=>'第二步，完善收货人基本信息' } >
             <InputItem
-              {...getFieldProps('tel')}
+              {...getFieldProps('tel', {
+                initialValue: this.props.endMsg.tel
+              })}
               type='phone'
             >
               联系电话
             </InputItem>
             <InputItem
-              {...getFieldProps('receiverName')}
+              {...getFieldProps('receiverName', {
+                initialValue: this.props.endMsg.receiverName
+              })}
             >
               姓名
             </InputItem>
+            {this.typeId==3&&
+            <Picker
+              onPickerChange={ this.onPickerChange }
+              cols={1}
+              value={[this.props.provinceCode]}
+              data={this.props.provinceList} >
+              <ListItem>省归属地</ListItem>
+            </Picker>
+            }
+            <TextareaItem
+              {...getFieldProps('address', {
+                initialValue: this.props.endAddress
+              })}
+              rows={3}
+              count={50}
+              title='详细地址' />
           </List>
       }
-      <WingBlank>
-        <div style={{margin: '7px 0'}} >详细地址：</div>
-        <textarea style={{width: '100%', borderRadius: 0,
-                          border: '1px solid #d9d9d9'
-        }} rows="3" ref='address' ></textarea>
-      </WingBlank>
       <WhiteSpace />
       <WingBlank>
         <Button onClick={ this.submit } type='primary'>确定</Button>

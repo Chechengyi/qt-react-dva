@@ -23,6 +23,7 @@ export async function courierIsRepeat(parmas) {
 }
 // 获取订单类型列表
 export async function getOrderType(params) {
+  // return request(`/ceshi/order/getOrderTypes`)
   return request(`/order/getOrderTypes`)
 }
 // 获取省级列表
@@ -321,4 +322,41 @@ export async function courierNoAccpetCount(params) {
 // 快递员获取未处理订单列表
 export async function getCourierNoAccpet(params) {
   return request(`/order/getAcceptes?${stringify(params)}`)
+}
+// 快递员确认处理订单
+export async function courierAddAccpet(params) {
+  return request(`/order/addAccepted`, {
+    method: 'POST',
+    body: params
+  })
+}
+// 快递员查看待配送待订单（未确认的订单）
+export async function courierNoConfirm(params) {
+  return request(`/order/getCouShips?${stringify(params)}`)
+}
+// 快递员配送（确认订单，会携带一些订单参数 如 重量， 实际费用）
+export async function courierConfirmOrder(params) {
+  return request(`/order/addShipped`, {
+    method: 'POST',
+    body: params
+  })
+}
+// 快递员获取用户还未付款的订单
+export async function courierGetCusNoPay(params) {
+  return request(`/order/getNoPay?${stringify(params)}`)
+}
+// 快递员获取配送中的订单
+export async function courierDistribution(params) {
+  return request(`/order/getNoDone?${stringify(params)}`)
+}
+// 快递员确认送达订单
+export async function courierAddDone(params) {
+  return request('/order/addDone', {
+    method: 'POST',
+    body: params
+  })
+}
+// 快递员获取已经完成的订单 // 参数， couId pageNo pageSize
+export async function courierGetDone(params) {
+  return request(`/order/getCouDones?${stringify(params)}`)
 }

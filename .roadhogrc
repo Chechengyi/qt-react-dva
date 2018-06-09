@@ -30,8 +30,13 @@
   "ignoreMomentLocale": true,
   "theme": "./src/theme.js",
   "proxy": {
+            "/ceshi": {
+                              "target": "http://127.0.0.1:3000/",
+                              "changeOrigin": true,
+                              "pathRewrite": { "^/" : "" }
+                          },
               "/": {
-                  "target": "http://127.0.0.1:3000/",
+                  "target": "http://47.94.248.23:8080/",
                   "changeOrigin": true,
                   "pathRewrite": { "^/" : "" }
               }

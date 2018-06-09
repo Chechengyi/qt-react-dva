@@ -58,26 +58,6 @@ export default class Cont extends PureComponent {
           }
         </Switch>
       </div>
-       {/*<div style={{position: 'fixed', bottom: 0, width: '100%'}} >*/}
-      {/*<TabBar hidden={this.state.hidden} >*/}
-      {/*<TabBar.Item*/}
-      {/*icon={{ uri: '/all.png' }}*/}
-      {/*selectedIcon={{ uri: '/all1.png' }}*/}
-      {/*title="首页"*/}
-      {/*key="首页"*/}
-      {/*selected={this.state.selectedTab === 'index'}*/}
-      {/*onPress={ () => { this.link('index') } }*/}
-      {/*/>*/}
-      {/*<TabBar.Item*/}
-      {/*icon={{ uri: '/my.png' }}*/}
-      {/*selectedIcon={{ uri: '/my1.png' }}*/}
-      {/*title="我的"*/}
-      {/*key="我的"*/}
-      {/*selected={this.state.selectedTab === 'my'}*/}
-      {/*onPress={ () => { this.link('my') } }*/}
-      {/*/>*/}
-      {/*</TabBar>*/}
-      {/*</div>*/}
     </div>
   }
 }

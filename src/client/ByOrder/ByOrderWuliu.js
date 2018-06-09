@@ -19,14 +19,15 @@ const Brief = List.Item.Brief
   orderType: state.orderType.data,
   adminId: state.orderAddress.adminId,
   startAddress: state.orderAddress.startAddress,
-  endAddress: state.orderAddress.endAddress
+  endAddress: state.orderAddress.endAddress,
+  provinceCode: state.orderAddress.provinceCode
 }) )
 @createForm()
 export default class ByOrderTongcheng extends Component {
 
   constructor(props){
     super(props)
-    this.typeId = 1
+    this.typeId = 3
     this.AMap = Object.AMap
     this.state = {
       ExpectedFee: null,
@@ -38,8 +39,8 @@ export default class ByOrderTongcheng extends Component {
     // 保存当前订单的提成比例， 供后续订单下单请求时发送给后端
     if ( orderType.length!==0 ) {
       for ( var i=0 ;i<orderType.length; i++ ) {
-        if ( orderType[i].id==1 ) {
-          window.sessionStorage.setItem('feeRate', orderType[i].feeRate||0.03)
+        if ( orderType[i].id==3 ) {
+          window.sessionStorage.setItem('feeRate', orderType[i].feeRate)
         }
       }
     }
@@ -66,13 +67,13 @@ export default class ByOrderTongcheng extends Component {
     // 从sessionStorage里取出当前订单的提价比例
     const feeRate = window.sessionStorage.getItem('feeRate')
     let {weight, goodsType} = this.props.form.getFieldsValue()
-    const {startPoint, endPoint, startMsg, endMsg, client_id, adminId, endAddress} = this.props
+    const {startPoint, endPoint, startMsg, endMsg, client_id, adminId, endAddress, provinceCode} = this.props
     //  检验信息是否完善
     if (objIsNull.call(startPoint) ||  // 起点经纬度是否为空
-        objIsNull.call(endPoint) || // 终点经纬度是否为空
-        objIsNull.call(startMsg) ||  // 起点寄件人信息是否为空
-        objIsNull.call(endMsg) || !weight || !goodsType    // 终点收件人信息是否为空
-        ) {
+      objIsNull.call(endPoint) || // 终点经纬度是否为空
+      objIsNull.call(startMsg) ||  // 起点寄件人信息是否为空
+      objIsNull.call(endMsg) || !weight || !goodsType    // 终点收件人信息是否为空
+    ) {
       Modal.alert('请先完善订单信息', '订单信息不完善不能提交订单！',[{
         text: '确定', onPress: ()=>{}
       }])
@@ -83,17 +84,19 @@ export default class ByOrderTongcheng extends Component {
       typeId: this.typeId,
       feeRate: parseFloat(feeRate),
       weight: parseFloat(weight),
-      distance: this.distance,  // 具体以后估算的为准
+      // distance: this.distance,  // 具体以后估算的为准
       receiverName: endMsg.receiverName,
       receiverTel: endMsg.tel,
       receiverAddr: endAddress,
       senderName: startMsg.receiverName,
       senderTel: startMsg.tel,
+      senderAddress: this.props.startAddress,
       cusLongitude: startPoint.lnt,
       cusLatitude: startPoint.lat,
-      endLongitude: endPoint.lnt,
-      endLatitude: endPoint.lat,
+      // endLongitude: endPoint.lnt,
+      // endLatitude: endPoint.lat,
       goodsType,
+      proCode: provinceCode,
       fee: this.state.expectedFee
     }
     console.log(posData)
@@ -126,7 +129,8 @@ export default class ByOrderTongcheng extends Component {
     getExpectedPrice({
       orderTypeId: this.typeId,
       distance: this.distance,
-      weight
+      weight,
+      proCode: this.props.provinceCode
     })
       .then( res=> {
         this.setState({
@@ -192,19 +196,19 @@ export default class ByOrderTongcheng extends Component {
           </InputItem>
         </List>
         { this.state.expectedFee&&
-          <WingBlank>
-            {this.state.feeLoading?
-              <Flex justify='center' style={{marginTop: 15}} >
-                <ActivityIndicator animating={this.state.feeLoading} />
-              </Flex>:
-              <div>
-                <div style={{color: '#888', marginTop: 13}} >订单预算费用</div>
-                <div style={{textAlign: 'center', padding: '5px'}} >
-                  <span>{this.state.expectedFee} 元</span>
-                </div>
+        <WingBlank>
+          {this.state.feeLoading?
+            <Flex justify='center' style={{marginTop: 15}} >
+              <ActivityIndicator animating={this.state.feeLoading} />
+            </Flex>:
+            <div>
+              <div style={{color: '#888', marginTop: 13}} >订单预算费用</div>
+              <div style={{textAlign: 'center', padding: '5px'}} >
+                <span>{this.state.expectedFee} 元</span>
               </div>
-            }
-          </WingBlank>
+            </div>
+          }
+        </WingBlank>
         }
         <WhiteSpace />
         <WingBlank>

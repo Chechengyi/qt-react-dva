@@ -1,25 +1,21 @@
-import { courierNoAccpetCount, getCourierNoAccpet } from '../services/api'
+/*
+*   快递员已经完成的订单
+* */
+
+import { courierGetDone } from '../services/api'
 
 export default {
-  namespace: 'courierNoAccept',
+  namespace: 'courierDone',
   state: {
     loading: false,
-    data: [],
-    count: 0
+    data: []
   },
   effects: {
     *refresh( {payload}, {call, put} ){
-      const res = yield call( getCourierNoAccpet, payload )
+      const res = yield call( courierGetDone, payload )
       yield put({
         type: 'saveData',
-        payload: res.data
-      })
-    },
-    *getCount( {payload}, {call, put} ){
-      const res = yield call( courierNoAccpetCount, payload )
-      yield put({
-        type: 'saveCount',
-        payload: res.data
+        payload: res.data.content
       })
     },
     *getData( {payload}, {call, put} ){
@@ -27,10 +23,10 @@ export default {
         type: 'changeLoading',
         payload: true
       })
-      const res = yield call( getCourierNoAccpet, payload )
+      const res = yield call( courierGetDone, payload )
       yield put({
         type: 'saveData',
-        payload: res.data
+        payload: res.data.content
       })
       yield put({
         type: 'changeLoading',
@@ -39,12 +35,6 @@ export default {
     }
   },
   reducers: {
-    saveCount( state, {payload} ){
-      return {
-        ...state,
-        count: payload
-      }
-    },
     saveData( state, {payload} ){
       return {
         ...state,

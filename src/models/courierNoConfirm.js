@@ -1,24 +1,19 @@
-import { courierNoAccpetCount, getCourierNoAccpet } from '../services/api'
+/*
+* 快递员待确认的订单
+* */
+import { courierNoConfirm } from '../services/api'
 
 export default {
-  namespace: 'courierNoAccept',
+  namespace: 'courierNoConfirm',
   state: {
     loading: false,
-    data: [],
-    count: 0
+    data: []
   },
   effects: {
     *refresh( {payload}, {call, put} ){
-      const res = yield call( getCourierNoAccpet, payload )
+      const res = yield call( courierNoConfirm, payload )
       yield put({
         type: 'saveData',
-        payload: res.data
-      })
-    },
-    *getCount( {payload}, {call, put} ){
-      const res = yield call( courierNoAccpetCount, payload )
-      yield put({
-        type: 'saveCount',
         payload: res.data
       })
     },
@@ -27,7 +22,7 @@ export default {
         type: 'changeLoading',
         payload: true
       })
-      const res = yield call( getCourierNoAccpet, payload )
+      const res = yield call( courierNoConfirm, payload )
       yield put({
         type: 'saveData',
         payload: res.data
@@ -38,13 +33,7 @@ export default {
       })
     }
   },
-  reducers: {
-    saveCount( state, {payload} ){
-      return {
-        ...state,
-        count: payload
-      }
-    },
+  reducers:{
     saveData( state, {payload} ){
       return {
         ...state,

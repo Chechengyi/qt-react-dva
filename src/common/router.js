@@ -56,6 +56,15 @@ export const getRouterData = (app) => {
     '/admin/cont/order/cancel': {
       component: dynamicWrapper(app, ['admin_login', 'cancelOrder', 'orderType'], () => import('../routes/Order/CancelOrder'))
     },
+    '/admin/cont/orderSetting/jisong': {
+      component: dynamicWrapper(app, ['admin_login'], () => import('../routes/OrderSetting/Tongcheng'))
+    },
+    '/admin/cont/orderSetting/daigou': {
+      component: dynamicWrapper(app, ['admin_login'], () => import('../routes/OrderSetting/Daigou'))
+    },
+    '/admin/cont/orderSetting/kuaidi': {
+      component: dynamicWrapper(app, ['admin_login'], () => import('../routes/OrderSetting/Kuaidi'))
+    },
     '/admin/cont/people/cus': {
       component: dynamicWrapper(app, ['admin_login', 'customer'], ()=>import('../routes/Staff/Cus'))
     },
@@ -126,6 +135,9 @@ export const getRouterData = (app) => {
     '/cont/byOrder/daigou': {
       component: dynamicWrapper(app, ['client_login', 'orderType', 'orderAddress'], () => import('../client/ByOrder/ByOrderDaigou')),
     },
+    '/cont/byOrder/wuliu': {
+      component: dynamicWrapper(app, ['client_login', 'orderType', 'orderAddress'], () => import('../client/ByOrder/ByOrderWuliu')),
+    },
     '/cont/byOrder/:id': {
       component: dynamicWrapper(app, ['client_login', 'orderType', 'orderAddress'], () => import('../client/ByOrder')),
     },
@@ -171,10 +183,19 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['driver_login', 'courierNoAccept', 'orderType'], () => import('../driver/Order/Weichuli')),
     },
     '/driverCont/daiqueren': {
-      component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Order/Daiqueren')),
+      component: dynamicWrapper(app, ['driver_login', 'orderType','courierNoConfirm'], () => import('../driver/Order/Daiqueren')),
+    },
+    '/driverCont/daifukuan': {
+      component: dynamicWrapper(app, ['driver_login', 'orderType', 'courierNoPay'], () => import('../driver/Order/Daifukuan')),
     },
     '/driverCont/peisongzhong': {
-      component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Order/Peisongzhong')),
+      component: dynamicWrapper(app, ['driver_login', 'orderType', 'courierDistribution'], () => import('../driver/Order/Peisongzhong')),
+    },
+    '/driverElseCont/done': {
+      component: dynamicWrapper(app, ['driver_login', 'orderType', 'courierDone'], () => import('../driver/Order/Done')),
+    },
+    '/driverElseCont/confirmOrder': {
+      component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Order/ConfirmOrder')),
     },
     '/driverElseCont': {
       component: dynamicWrapper(app, ['driver_login'], () => import('../driver/ElesCont')),

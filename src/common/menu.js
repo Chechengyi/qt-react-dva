@@ -1,6 +1,4 @@
 
-const ROLEID = window.sessionStorage.getItem('roleId')
-
 const menuData = [
   {
     name: '平台人员管理',
@@ -25,7 +23,7 @@ const menuData = [
     ]
   },
   {
-    name: '订单模块',
+    name: '订单记录',
     icon: 'profile',
     path: 'admin/cont/order',
     children: [
@@ -44,6 +42,25 @@ const menuData = [
       {
         name: '以取消订单',
         path: 'cancel'
+      }
+    ]
+  },
+  {
+    name: '订单管理',
+    icon: 'setting',
+    path: 'admin/cont/orderSetting',
+    children: [
+      {
+        name: '同城急送',
+        path: 'jisong'
+      },
+      {
+        name: '代购服务',
+        path: 'daigou'
+      },
+      {
+        name: '快递物流',
+        path: 'kuaidi'
       }
     ]
   },
