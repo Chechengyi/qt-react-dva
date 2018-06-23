@@ -13,13 +13,11 @@ export default {
   effects: {
     // 进入页面获取data
     *getData( {payload}, {call, put} ){
-      console.log('...')
       yield put({
         type: 'changeLoading',
         payload: true
       })
       const res = yield call(getNoDisOrder, payload)
-      console.log(res)
       let arr = []
       for ( var i=0; i<res.data.length; i++ ) {
         arr.push(res.data[i][0])

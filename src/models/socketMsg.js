@@ -1,19 +1,18 @@
-// {
-//   text: '发送消息的内容',
-//   createAt: '消息创建的时间',
-//   toUser: '接受方的id',
-//   room: “c”+uesrId+”a”+toUser,
-//   user: {
-//     id: '发送方的id',
-//     name: '发送方的名字'
-//   }
-// }
+/*
+* {
+*   adminId,
+*   cusId,
+*   formId,
+*   roomName,
+*   sendTime,
+*   text,
+*   toId
+* }
+* */
 
-// {
-//   id: []
-// }
-
-import { cusGetChatUserList, adminGetChatObj } from '../services/api'
+import { cusGetChatObj, adminGetChatObj,
+  adminGetChatMsg, cusGetChatMsg
+} from '../services/api'
 import {routerRedux} from 'dva/router'
 
 export default {
@@ -21,7 +20,6 @@ export default {
   state: {
     msgList: [],   //
     userList: {}  // 聊天对象列表
-    // List: {}
   },
   effects: {
     *setMsg({payload}, {call, put}){
@@ -32,20 +30,44 @@ export default {
         payload
       })
     },
+    *getAjaxMsg({payload}, {call, put}){
+      // 判断是管理员还是客户
+      let res
+      if ( payload.type==='cus' ) {
+        res = yield call(cusGetChatMsg, payload)
+      } else {
+        res = yield call(adminGetChatMsg, payload)
+      }
+      yield put({
+        type: 'saveAjaxMsg',
+        payload: {
+          toUserId: payload.cusId,
+          msg: res.data
+        }
+      })
+    },
     *setUserList({payload}, {call, put}){
       let res
       console.log('....')
       if (payload.type==='admin') {
         res = yield call( adminGetChatObj, {adminId: payload.adminId} )
       } else {
-        res = yield call( cusGetChatUserList, {cusId: payload.cusId} )
+        res = yield call( cusGetChatObj, {cusId: payload.cusId} )
       }
-      console.log(res)
-      return
       if (res.data) {
+        // 把后台返回的数据转换为期望的数据结构
+        let listData = {}
+        res.data.forEach( item=>{
+          listData[item[0]]={
+            id: item[0],
+            room: item[1],
+            username: item[2],
+            msg: []
+          }
+        })
         yield put({
           type: 'saveUserList',
-          payload: res.data
+          payload: listData
         })
       }
 
@@ -83,6 +105,16 @@ export default {
       return {
         ...state,
         userList: payload
+      }
+    },
+    saveAjaxMsg( state, {payload}){
+      console.log(payload)
+      let toUserId = payload.toUserId
+      let obj = {...state.userList}
+      obj[toUserId]['msg'] = payload.msg
+      return {
+        ...state,
+        userList: obj
       }
     },
     saveMsg( state, {payload} ){

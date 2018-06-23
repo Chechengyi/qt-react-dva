@@ -132,6 +132,9 @@ export const getRouterData = (app) => {
     '/clientUser/reg': {
       component: dynamicWrapper(app, [], () => import('../client/Reg')),
     },
+    '/clientUser/forgetPsw': {
+      component: dynamicWrapper(app, [], () => import('../client/ForgetPsw')),
+    },
     '/cont': {
       component: dynamicWrapper(app, ['client_login', 'socketMsg','CusNoPay'], () => import('../client/Cont')),
     },

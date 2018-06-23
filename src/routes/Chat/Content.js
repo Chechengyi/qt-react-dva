@@ -114,8 +114,11 @@ export default class Content extends Component {
       <div ref='scrollWarp' className={styles.content} >
         <div ref='scroll' style={{padding: '10px 0'}} >
           {Object.keys(this.props.userList).length!==0&&
+            console.log(this.props.userList[parseInt(this.cusId)].msg)
+          }
+          {Object.keys(this.props.userList).length!==0&&
             this.props.userList[parseInt(this.cusId)].msg.map( (item,i)=>(
-              <MsgItem adminId={this.props.adminId} data={item} key={i} />
+              <MsgItem adminId={this.props.adminId} data={item} key={item.id} />
             ) )
           }
         </div>

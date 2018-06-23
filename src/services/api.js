@@ -3,15 +3,29 @@ import request from '../utils/request';
 
 
 // 聊天类请求
+// 管理员获取聊天对象
 export async function adminGetChatObj(params) {
   return request(`/getAdminToCus?${stringify(params)}`)
 }
-
+// 管理员获取聊天对象的聊天信息 参数 id room
+export async function adminGetChatMsg(params) {
+  return request(`/getCusMessage?${stringify(params)}`)
+}
+// 客户获取聊天对象
+export async function cusGetChatObj(params) {
+  return request(`/getCusToAdmin?${stringify(params)}`)
+}
+// 客户获取与聊天对象的聊天信息
+export async function cusGetChatMsg(params) {
+  return request(`/getAdminMessage?${stringify(params)}`)
+}
 
 // 获取验证码
 export async function getCode(params) {
-  return request(`/getAuthCode?${stringify(params)}`)
+  return request(`/cus/getYzm?${stringify(params)}`)
 }
+
+//
 
 /*
 * 公共API
@@ -249,6 +263,13 @@ export async function clientReg(params) {
     body: params
   })
 }
+// 客户端忘记密码
+export async function clientForgetPsw(params) {
+  return request('/cus/resetPwd', {
+    method: 'POST',
+    body: params
+  })
+}
 //  用户修改密码
 export async function clientUpdatePsw(params) {
   return request('/cus/modifyPwd', {
@@ -331,11 +352,6 @@ export async function cusCancelOrder(params) {
     method: 'POST',
     body: params
   })
-}
-
-// 客户获取聊天对象列表（传入客户id）根据聊天历史信息列表分组获取与客户聊过天的管理员
-export async function cusGetChatUserList(params) {
-  return request(`/ceshi/cusGetChatObject?${stringify(params)}`)
 }
 
 

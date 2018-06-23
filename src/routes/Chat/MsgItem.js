@@ -5,7 +5,7 @@ export default class MsgItem extends Component {
 
   renderMsgRow = (data, adminId)=> {
     if (!data.user) return null
-    if ( data.user.id==adminId ) { // 用户本人发的消息显示在右边
+    if ( data.fromId==adminId ) { // 用户本人发的消息显示在右边
       return <div className={styles.msgBoxMe} style={{float: 'right'}} >
         <div style={{marginRight: 10, color: 'green'}} >我</div>
         <div>{data.text}</div>
@@ -23,7 +23,9 @@ export default class MsgItem extends Component {
 
   render(){
     const {data} = this.props
+    console.log(data)
     return <div className={styles.msgItem} >
+      dd
       <div>{this.renderMsgRow(data, this.props.adminId)}</div>
     </div>
   }

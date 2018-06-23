@@ -3,7 +3,7 @@ import { NavBar, Icon, List, InputItem,
   WingBlank, Flex, Button, WhiteSpace,
   Toast
 } from 'antd-mobile'
-import { clientReg, getCode } from '../services/api'
+import { clientForgetPsw, getCode } from '../services/api'
 import { createForm } from 'rc-form';
 
 @createForm()
@@ -29,14 +29,14 @@ export default class Reg extends PureComponent {
       tel
     })
       .then( res=>{
-        if (res.status==='ERROR') {
-          Toast.fail('操作太频繁，请稍后在试', 1)
-        } else {
-          this.setTime()
-          this.setState({
-            sendAuthCode: true
-          })
-        }
+         if (res.status==='ERROR') {
+           Toast.fail('操作太频繁，请稍后在试', 1)
+         } else {
+           this.setTime()
+           this.setState({
+             sendAuthCode: true
+           })
+         }
       })
   }
   setTime=()=>{
@@ -64,8 +64,8 @@ export default class Reg extends PureComponent {
     if ( this.state.loading ) {
       return
     }
-    const {tel, username, password, rePassword, authCode} = this.props.form.getFieldsValue()
-    if ( !(username&&password&&rePassword&&authCode) ) {
+    const {tel, password, rePassword, authCode} = this.props.form.getFieldsValue()
+    if ( !(password&&rePassword&&authCode) ) {
       Toast.fail('请完善信息！', 0.8)
       return
     }
@@ -81,10 +81,9 @@ export default class Reg extends PureComponent {
       loading: true
     })
     let phone = tel.replace(/\s+/g,"");
-    clientReg({
+    clientForgetPsw({
       //tel: phone,  //电话号码
-      account: phone,
-      username, // 用户姓名
+      account: phone, // 用户账户
       password,
       yzm: authCode  //验证码
     })
@@ -94,11 +93,11 @@ export default class Reg extends PureComponent {
           loading: false
         })
         if (res.status==="OK") {
-          Toast.success('注册成功！', 1)
+          Toast.success('修改成功！', 1)
         } else if (res.status==="REPEAT") {
           Toast.fail('电话已经注册，请直接登录', 1)
         } else {
-          Toast.fail('注册失败,重新尝试',1)
+          Toast.fail('验证码错误',1)
         }
       } )
       .catch( err=>{
@@ -115,17 +114,14 @@ export default class Reg extends PureComponent {
         // mode="light"
         icon={<Icon type='left' ></Icon>}
         onLeftClick={ () => { this.props.history.goBack() } }
-      >注册</NavBar>
+      >忘记密码</NavBar>
       <WingBlank>
         <div style={{marginTop: 30}} >
           <List>
             <InputItem
               {...getFieldProps('tel')}
               type="phone"
-            >手机号码</InputItem>
-            <InputItem
-              {...getFieldProps('username')}
-            >姓名</InputItem>
+            >账户</InputItem>
             <InputItem {...getFieldProps('password')} type='password' >
               密码
             </InputItem>
@@ -155,7 +151,7 @@ export default class Reg extends PureComponent {
           </List>
           <WhiteSpace />
           <WingBlank>
-            <Button onClick={this.submit} loading={this.state.loading} type='primary' >注册</Button>
+            <Button onClick={this.submit} loading={this.state.loading} type='primary' >修改密码</Button>
           </WingBlank>
         </div>
       </WingBlank>

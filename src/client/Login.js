@@ -56,7 +56,7 @@ export default class Login extends PureComponent {
         <WhiteSpace></WhiteSpace>
         <Button onClick={ () => { this.props.history.push('/clientUser/reg') } } type='ghost' >注册</Button>
         <WhiteSpace />
-        <Button type='warning' >忘记密码</Button>
+        <Button onClick={ ()=>this.props.history.push('/clientUser/forgetPsw') } type='warning' >忘记密码</Button>
       </WingBlank>
     </div>
   }

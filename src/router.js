@@ -30,6 +30,9 @@ function RouterConfig({ history, app }) {
     <LocaleProvider locale={zhCN}>
       <Router history={history}>
         <Switch>
+          <Route exact path='/' render={ ()=>(
+            <Redirect to='/cont' />
+          )} />
           <Route path="/admin/else" render={props => <AdminElse {...props} />} />
           <Route path="/admin/user" render={props => <UserLayout {...props} />} />
           <Route path="/admin/cont" render={props => <BasicLayout {...props} />} />

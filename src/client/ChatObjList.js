@@ -8,20 +8,29 @@ const ListItem = List.Item
   client_id: state.client_login.client_id,
   userList: state.socketMsg.userList
 }))
-
 export default class ChatObjList extends Component {
 
   componentDidMount(){
-    // this.props.dispatch({
-    //   type: 'socketMsg/setUserList',
-    //   payload: {
-    //     cusId: this.props.client_id,
-    //     type: 'cus'
-    //   }
-    // })
+    // 获取用户聊天对象
+    this.props.dispatch({
+      type: 'socketMsg/setUserList',
+      payload: {
+        cusId: this.props.client_id,
+        type: 'cus'
+      }
+    })
   }
 
-  linkToChat = (adminId, username)=> {
+  linkToChat = (adminId, username, roomName)=> {
+    this.props.dispatch({
+      type: 'socketMsg/getAjaxMsg',
+      payload: {
+        type: 'cus',
+        adminId: adminId,
+        roomName
+      }
+    })
+    return
     this.props.history.push(`/cont/clientChat/${adminId}/${username}`)
   }
 
@@ -39,7 +48,7 @@ export default class ChatObjList extends Component {
           {
             Object.keys(this.props.userList).map( (item,i)=>(
               <ListItem
-                onClick={ ()=>this.linkToChat(item, this.props.userList[item]['username']) }
+                onClick={ ()=>this.linkToChat(item, this.props.userList[item]['username'], this.props.userList[item]['room']) }
                 key={i} >
                 {this.props.userList[item]['username']}
               </ListItem>
