@@ -23,9 +23,9 @@ export default class Daiqueren_Item extends Component {
       return <div>
         <Flex align='center' >
           购货地点：
-          <a href={`http://uri.amap.com/marker?position=${data.cusLongitude},${data.cusLatitude}`}>
+          <a href={`http://uri.amap.com/marker?position=${data.endLongitude},${data.endLatitude}`}>
             <img style={{width: 25, height: 25}} src="/1.png" alt=""/>
-            {data.senderAddress}
+            去到购货地址
           </a>
         </Flex>
       </div>
@@ -33,9 +33,9 @@ export default class Daiqueren_Item extends Component {
        return <div>
          <Flex align='center' >
            取货地点：
-           <a href={`http://uri.amap.com/marker?position=${data.endLongitude},${data.endLatitude}`}>
+           <a href={`http://uri.amap.com/marker?position=${data.cusLongitude},${data.cusLatitude}`}>
              <img style={{width: 25, height: 25}} src="/1.png" alt=""/>
-             {data.senderAddress}
+             {typeId==1?'导航到取货地点': data.senderAddress}
            </a>
          </Flex>
        </div>
@@ -57,13 +57,13 @@ export default class Daiqueren_Item extends Component {
     const {data} = this.props
     if ( data.typeId==2 ) { //代购服务
       return <div style={{padding: '10px 7px', marginBottom: 8, backgroundColor: '#fff7f4'}} >
-        <Flex warp='wrap' >
+        <Flex wrap='wrap' >
           <FlexItem style={{fontSize: '1.1em', fontWeight: 500,
-            flex: 7}} >
+            flex: 'auto'}} >
             订单编号: {data.ono}
           </FlexItem>
           <FlexItem style={{fontSize: '1.1em', fontWeight: 500,
-            flex: 4, textAlign: 'right', paddingRight: 15}} >
+            flex: 'auto', textAlign: 'right', paddingRight: 15}} >
             {this.renderOrderType(data.typeId)}
           </FlexItem>
         </Flex>

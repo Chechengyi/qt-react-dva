@@ -65,8 +65,8 @@ export default class ScrollChat extends Component {
       return
     }
     this.props.onSend({
-      userId: this.userInfo.userId,
-      username: this.userInfo.username,
+      userId: this.userInfo.id,
+      username: this.userInfo.name,
       text: this.refs.input.value
     })
     this.refs.input.value=''

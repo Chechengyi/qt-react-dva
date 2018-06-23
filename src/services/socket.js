@@ -1,7 +1,16 @@
 
-let websocket = undefined
 
-function getSock (  ) {
-  websocket = new WebSocket('wx://47.94.248.23:8080/wechat')
-  
+export async function openSocket (url) {
+  return new Promise( (reslove, reject)=>{
+    let websocket = new WebSocket(url)
+    websocket.onopen = function (e) {
+      console.log('websocket连接成功')
+      reslove(websocket)
+    }
+    websocket.onerror = function (err) {
+      console.log('websocket连接失败')
+      reject(err)
+    }
+  } )
 }
+

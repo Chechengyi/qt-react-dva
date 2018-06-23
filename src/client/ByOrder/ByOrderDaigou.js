@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { NavBar, Icon, List, InputItem, Picker, Modal, Flex,
+import { NavBar, Icon, List, InputItem, Picker, Modal, Flex, Toast,
   TextareaItem, Button, WingBlank, WhiteSpace, ActivityIndicator } from 'antd-mobile'
 import { connect } from 'dva'
 import { createForm } from 'rc-form'
@@ -12,6 +12,7 @@ const FlexItem = Flex.Item
 
 @connect( state=>({
   client_id: state.client_login.client_id,
+  client_tel: state.client_login.client_tel,
   startPoint: state.orderAddress.startPoint,
   startMsg: state.orderAddress.startMsg,
   endPoint: state.orderAddress.endPoint,
@@ -30,7 +31,8 @@ export default class ByOrderDaigou extends Component {
     this.AMap = Object.AMap
     this.state = {
       feeLoading: false,
-      expectedFee: null
+      expectedFee: null,
+      loading: false
     }
   }
 
@@ -71,7 +73,11 @@ export default class ByOrderDaigou extends Component {
   sendGetExpectedFee= e=> {
     // 首先判断 物品距离，重量等信息是否为空 不为空才能发送请求
     const {weight} = this.props.form.getFieldsValue()
-    if ( !weight&&this.distance ) return
+    // 如果已经估过价， 返回， 不在继续估价
+    if (this.state.expectedFee) return
+
+    if ( !weight||!this.distance ) return
+    console.log('执行了估价操作')
     this.setState({
       feeLoading: true
     })
@@ -98,11 +104,16 @@ export default class ByOrderDaigou extends Component {
   * @this.props.endPoint 购买商品的位置， 用作数据库中取货位置的信息
   * */
   submit= e=> {
+    if (this.state.loading) return
+    this.setState({
+      loading: true
+    })
     const { weight, goodsType, comment, couPay } = this.props.form.getFieldsValue()
     const {startPoint, endPoint, startMsg, client_id, adminId} = this.props
     //验证商品基本信息是否为空
-    if ( !weight || !goodsType ) {
+    if ( !weight || !goodsType || !couPay ) {
       this.renderModal('请先将商品信息完善')
+      return
     }
     // 验证位置客户位置信息
     if ( objIsNull.call(this.props.startPoint) ||
@@ -122,7 +133,7 @@ export default class ByOrderDaigou extends Component {
       comment,   //客户填写的订单备注
       distance: this.distance,
       receiverName: startMsg.receiverName,
-      receiverTel: startMsg.tel,
+      receiverTel: this.props.client_tel,
       endLongitude: startPoint.lnt,
       endLatitude: startPoint.lat,
       cusLongitude: endPoint.lnt,
@@ -135,7 +146,21 @@ export default class ByOrderDaigou extends Component {
     console.log(posData)
     addOrder({ ...posData })
       .then( res=> {
-        console.log(res)
+        this.setState({
+          loading: false
+        })
+        if (res.status==='OK') {
+          Modal.alert('下单成功，快递员正在向您赶来的路上。可在订单中心查看订单详情','', [{
+            text: '确认', onPress: ()=> { this.props.history.replace('/cont/index') }
+          }])
+        } else {
+          Toast.fail('下单失败，请重新尝试', 1)
+        }
+      } )
+      .catch( err=>{
+        Modal.alert('服务器发生错误，请重新尝试','', [{
+          text: '确认', onPress: ()=>{}
+        }])
       } )
 
   }

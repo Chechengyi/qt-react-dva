@@ -1,5 +1,6 @@
 {
   "entry": "src/index.js",
+  "hash": true,
   "extraBabelPlugins": [
     "transform-runtime",
     "transform-decorators-legacy",
@@ -36,7 +37,7 @@
                               "pathRewrite": { "^/" : "" }
                           },
               "/": {
-                  "target": "http://47.94.248.23:8080/",
+                  "target": "http://192.168.1.104:8080/",
                   "changeOrigin": true,
                   "pathRewrite": { "^/" : "" }
               }

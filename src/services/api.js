@@ -1,6 +1,13 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
+
+// 聊天类请求
+export async function adminGetChatObj(params) {
+  return request(`/getAdminToCus?${stringify(params)}`)
+}
+
+
 // 获取验证码
 export async function getCode(params) {
   return request(`/getAuthCode?${stringify(params)}`)
@@ -182,6 +189,48 @@ export async function dealerDoneOrder(params) {
 export async function dealerCancelOrder(params) {
   return request(`/order/getCancels?${stringify(params)}`)
 }
+// 管理员获取快递员提款未处理的请求
+export async function adminGetCouMoneyNoDis(params) {
+  return request(`/admin/getCouMoneyNoDis?${stringify(params)}`)
+}
+// 管理员确定快递员的提款处理已经转账了
+export async function adminAccpetCouMoney(params) {
+  return request('/admin/accpetCouMoney', {
+    method: 'POST',
+    body: params
+  })
+}
+// 管理员获取快递员提款历史请求个数
+export async function adminGetCouMoneyDisCount(params) {
+  return request(`/ceshi/admin/getCouMoneyDisCount?${stringify(params)}`)
+}
+// 管理员获取快递员提款请求历史记录
+export async function adminGetCouMoneyDis(params) {
+  return request(`/admin/getCouMoneyDis?${stringify(params)}`)
+}
+
+// 管理员获取订单计价方式的请求  // 参数， id
+export async function adminGetOrderTypePrice(params) {
+  return request(`/admin/getExpressPrice?${stringify(params)}`)
+}
+// 管理员修改订单计价方式  参数  id orderTypeId
+export async function adminPutOrderTypePrice(params) {
+  return request('/admin/modifyExpressPrice', {
+    method: 'POST',
+    body: params
+  })
+}
+//  管理员获取省计价
+export async function adminGetProvincePrice(params) {
+  return request(`/admin/getAreaPriceAll?${stringify(params)}`)
+}
+// 管理员修改快递物流省区计价方式
+export async function adminPutProvincePrice(params) {
+  return request('/admin/modifyAreaPrice', {
+    method: 'POST',
+    body: params
+  })
+}
 
 /*
 *   客户端API
@@ -260,6 +309,35 @@ export async function addOrder(params) {
     body: params
   })
 }
+// 客户获取未付款订单个数
+export async function cusGetNoPayCount(params) {
+  return request(`/ceshi/order/cusGetNoPayCount?${stringify(params)}`)
+}
+// 客户获取为付款订单请求
+export async function cusGetNoPayList(params) {
+  return request(`/ceshi/order/cusGetNoPay?${stringify(params)}`)
+}
+// 客户获取进行中的订单列表
+export async function cusGetOngoing(params) {
+  return request(`/ceshi/order/cusGetOngoing?${stringify(params)}`)
+}
+// 客户获取已经完成的订单
+export async function cusGetDone(params) {
+  return request(`/ceshi/order/cusGetDone?${stringify(params)}`)
+}
+// 客户取消订单（只有在管理员分配之前才能取消）
+export async function cusCancelOrder(params) {
+  return request('/ceshi/order/cusCancelOrder', {
+    method: 'POST',
+    body: params
+  })
+}
+
+// 客户获取聊天对象列表（传入客户id）根据聊天历史信息列表分组获取与客户聊过天的管理员
+export async function cusGetChatUserList(params) {
+  return request(`/ceshi/cusGetChatObject?${stringify(params)}`)
+}
+
 
 /*
 *   快递员端API

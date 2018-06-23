@@ -51,9 +51,11 @@ export default {
       }
     },
     saveData( state, {payload} ){
+      // let count = payload.length
       return {
         ...state,
-        data: payload
+        data: payload,
+        // count
       }
     },
     changeLoading( state, {payload} ){

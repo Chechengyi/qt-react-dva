@@ -15,10 +15,22 @@ export default [
   //   iconPath: '/daigou.png',
   //   linkTo: ''
   // },
+  // {
+  //   title: '待付款订单',
+  //   linkTo: '/cont/noPay'
+  // },
+  // {
+  //   title: '订单中心',
+  //   iconPath: '/dingdan.png',
+  //   linkTo: ''
+  // },
   {
-    title: '订单中心',
-    iconPath: '/dingdan.png',
-    linkTo: ''
+    title: '进行中订单',
+    linkTo: '/cont/ongoing'
+  },
+  {
+    title: '已完成订单',
+    linkTo: '/cont/done'
   },
   {
     title: '个人中心',

@@ -92,6 +92,8 @@ export default class Money extends PureComponent {
       Toast.fail('提现金额超出总金额', 1)
       return
     }
+    // console.log(this.state.aaccountType)
+    // return
     alert(<div>
       <div>提现金额{money}元</div>
       <div>提现账户为{this.state.aaccountType==='wxpay'?'微信':'支付宝'}</div>
@@ -106,7 +108,8 @@ export default class Money extends PureComponent {
         driverTixian({
           couId: this.props.driver_id,
           putCash: money,
-          putAccount: this.state.aaccountType
+          // putAccount: this.state.aaccountType
+          accountSign: this.state.aaccountType
         })
           .then(res=>{
             // this.props.history.replace('/driverElseCont/money')
@@ -139,7 +142,7 @@ export default class Money extends PureComponent {
                 this.props.history.replace('/driverElseCont/money')
               }
             }])
-          } )
+          })
       }
     }])
   }
@@ -158,8 +161,18 @@ export default class Money extends PureComponent {
         <div style={{padding: '30px 0'}} >
           <List style={{marginBottom: 0}} >
             <InputItem
-              {...getFieldProps('money')}
-              placeholder='请输入提现金额' type='number' >提现金额</InputItem>
+              {...getFieldProps('money', {
+                normalize: (v, prev) => {  //验证金额
+                  if (v && !/^(([1-9]\d*)|0)(\.\d{0,2}?)?$/.test(v)) {
+                    if (v === '.') {
+                      return '0.';
+                    }
+                    return prev;
+                  }
+                  return v;
+                },
+              })}
+              placeholder='请输入提现金额'>提现金额</InputItem>
           </List>
           {this.renderMoneyAccountList()}
           <WhiteSpace size='lg' />
@@ -197,6 +210,9 @@ export default class Money extends PureComponent {
            <ListItem
              arrow="horizontal"
            >提现记录</ListItem>
+           <ListItem
+             arrow="horizontal"
+           >我的收益</ListItem>
          </List>
       </div>
     </div>

@@ -67,15 +67,25 @@ export default class ByOrderTongcheng extends Component {
     const feeRate = window.sessionStorage.getItem('feeRate')
     let {weight, goodsType} = this.props.form.getFieldsValue()
     const {startPoint, endPoint, startMsg, endMsg, client_id, adminId, endAddress} = this.props
-    //  检验信息是否完善
+
+    // 检验商品信息是否完善
+    if ( !weight || !goodsType ) {
+      Modal.alert('请先完善要寄物品信息', '信息不完善不能提交订单', [{
+        text: '确定', onPress: ()=> {}
+      }])
+      return
+    }
+
+    //  检验地址信息是否完善
     if (objIsNull.call(startPoint) ||  // 起点经纬度是否为空
         objIsNull.call(endPoint) || // 终点经纬度是否为空
         objIsNull.call(startMsg) ||  // 起点寄件人信息是否为空
-        objIsNull.call(endMsg) || !weight || !goodsType    // 终点收件人信息是否为空
+        objIsNull.call(endMsg)    // 终点收件人信息是否为空
         ) {
       Modal.alert('请先完善订单信息', '订单信息不完善不能提交订单！',[{
         text: '确定', onPress: ()=>{}
       }])
+      return
     }
     let posData = {
       adminId: parseInt(adminId),
@@ -99,7 +109,21 @@ export default class ByOrderTongcheng extends Component {
     console.log(posData)
     addOrder({...posData})
       .then( res=> {
-        console.log(res)
+        this.setState({
+          loading: false
+        })
+        if (res.status==='OK') {
+          Modal.alert('下单成功，快递员正在向您赶来的路上。可在订单中心查看订单详情','', [{
+            text: '确认', onPress: ()=> { this.props.history.replace('/cont/index') }
+          }])
+        } else {
+          Toast.fail('下单失败，请重新尝试', 1)
+        }
+      } )
+      .catch( err=>{
+        Modal.alert('服务器发生错误，请重新尝试','', [{
+          text: '确认', onPress: ()=>{}
+        }])
       } )
   }
   // 获取起点与终点之间的距离，用于核算运费
@@ -119,7 +143,10 @@ export default class ByOrderTongcheng extends Component {
   sendGetExpectedFee = e=> {
     // 首先判断 物品距离，重量等信息是否为空 不为空才能发送请求
     const {weight} = this.props.form.getFieldsValue()
-    if ( !weight&&this.distance ) return
+    // 如果已经估过价， 返回， 不在继续估价
+    if (this.state.expectedFee) return
+
+    if ( !weight||!this.distance ) return
     this.setState({
       feeLoading: true
     })

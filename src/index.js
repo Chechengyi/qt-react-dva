@@ -9,7 +9,7 @@ import 'antd-mobile/dist/antd-mobile.css'
 import './theme.less'
 
 // 1. Initialize
-const app = dva({
+export const app = dva({
   // history: browserHistory(),
 });
 

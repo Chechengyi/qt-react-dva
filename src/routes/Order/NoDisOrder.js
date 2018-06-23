@@ -159,7 +159,7 @@ export default class Cai extends PureComponent {
           </Col>
           <Col md={5} sm={10} >
             <FormItem label="订单类型">
-              {getFieldDecorator('orderType')(
+              {getFieldDecorator('orderTypeId')(
                 <Select>
                   {this.props.orderType.map( item=>(
                     <Option key={item.id} value={item.id} >{item.type}</Option>

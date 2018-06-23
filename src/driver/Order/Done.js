@@ -28,7 +28,7 @@ export default class Done extends Component {
     this.state={
       dataSource,
       refreshing: false,
-      pageNo: 1,
+      pageNo: 0,
       pageSize: 20,
       data: []
     }
@@ -46,7 +46,7 @@ export default class Done extends Component {
       type: 'courierDone/getData',
       payload: {
         couId: this.props.driver_id,
-        pageNo: this.state.pageNo,
+        pageNo: this.state.pageNo + 1 ,
         pageSize: this.state.pageSize,
         refreshing: false
       }
@@ -58,7 +58,16 @@ export default class Done extends Component {
       this.setState({
         refreshing: false
       })
-      let arr = this.data.slice()
+      if (nextProps.data.length===0) {
+        this.setState({
+          isOver: true
+        })
+      } else {
+        this.setState( prevState=>({
+          pageNo: prevState.pageNo + 1
+        }) )
+      }
+      let arr = this.state.data.slice()
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(arr.concat(nextProps.data)),
         data: arr.concat(nextProps.data)
@@ -66,11 +75,27 @@ export default class Done extends Component {
     }
   }
 
+  onEndReached= e=> {
+    console.log('去加载把')
+    if ( this.props.loading ) return
+    this.props.dispatch({
+      type: 'courierDone/getData',
+      payload: {
+        couId: this.props.driver_id,
+        pageNo: this.state.pageNo + 1 ,
+        pageSize: this.state.pageSize,
+        refreshing: false,
+        isOver: false
+      }
+    })
+    // this.setState( (prev) )
+  }
+
   onRefresh=e=> {
     this.data = []
     this.setState({
       refreshing: true,
-      pageNo: 1,
+      pageNo: 0,
       pageSize: 20
     })
     this.props.dispatch({
@@ -104,6 +129,12 @@ export default class Done extends Component {
           justifyContent: 'center', paddingTop: 10}} >
           <ActivityIndicator animating={this.props.loading} ></ActivityIndicator>
         </div> }
+        renderFooter={ (e)=><div style={{textAlign: 'center'}} >
+          {this.state.isOver&&<span style={{}} >没有订单了...</span>}
+          {this.props.loading&&'加载中...'}
+        </div> }
+        onEndReachedThreshold={200}
+        onEndReached={this.onEndReached}
         pullToRefresh={
           <PullToRefresh
             refreshing={this.state.refreshing}

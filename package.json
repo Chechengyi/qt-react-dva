@@ -26,6 +26,7 @@
     "classnames": "^2.2.5",
     "core-js": "^2.5.1",
     "dva": "^2.1.0",
+    "echarts": "^4.1.0",
     "enquire-js": "^0.1.1",
     "g-cloud": "^1.0.2-beta",
     "g2": "^2.3.13",

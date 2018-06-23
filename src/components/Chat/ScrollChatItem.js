@@ -4,28 +4,26 @@ import styles from './ScrollChatItem.less'
 export default class ScrollChatItem extends Component {
 
   renderRow = e=> {
-    console.log(this.props.userInfo.userId)
-    if (e.userId != this.props.userInfo.userId) {
-      return (
-        <div className={styles.row}
-          style={{float: 'left', backgroundColor: '#ffffff'}}
-        >
-          {e.text}
-        </div>
-      )
-    } else {
+    if (e.user.id === this.props.userInfo.id) {
       return (
         <div className={styles.row}
              style={{float: 'right', backgroundColor: '#ffb300'}} >
           {e.text}
         </div>
       )
-
+    } else {
+      return (
+        <div className={styles.row}
+             style={{float: 'left', backgroundColor: '#ffffff'}}
+        >
+          {e.text}
+        </div>
+      )
     }
   }
 
   isMe = data=> {
-    return data.userId == this.props.userInfo.userId
+    return  data.user && data.user.id == this.props.userInfo.id
   }
 
   render () {

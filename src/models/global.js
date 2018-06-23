@@ -1,4 +1,7 @@
 import { queryNotices } from '../services/api';
+import { openSocket } from '../services/socket'
+
+let WS
 
 export default {
   namespace: 'global',
@@ -62,7 +65,6 @@ export default {
       };
     },
   },
-
   subscriptions: {
     setup({ history }) {
       // Subscribe history(url) change, trigger `load` action if pathname is `/`
@@ -72,11 +74,8 @@ export default {
         }
       });
     },
-    socketStep({history}){
-      // 初始化model的时候连接websocket
-      return history.listen( ({pathname})=> {
-        console.log(pathname)
-      } )
-    }
+    // socketStep: async function ({dispatch}) {
+    //   WS = await openSocket('ws://192.168.1.102:8000/wschat')
+    // }
   },
 };

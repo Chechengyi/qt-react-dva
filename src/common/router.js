@@ -3,6 +3,7 @@ import dynamic from 'dva/dynamic';
 import { getMenuData } from './menu';
 import AccountManagement from "../driver/AccountManagement";
 import Ships from "../routes/Order/Ships";
+import OrderStatistical from "../routes/Order/OrderStatistical";
 
 // wrapper of dynamic
 const dynamicWrapper = (app, models, component) => dynamic({
@@ -42,7 +43,21 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['admin_login'], () => import('../routes/Else/UpdateMsg'))
     },
     '/admin/cont': {
-      component: dynamicWrapper(app, ['admin_login', 'noDisOrder'], () => import('../layouts/BasicLayout')),
+      component: dynamicWrapper(app, ['admin_login', 'noDisOrder', 'socketMsg'], () => import('../layouts/BasicLayout')),
+    },
+    '/admin/cont/chat': {
+      // exact: true,
+      component: dynamicWrapper(app, ['admin_login', 'socketMsg'], () => import('../routes/Chat/Index')),
+    },
+    '/admin/cont/chat/content/:cusId/:username': {
+      exact: false,
+      component: dynamicWrapper(app, ['admin_login', 'socketMsg'], () => import('../routes/Chat/Content')),
+    },
+    '/admin/cont/couMoney/noDis': {
+      component: dynamicWrapper(app, ['admin_login', 'adminCouMoneyNoDis'], () => import('../routes/CouMoney/NoDis')),
+    },
+    '/admin/cont/couMoney/dis': {
+      component: dynamicWrapper(app, ['admin_login', 'adminCouMoneyDis', 'orderType'], () => import('../routes/CouMoney/Dis')),
     },
     '/admin/cont/order/noDisOrder': {
       component: dynamicWrapper(app, ['admin_login', 'noDisOrder', 'orderType'], () => import('../routes/Order/NoDisOrder'))
@@ -56,6 +71,9 @@ export const getRouterData = (app) => {
     '/admin/cont/order/cancel': {
       component: dynamicWrapper(app, ['admin_login', 'cancelOrder', 'orderType'], () => import('../routes/Order/CancelOrder'))
     },
+    '/admin/cont/order/orderStatistical': {
+      component: dynamicWrapper(app, ['admin_login', 'cancelOrder', 'orderType'], () => import('../routes/Order/OrderStatistical'))
+    },
     '/admin/cont/orderSetting/jisong': {
       component: dynamicWrapper(app, ['admin_login'], () => import('../routes/OrderSetting/Tongcheng'))
     },
@@ -63,7 +81,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['admin_login'], () => import('../routes/OrderSetting/Daigou'))
     },
     '/admin/cont/orderSetting/kuaidi': {
-      component: dynamicWrapper(app, ['admin_login'], () => import('../routes/OrderSetting/Kuaidi'))
+      component: dynamicWrapper(app, ['admin_login', 'provincePriceList'], () => import('../routes/OrderSetting/Kuaidi'))
     },
     '/admin/cont/people/cus': {
       component: dynamicWrapper(app, ['admin_login', 'customer'], ()=>import('../routes/Staff/Cus'))
@@ -115,7 +133,16 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, [], () => import('../client/Reg')),
     },
     '/cont': {
-      component: dynamicWrapper(app, ['client_login'], () => import('../client/Cont')),
+      component: dynamicWrapper(app, ['client_login', 'socketMsg','CusNoPay'], () => import('../client/Cont')),
+    },
+    '/cont/nopay': {
+      component: dynamicWrapper(app, ['client_login','CusNoPay', 'orderType', 'socketMsg'], () => import('../client/NoPay')),
+    },
+    '/cont/ongoing': {
+      component: dynamicWrapper(app, ['client_login', 'clientOngoing', 'orderType'], () => import('../client/Order/Ongoing')),
+    },
+    '/cont/done': {
+      component: dynamicWrapper(app, ['client_login', 'clientOngoing', 'orderType'], () => import('../client/Order/Done'))
     },
     '/cont/chooseLocation/:type': {
       component: dynamicWrapper(app, ['client_login', 'orderAddress'], () => import('../client/ChooseLocation')),
@@ -142,13 +169,16 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['client_login', 'orderType', 'orderAddress'], () => import('../client/ByOrder')),
     },
     '/cont/index': {
-      component: dynamicWrapper(app, ['client_login', 'orderType'], () => import('../client/Index')),
+      component: dynamicWrapper(app, ['client_login', 'orderType', 'CusNoPay'], () => import('../client/Index')),
     },
     '/cont/my': {
       component: dynamicWrapper(app, ['client_login'], () => import('../client/My')),
     },
-    '/clientChat': {
-      component: dynamicWrapper(app, ['client_login'], () => import('../client/Chat')),
+    '/cont/clientChat/:adminId/:username': {
+      component: dynamicWrapper(app, ['client_login', 'socketMsg'], () => import('../client/Chat')),
+    },
+    '/cont/ChatObjList': {
+      component: dynamicWrapper(app, ['client_login', 'socketMsg'], () => import('../client/ChatObjList')),
     },
     '/cont/upDatePsw': {
       component: dynamicWrapper(app, ['client_login'], () => import('../client/UpdatePsw')),

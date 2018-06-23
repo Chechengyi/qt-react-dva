@@ -90,3 +90,4 @@ export function debouce2( wait, func, ctx ) {
 export function objIsNull(){
   return Object.keys(this).length===0
 }
+

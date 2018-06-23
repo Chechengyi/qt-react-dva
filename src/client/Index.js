@@ -12,7 +12,8 @@ let mapObj = null
   client_name: state.client_login,
   orderData: state.orderType.data,
   orderLoading: state.orderType.loading,
-  client_status: state.client_login.client_status
+  client_status: state.client_login.client_status,
+  count: state.CusNoPay.count
 }))
 export default class Index extends PureComponent {
 
@@ -37,6 +38,12 @@ export default class Index extends PureComponent {
         type: 'orderType/getData',
       })
     }
+    this.props.dispatch({
+      type: 'CusNoPay/getCount',
+      payload: {
+        cusId: this.props.client_id
+      }
+    })
     this.createMap()   // 直接创建地图
     // this.getPos()   // 根据客户定位创建地图
   }
@@ -115,6 +122,12 @@ export default class Index extends PureComponent {
   }
 
   handleDrawOpen=(e)=>{
+    this.props.dispatch({
+      type: 'CusNoPay/getCount',
+      payload: {
+        cusId: this.props.client_id
+      }
+    })
     if (e==='revers'){
       this.setState((prevState,props)=>({
         isOpen: !prevState.isOpen
@@ -153,13 +166,15 @@ export default class Index extends PureComponent {
   }
 
   render () {
-    const sidebar=(<DrawCont history={this.props.history} />)
+    const sidebar=(<DrawCont count={this.props.count} history={this.props.history} />)
     return <div>
       <NavBar
         title='快递员上门服务'
         leftContent={ ()=>(<img onClick={(e)=>{this.handleDrawOpen('revers')}} src="/Category.png" style={{width: 20, height: 20}} alt=""/>
         ) }
-        rightContent={()=>(<img onClick={ ()=>{ this.props.history.push('/clientChat') } } style={{width: 20, height: 20}} src="/chat.png" alt=""/>
+        // rightContent={()=>(<img onClick={ ()=>{ this.props.history.push('/clientChat/1') } } style={{width: 20, height: 20}} src="/wechat1.png" alt=""/>
+        // )}
+        rightContent={()=>(<img onClick={ ()=>{ this.props.history.push('/cont/ChatObjList') } } style={{width: 20, height: 20}} src="/wechat1.png" alt=""/>
         )}
         navBarStyle={{
           height: 35,
@@ -205,7 +220,7 @@ export default class Index extends PureComponent {
             onClick={ this.handleOrderLink }
             style={{
             position: 'absolute', textAlign: 'center', lineHeight: '30px',
-            width: 80, height: 30, backgroundColor: '#000',
+            width: 80, height: 30, backgroundColor: '#108ee9',
             top: '50%', left: '50%', marginLeft: -40, borderRadius: '20px'
           }} onTouchMove={ e=>e.preventDefault() } >
             <div className={styles.xuanzhuan}></div>
@@ -215,7 +230,7 @@ export default class Index extends PureComponent {
           <div style={{
             position: 'absolute', width: '100%', height: 30,
             bottom: 0, left: 0, zIndex: 199, lineHeight: '30px',
-            backgroundColor: '#fff', textAlign: 'center'
+            backgroundColor: '#108ee9', textAlign: 'center', color: '#fff'
           }} >
             查看并同意<span>《快递运单契约条款》</span>
           </div>

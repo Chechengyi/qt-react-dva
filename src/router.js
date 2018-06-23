@@ -23,24 +23,23 @@ function RouterConfig({ history, app }) {
   const DriverLogin = routerData['/driverLogin'].component
   const DriverCont = routerData['/driverCont'].component
   const DriverElseCont = routerData['/driverElseCont'].component
+  const AdminChat = routerData['/admin/cont/chat'].component
   // 客户端聊天界面
-  const ClientChat = routerData['/clientChat'].component
+  // const ClientChat = routerData['/clientChat'].component
   return (
     <LocaleProvider locale={zhCN}>
       <Router history={history}>
         <Switch>
           <Route path="/admin/else" render={props => <AdminElse {...props} />} />
-
           <Route path="/admin/user" render={props => <UserLayout {...props} />} />
           <Route path="/admin/cont" render={props => <BasicLayout {...props} />} />
-          {/*<Route path="/driver" render={ props => <DriverIndex {...props} />} />*/}
+          {/*<Route path="/admin/cont/chat" exact={true} render={ props=><AdminChat {...props} /> } />*/}
           <Route path="/driverLogin" render={ props => <DriverLogin {...props} />   } />
           <Route path="/driverCont" render={ props => <DriverCont {...props} /> }  />
           <Route path="/driverElseCont" render={ props=><DriverElseCont {...props} /> } ></Route>
           <Route path='/clientUser' render={ props=><ClientLayout {...props} /> } />
-          {/*<Route path="/login" render={ props => <ClientLogin {...props} /> } />*/}
           <Route path="/cont" render={ props => <ClientCont {...props} /> } />
-          <Route path="/clientChat" render={ props => <ClientChat {...props} /> } />
+          {/*<Route path="/clientChat/:adminId/:username" render={ props => <ClientChat {...props} /> } />*/}
           <Route path="/orderMap/:id/:location" render={ props => <OrderMap {...props} /> } />
           <Route path="/*" component={NotFound}  />
         </Switch>

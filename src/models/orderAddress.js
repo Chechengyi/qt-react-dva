@@ -40,6 +40,7 @@ export default {
       })
     },
     *startAddress( {payload}, {call, put} ){
+      console.log('设置详细地址了')
       yield put({
         type: 'saveStartAddress',
         payload

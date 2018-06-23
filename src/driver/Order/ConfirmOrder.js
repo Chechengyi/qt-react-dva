@@ -71,7 +71,7 @@ export default class ConfirmOrder extends Component {
             })
             if (res.status==='OK') {
               Modal.alert('确认订单信息成功，等待客户付款','', [{
-                text: '确认', onPress: ()=> console.log('跳到待付款页面')
+                text: '确认', onPress: ()=> this.props.history.replace('/driverCont/daifukuan')
               }] )
             } else {
               Toast.fail('确认订单信息失败，请重试', 1)
@@ -131,23 +131,6 @@ export default class ConfirmOrder extends Component {
           >
             商品类型
           </InputItem>
-          <InputItem
-            {...getFieldProps('actualFee', {
-              initialValue: data.actualFee,
-              normalize: (v, prev) => {  //验证金额
-                if (v && !/^(([1-9]\d*)|0)(\.\d{0,2}?)?$/.test(v)) {
-                  if (v === '.') {
-                    return '0.';
-                  }
-                  return prev;
-                }
-                return v;
-              },
-            })}
-            extra="元"
-          >
-            真实运费
-          </InputItem>
           {data.typeId==2&&<InputItem
             {...getFieldProps('price', {
               // initialValue: data.actualFee,
@@ -166,6 +149,23 @@ export default class ConfirmOrder extends Component {
           >
             商品价格
           </InputItem>}
+          <InputItem
+            {...getFieldProps('actualFee', {
+              initialValue: data.fee,
+              normalize: (v, prev) => {  //验证金额
+                if (v && !/^(([1-9]\d*)|0)(\.\d{0,2}?)?$/.test(v)) {
+                  if (v === '.') {
+                    return '0.';
+                  }
+                  return prev;
+                }
+                return v;
+              },
+            })}
+            extra="元"
+          >
+            真实运费
+          </InputItem>
         </List>
         <WingBlank>
           <WhiteSpace />

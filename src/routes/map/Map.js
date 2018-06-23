@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Select, Spin, message } from 'antd'
+import { Select, Spin, message, Modal } from 'antd'
 import { connect } from 'dva'
 import { getCourierPos, dealerDistributeOrder } from '../../services/api'
 import { promise_ } from '../../services/utils'
@@ -82,21 +82,32 @@ export default class Map extends PureComponent {
   }
 
   handleMarkerClick = e=> {
-    dealerDistributeOrder({
-      id: this.id,
-      couId: e.target.F.extData.courierId
-    })
-      .then( res=>{
-        if (res.status==='OK'){
-          message.success('订单分配成功！', 1, ()=>{
-            this.props.history.goBack()
+    console.log(e.target.F.extData)
+    Modal.confirm({
+      title: `确认将订单分配给快递员  ${e.target.F.extData.username}?`,
+      content: '',
+      onOk: ()=>{
+        dealerDistributeOrder({
+          id: this.id,
+          couId: e.target.F.extData.courierId
+        })
+          .then( res=>{
+            if (res.status==='OK'){
+              message.success('订单分配成功！', 1, ()=>{
+                this.props.history.goBack()
+              } )
+            } else {
+              message.success(`快递员${e.target.F.extData.username}下班了，请分配给其他人`, 0,8)
+              this.props.history.replace(this.props.match.url)
+            }
           } )
-        }
-      } )
+      }
+    })
   }
 
   componentDidMount () {
     //   27.70846  107.05683
+    console.log(this)
     this.id = this.props.match.params.id
     this.lnt = this.props.match.params.location.split(',')[0]
     this.lat = this.props.match.params.location.split(',')[1]

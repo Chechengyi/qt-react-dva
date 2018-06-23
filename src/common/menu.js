@@ -36,18 +36,23 @@ const menuData = [
         path: 'ships'
       },
       {
-        name: '以完成订单',
+        name: '已完成订单',
         path: 'dones'
       },
       {
-        name: '以取消订单',
+        name: '已取消订单',
         path: 'cancel'
+      },
+      {
+        name: '送单统计',
+        path: 'orderStatistical'
       }
     ]
   },
   {
     name: '订单管理',
     icon: 'setting',
+    isAdmin: true,
     path: 'admin/cont/orderSetting',
     children: [
       {
@@ -64,10 +69,31 @@ const menuData = [
       }
     ]
   },
+  // {
+  //   name: '订单定位',
+  //   icon: 'user',
+  //   path: 'orderMap/2'
+  // },
   {
-    name: '订单定位',
-    icon: 'user',
-    path: 'orderMap/2'
+    name: '聊天信息',
+    icon: 'wechat',
+    path: '/admin/cont/chat'
+  },
+  {
+    name: '快递员提款',
+    isAdmin: true,
+    icon: 'pay-circle-o',
+    path: 'admin/cont/couMoney',
+    children: [
+      {
+        name: '未处理提款申请',
+        path: 'noDis'
+      },
+      {
+        name: '已处理提款申请',
+        path: 'dis'
+      }
+    ]
   }
   ]
 
@@ -75,11 +101,23 @@ function formatter(data, roleId, parentPath = '') {
   const list = [];
   data.forEach((item) => {
     if (item.children) {
-      list.push({
-        ...item,
-        path: `${parentPath}${item.path}`,
-        children: formatter(item.children, roleId, `${parentPath}${item.path}/`),
-      });
+      // 判断是否需要管理员全县
+      if ( item.isAdmin ) {
+        if (roleId==0) { // 如果该项需要管理员权限，验证roleId是否为0
+          list.push({
+            ...item,
+            path: `${parentPath}${item.path}`,
+            children: formatter(item.children, roleId, `${parentPath}${item.path}/`),
+          })
+        }
+      } else {
+        list.push({
+          ...item,
+          path: `${parentPath}${item.path}`,
+          children: formatter(item.children, roleId, `${parentPath}${item.path}/`),
+        })
+      }
+
     } else {
       if (item.isAdmin) {
         // 验证roleId， 管理员具有的一些操作权限经销商不能看到

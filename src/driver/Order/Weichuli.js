@@ -35,7 +35,8 @@ export default class Weichuli extends PureComponent {
     this.state={
       data: [],
       dataSource,
-      refreshing: false
+      refreshing: false,
+      isOver: false
     }
 
   }
@@ -61,6 +62,11 @@ export default class Weichuli extends PureComponent {
       refreshing: false
     })
     if ( nextProps.data!==this.props.data ) {
+      if (nextProps.data.length===0) {
+        this.setState({
+          isOver: true
+        })
+      }
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(nextProps.data),
       })
@@ -103,9 +109,12 @@ export default class Weichuli extends PureComponent {
           justifyContent: 'center', paddingTop: 10}} >
           <ActivityIndicator animating={this.props.loading } ></ActivityIndicator>
         </div> }
-        renderFooter={ ()=><div></div> }
+        renderFooter={ (e)=><div style={{textAlign: 'center'}} >
+          {this.state.isOver&&<span style={{}} >没有订单了...</span>}
+        </div> }
         pullToRefresh={
           <PullToRefresh
+            style={{minHeight: document.documentElement.clientHeight-45-50}}
             refreshing={this.state.refreshing}
           onRefresh={this.onRefresh}
         />}

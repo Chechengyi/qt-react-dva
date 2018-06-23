@@ -14,6 +14,7 @@ import NotFound from '../routes/Exception/404';
 import { getRoutes } from '../utils/utils';
 import { getMenuData } from '../common/menu';
 import Header from '../components/Header'
+import {openSocket} from "../services/socket";
 
 
 /**
@@ -83,6 +84,8 @@ class BasicLayout extends React.PureComponent {
     };
   }
   componentDidMount() {
+    // 连接websocket
+    this.getSokcet()
     if ( this.props.login.admin_status !== 'OK' ) {
       this.props.history.push('/admin/user/login')
       return
@@ -96,6 +99,35 @@ class BasicLayout extends React.PureComponent {
       });
     });
   }
+
+  getSokcet= async ()=> {
+
+    if ( !window.cusWS ) {
+      try {
+        window.cusWS = await openSocket('ws://localhost:8080/wschat')
+      } catch (e) {
+        return
+      }
+    } else {
+      return
+    }
+    window.cusWS.onmessage = e=> {
+      console.log('接收')
+      console.log(e.data)
+      if (!e.data.user) {
+        return
+      }
+      let obj = JSON.parse(e.data)
+      this.props.dispatch({
+        type: 'socketMsg/setMsg',
+        payload: {
+          toUserId: e.data.user.id,
+          msg: e.data
+        }
+      })
+    }
+  }
+
   // 发送获取未分配订单个数的请求
   getOrderCount(){
     this.props.dispatch({
@@ -149,6 +181,7 @@ class BasicLayout extends React.PureComponent {
                     <Route
                       key={item.key}
                       path={item.path}
+                      // render={ props=><item.component {...props} /> }
                       component={item.component}
                       exact={item.exact}
                     />

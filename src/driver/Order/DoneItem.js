@@ -21,13 +21,21 @@ export default class DoneItem extends Component {
     const {data} = this.props
     return <div style={{
       padding: '10px 7px', margin: '8px 10px', borderRadius: 3,
-      backgroundColor: '#fff'
+      backgroundColor: '#fff', height: 1000
     }} >
-      <Flex>
-        <FlexItem style={{flex: 7}} >订单编号：{data.ono}</FlexItem>
-        <FlexItem style={{flex: 3}} >{this.renderOrderType(data.typeId)}</FlexItem>
+      <Flex wrap='wrap'>
+        <FlexItem style={{flex: 'auto'}} >订单编号：{data.ono}</FlexItem>
+        <FlexItem style={{flex: 'auto'}} >{this.renderOrderType(data.typeId)}</FlexItem>
       </Flex>
-
+      <Flex>
+        订单成交金额：{data.actualFee} 元
+      </Flex>
+      {data.typeId==2&&
+        <Flex>垫付金额: 30 元</Flex>
+      }
+      <Flex>
+        我的提成：1 元
+      </Flex>
     </div>
   }
 }

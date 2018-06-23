@@ -28,7 +28,8 @@ export default class Daifukuan extends Component {
     this.state={
       data: [],
       dataSource,
-      refreshing: false
+      refreshing: false,
+      isOver: false
     }
   }
 
@@ -37,6 +38,11 @@ export default class Daifukuan extends Component {
       refreshing: false
     })
     if ( nextProps.data!==this.props.data ) {
+      if (nextProps.data.length===0) {
+        this.setState({
+          isOver: true
+        })
+      }
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(nextProps.data),
       })
@@ -88,6 +94,9 @@ export default class Daifukuan extends Component {
         renderHeader={ ()=> <div style={{display: 'flex',
           justifyContent: 'center', paddingTop: 10}} >
           <ActivityIndicator animating={this.props.loading} ></ActivityIndicator>
+        </div> }
+        renderFooter={ (e)=><div style={{textAlign: 'center'}} >
+          {this.state.isOver&&<span style={{}} >没有订单了...</span>}
         </div> }
         pullToRefresh={
           <PullToRefresh

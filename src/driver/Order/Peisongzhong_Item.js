@@ -44,10 +44,10 @@ export default class Peisongzhong_Item extends Component {
           <FlexItem>电话: {data.senderTel}</FlexItem>
         </Flex>
         <Flex style={{padding: 3}} >
-          收货地址:
           <a href={`http://uri.amap.com/marker?position=${data.cusLongitude},${data.cusLatitude}`}>
             <img src="/1.png"/>
-            {data.receiverAddr}
+            {/*{data.receiverAddr}*/}
+            导航到客户处
           </a>
         </Flex>
       </Flex>

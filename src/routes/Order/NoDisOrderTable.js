@@ -210,22 +210,34 @@ export default class FrontDesk_table extends  PureComponent {
       {
         title: '订单编号',
         dataIndex: 'ono',
-        width:100
+        width:150
       },
       {
         title: '客户姓名',
-        dataIndex: 'senderName',
-        width: 100
+        dataIndex: 'username',
+        width: 100,
+        // render: (val, text, index)=>(
+        //   <div>
+        //     {/*{text.typeId==2?*/}
+        //       {/*text.receiverName:*/}
+        //       {/*text.senderName*/}
+        //     {/*}*/}
+        //     {}
+        //   </div>
+        // )
       },
       {
         title: '联系电话 ',
-        dataIndex: 'senderTel',
+        dataIndex: 'tel',
         width: 150,
-        render: (val, text, index) => (
-          <div>
-            {this.state.selectWriteKey===index?this.renderWriteInput(getFieldDecorator,val,'tel'): val}
+        render: (val, text, index) => {
+          return <div>
+            {text.typeId==2?
+              text.receiverTel:
+              text.senderTel
+            }
           </div>
-        )
+        }
       },
       {
         title: '订单类型',

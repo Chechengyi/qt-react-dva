@@ -87,6 +87,7 @@ export default class StartAddress extends Component {
     })
     // 设置下单地点的详细地址  快递物流订单需要这个字段
     if ( this.typeId==3 ) {
+      console.log('sdasd')
       this.props.dispatch({
         type: 'orderAddress/startAddress',
         payload: address
@@ -228,7 +229,9 @@ export default class StartAddress extends Component {
           defaultValue={this.props.startMsg.receiverName}
         >姓名</InputItem>
         {this.typeId==3?<TextareaItem
-          {...getFieldProps('address')}
+          {...getFieldProps('address', {
+            initialValue: this.props.startAddress
+          })}
           count={50}
           clear rows={3}
           title='寄件地址' />:null}

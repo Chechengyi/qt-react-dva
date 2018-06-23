@@ -47,7 +47,7 @@ export default class Weichuli_Item extends Component {
   }
 
   handleChoose= id=> {
-    Modal.alert('确认处理？','', [{
+    Modal.alert('确认处理', '', [{
       text: '确定', onPress: ()=> {
         courierAddAccpet({
           id
@@ -67,19 +67,19 @@ export default class Weichuli_Item extends Component {
           } )
       }
     }, {
-      text: '确定，并带我去详情页', onPress: ()=> {
-
-      }
-    }, {
-      text: '不，我只是点错了', onPress: ()=> {}
+      text: '取消', onPress: ()=> {}
     }])
+
   }
+
 
   render () {
     const {data} = this.props
     return <ListItem style={{display: this.state.isCancel?'none':''}} >
       <div>订单类型：{this.renderOrderType(data.typeId)}</div>
-      <div><span style={{color: '#888', fontSize: '15px', lineHeight: 1.5}} >起始地址： {data.senderAdress}</span></div>
+      <div>
+        <span style={{color: '#888', fontSize: '15px', lineHeight: 1.5}} ></span>
+      </div>
       <div style={{fontSize: 15, marginTop: 5, textAlign: 'right'}} >
         <a onClick={ ()=>{ this.handleChoose(data.id) } } style={{marginRight: 10}} >确认处理</a>
         <a onClick={ ()=>{this.handleCancel(data.id)} } >取消订单</a>

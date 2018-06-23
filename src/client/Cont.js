@@ -3,9 +3,12 @@ import { Route, Redirect, Switch } from 'dva/router'
 import { getRoutes } from '../utils/utils'
 import { TabBar } from 'antd-mobile'
 import { connect } from 'dva'
+import { openSocket } from '../services/socket'
 
 @connect(state=>({
-  client_status: state.client_login.client_status
+  client_status: state.client_login.client_status,
+  count: state.CusNoPay.count,
+  client_id: state.client_login.client_id
 }))
 export default class Cont extends PureComponent {
 
@@ -21,6 +24,56 @@ export default class Cont extends PureComponent {
     // if (this.props.client_status!=='OK') {
     //   this.props.history.push('/clientUser/login')
     // }
+    // 如果用户登录了就发送websocket连接请求
+    if ( this.props.client_status=='OK' ) {
+      this.props.dispatch({
+        type: 'socketMsg/setUserList',
+        payload: {
+          cusId: this.props.client_id,
+          type: 'cus'
+        }
+      })
+      this.getSocket()
+    }
+  }
+
+  // componentWillMount(){
+  //   if (window.cusWS) {
+  //     window.cusWS.onclose = function () {
+  //       console.log('断开websocket连接')
+  //     }
+  //   }
+  // }
+
+  // 连接socket
+  getSocket = async ()=> {
+    let self = this
+
+    if ( !window.cusWS ) {
+      try {
+        window.cusWS = await openSocket('ws://localhost:8080/wschat')
+      } catch (e) {
+        return
+      }
+    } else {
+      return
+    }
+
+    window.cusWS.onmessage = e=> {
+      console.log('接收')
+      console.log(e.data)
+      if (!e.data.user) {
+        return
+      }
+      let obj = JSON.parse(e.data)
+      this.props.dispatch({
+        type: 'socketMsg/setMsg',
+        payload: {
+          toUserId: e.data.user.id,
+          msg: e.data
+        }
+      })
+    }
   }
 
   link = (url) => {
