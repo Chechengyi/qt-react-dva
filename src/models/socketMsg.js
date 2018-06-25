@@ -38,10 +38,11 @@ export default {
       } else {
         res = yield call(adminGetChatMsg, payload)
       }
+      console.log(res)
       yield put({
         type: 'saveAjaxMsg',
         payload: {
-          toUserId: payload.cusId,
+          toUserId: payload.type=='cus'?payload.adminId:payload.cusId,
           msg: res.data
         }
       })

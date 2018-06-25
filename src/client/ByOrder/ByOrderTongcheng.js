@@ -62,6 +62,7 @@ export default class ByOrderTongcheng extends Component {
   *  endLatitude(收货人纬度)(this.props.endPoint.lat)
   *  goodsType(寄货商品的类型)
   * */
+
   submit=()=> {
     // 从sessionStorage里取出当前订单的提价比例
     const feeRate = window.sessionStorage.getItem('feeRate')
@@ -87,44 +88,54 @@ export default class ByOrderTongcheng extends Component {
       }])
       return
     }
-    let posData = {
-      adminId: parseInt(adminId),
-      cusId: client_id,
-      typeId: this.typeId,
-      feeRate: parseFloat(feeRate),
-      weight: parseFloat(weight),
-      distance: this.distance,  // 具体以后估算的为准
-      receiverName: endMsg.receiverName,
-      receiverTel: endMsg.tel,
-      receiverAddr: endAddress,
-      senderName: startMsg.receiverName,
-      senderTel: startMsg.tel,
-      cusLongitude: startPoint.lnt,
-      cusLatitude: startPoint.lat,
-      endLongitude: endPoint.lnt,
-      endLatitude: endPoint.lat,
-      goodsType,
-      fee: this.state.expectedFee
-    }
-    console.log(posData)
-    addOrder({...posData})
-      .then( res=> {
-        this.setState({
-          loading: false
-        })
-        if (res.status==='OK') {
-          Modal.alert('下单成功，快递员正在向您赶来的路上。可在订单中心查看订单详情','', [{
-            text: '确认', onPress: ()=> { this.props.history.replace('/cont/index') }
-          }])
-        } else {
-          Toast.fail('下单失败，请重新尝试', 1)
+    // 下单之前先弹出窗口询问是否确定提交订单， 也检验在订单预算费用出来之后才提交订单
+    Modal.alert('订单预算费用为。元','确认提交订单？', [{
+      text: '取消', onPress: ()=> false
+    }, {
+      text: '确认', onPress: () => {
+        console.log('下单,,,')
+        return
+        let posData = {
+          adminId: parseInt(adminId),
+          cusId: client_id,
+          typeId: this.typeId,
+          feeRate: parseFloat(feeRate),
+          weight: parseFloat(weight),
+          distance: this.distance,  // 具体以后估算的为准
+          receiverName: endMsg.receiverName,
+          receiverTel: endMsg.tel,
+          receiverAddr: endAddress,
+          senderName: startMsg.receiverName,
+          senderTel: startMsg.tel,
+          cusLongitude: startPoint.lnt,
+          cusLatitude: startPoint.lat,
+          endLongitude: endPoint.lnt,
+          endLatitude: endPoint.lat,
+          goodsType,
+          fee: this.state.expectedFee
         }
-      } )
-      .catch( err=>{
-        Modal.alert('服务器发生错误，请重新尝试','', [{
-          text: '确认', onPress: ()=>{}
-        }])
-      } )
+        console.log(posData)
+        addOrder({...posData})
+          .then( res=> {
+            this.setState({
+              loading: false
+            })
+            if (res.status==='OK') {
+              Modal.alert('下单成功，快递员正在向您赶来的路上。可在订单中心查看订单详情','', [{
+                text: '确认', onPress: ()=> { this.props.history.replace('/cont/index') }
+              }])
+            } else {
+              Toast.fail('下单失败，请重新尝试', 1)
+            }
+          } )
+          .catch( err=>{
+            Modal.alert('服务器发生错误，请重新尝试','', [{
+              text: '确认', onPress: ()=>{}
+            }])
+          } )
+      }
+    }])
+
   }
   // 获取起点与终点之间的距离，用于核算运费
   getDistance= e=> {

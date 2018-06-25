@@ -10,6 +10,7 @@ export default class UserItem extends Component {
     this.props.dispatch({
       type: 'socketMsg/getAjaxMsg',
       payload: {
+        type: 'admin',
         cusId: data.id,
         roomName: data.room
       }

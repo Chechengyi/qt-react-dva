@@ -26,11 +26,10 @@ export default class ChatObjList extends Component {
       type: 'socketMsg/getAjaxMsg',
       payload: {
         type: 'cus',
-        adminId: adminId,
+        adminId: parseInt(adminId),
         roomName
       }
     })
-    return
     this.props.history.push(`/cont/clientChat/${adminId}/${username}`)
   }
 

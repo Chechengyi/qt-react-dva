@@ -113,16 +113,13 @@ class BasicLayout extends React.PureComponent {
     }
     window.cusWS.onmessage = e=> {
       console.log('接收')
-      console.log(e.data)
-      if (!e.data.user) {
-        return
-      }
       let obj = JSON.parse(e.data)
+      if (!obj.fromId||!obj.toId) return
       this.props.dispatch({
         type: 'socketMsg/setMsg',
         payload: {
-          toUserId: e.data.user.id,
-          msg: e.data
+          toUserId: obj.fromId,
+          msg: obj
         }
       })
     }

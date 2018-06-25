@@ -6,7 +6,8 @@ export default {
   namespace: 'driver_login',
   state: {
     driver_id: store.get('driverData')?store.get('driverData').driver_id:null,
-    isWork: false,   //是否上班,
+    // isWork: false,   //是否上班,
+    isWork: window.sessionStorage.getItem('driverWork')=='work'?true:false,
     // workLoading: false
     driver_status: store.get('driverData')?store.get('driverData').driver_status:null,
     driver_name: store.get('driverData')?store.get('driverData').driver_name:null,
@@ -105,12 +106,14 @@ export default {
         type: 'saveWork',
         payload: true
       })
+      window.sessionStorage.setItem('driverWork', 'work')
     },
     *noWork ( {payload}, {call, put} ) {
       yield put({
         type: 'saveWork',
         payload: false
       })
+      window.sessionStorage.setItem('driverWork', 'noWork')
     }
   },
   reducers: {

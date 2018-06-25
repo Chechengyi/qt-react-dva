@@ -46,33 +46,35 @@ export default class Content extends Component {
   }
 
   sendMsg = e=> {
-    // {
-    //   text: '发送消息的内容',
-    //   createAt: '消息创建的时间',
-    //   toUser: '接受方的id',
-    //   room: “c”+uesrId+”a”+toUser,
-    //   user: {
-    //     id: '发送方的id',
-    //     name: '发送方的名字'
-    //   }
-    // }
-    console.log(this.refs.input.value)
     if (/^[\s]*$/.test(this.refs.input.value) || !this.refs.input.value ) {
       message.error('输入聊天信息不能为空！', 1)
       this.refs.input.value=''
       return
     }
+    /*
+    * {
+    *   adminId,
+    *   cusId,
+    *   formId,
+    *   roomName,
+    *   sendTime,
+    *   text,
+    *   toId
+    * }
+    * */
     let msgObj = {
+      adminId: parseInt(this.props.adminId),
+      cusId: parseInt(this.cusId),
+      fromId: parseInt(this.props.adminId),
+      toId: parseInt(this.cusId),
       text: this.refs.input.value,
-      createAt: new Date(),
-      toUser: parseInt(this.cusId),
-      room: `c${this.cusId}a${this.props.adminId}`,
-      user: {
-        id: parseInt(this.props.adminId),
-        name: this.props.admin_name
-      }
+      roomName: `c${this.cusId}a${this.props.adminId}`,
+      sendTime: new Date()
     }
-    console.log(msgObj)
+    if ( window.cusWS ) {
+      console.log('发送')
+      window.cusWS.send(JSON.stringify(msgObj))
+    }
     this.props.dispatch({
       type: 'socketMsg/setMsg',
       payload: {
@@ -81,21 +83,20 @@ export default class Content extends Component {
       }
     })
     this.refs.input.value=' '
-    setTimeout( ()=>{
-      this.moni()
-    },300 )
+    // setTimeout( ()=>{
+    //   this.moni()
+    // },300 )
   }
 
   moni = e=> {
     let msgObj = {
+      adminId: parseInt(this.props.adminId),
+      cusId: parseInt(this.cusId),
+      fromId: 3,
+      toId: parseInt(this.props.adminId),
       text: '你好， 世界',
-      createAt: new Date(),
-      toUser: this.adminId,
-      room: `c${this.cusId}a${this.props.adminId}`,
-      user: {
-        id: 999,
-        name: '车'
-      }
+      roomName: `3a${this.props.adminId}`,
+      sendTime: new Date()
     }
     this.props.dispatch({
       type: 'socketMsg/setMsg',
@@ -114,11 +115,11 @@ export default class Content extends Component {
       <div ref='scrollWarp' className={styles.content} >
         <div ref='scroll' style={{padding: '10px 0'}} >
           {Object.keys(this.props.userList).length!==0&&
-            console.log(this.props.userList[parseInt(this.cusId)].msg)
-          }
-          {Object.keys(this.props.userList).length!==0&&
             this.props.userList[parseInt(this.cusId)].msg.map( (item,i)=>(
-              <MsgItem adminId={this.props.adminId} data={item} key={item.id} />
+              <MsgItem
+                adminId={this.props.adminId}
+                username={this.username}
+                data={item} key={i} />
             ) )
           }
         </div>

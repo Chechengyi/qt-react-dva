@@ -18,13 +18,19 @@ let timer = null
   driver_id: state.driver_login.driver_id,
   driver_name: state.driver_login.driver_name,
   isWork: state.driver_login.isWork
-}) )
+}))
 export default class DrawCont extends PureComponent {
 
   constructor(props) {
     super(props)
     this.state = {
       loading: false
+    }
+  }
+
+  componentDidMount(){
+    if ( this.props.isWork ) {
+      this.work()
     }
   }
 
@@ -45,7 +51,6 @@ export default class DrawCont extends PureComponent {
     } else {
       this.noWork()
     }
-
   }
   // 下班
   noWork = () => {
@@ -82,15 +87,8 @@ export default class DrawCont extends PureComponent {
         zoomToAccuracy:true      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
       });
       mapObj.addControl(geolocation);
-      // geolocation.watchPosition();
       geolocation.getCurrentPosition()
-      // if (!timer) {
-      //   timer = setInterval( () => {
-      //     geolocation.getCurrentPosition()
-      //   }, 3000 )
-      // }
       AMap.event.addListener(geolocation, 'complete', throttle(self.senPos,4000, self))
-      // AMap.event.addListener(geolocation, 'complete', throttle.bind(self, self.senPos, 5000 ));//返回定位信息
       AMap.event.addListener(geolocation, 'error', (err) => {console.log(err)});      //返回定位出错信息
     });
   }
@@ -99,7 +97,6 @@ export default class DrawCont extends PureComponent {
     if (this.props.isWork){
       geolocation.getCurrentPosition()
     }
-    // console.log(e.position)
     console.log(e)
   }
   // 发送位置为后台
@@ -120,11 +117,6 @@ export default class DrawCont extends PureComponent {
       console.log('已经下班了')
     }
   }
-
-  // goUpPsw = ()=> {
-  //   this.props.onOpenChange()
-  // }
-
 
   render () {
     return <div  style={{width: '100%', position: 'absolute',

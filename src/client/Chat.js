@@ -32,25 +32,25 @@ export default class ChatView extends Component {
   }
 
   onSend=(msg)=>{
-    // {
-    //   text: '发送消息的内容',
-    //   createAt: '消息创建的时间',
-    //   toUser: '接受方的id',
-    //   room: “c”+uesrId+”a”+toUser,
-    //   user: {
-    //     id: '发送方的id',
-    //     name: '发送方的名字'
-    //   }
-    // }
+    /*
+    * {
+    *   adminId,
+    *   cusId,
+    *   formId,
+    *   roomName,
+    *   sendTime,
+    *   text,
+    *   toId
+    * }
+    * */
     let sendObj = {
       text: msg.text,
-      createAt: new Date(),
-      room: `c+${this.props.client_id}+a+${this.adminId}`,
-      toUser: this.adminId,
-      user: {
-        id: parseInt(this.props.client_id),
-        name: this.props.client_name
-      }
+      sendTime: new Date(),
+      roomName: `c${this.props.client_id}a${this.adminId}`,
+      toId: this.adminId,
+      fromId: parseInt(this.props.client_id),
+      adminId: this.adminId,
+      cusId: parseInt(this.props.client_id)
     }
     console.log(sendObj)
     if ( window.cusWS ) {
@@ -64,7 +64,7 @@ export default class ChatView extends Component {
         msg: sendObj
       }
     })
-    this.resiveMsg()
+    // this.resiveMsg()
   }
 
   componentWillReceiveProps(nextProps){
@@ -76,13 +76,12 @@ export default class ChatView extends Component {
   resiveMsg = ()=> {
     let msgObj = {
       text: '你好， 世界',
-      createAt: new Date(),
-      toUser: parseInt(this.props.client_id),
-      room: `c${this.props.client_id}a${this.adminId}`,
-      user: {
-        id: 999,
-        name: '管理员'
-      }
+      sendTime: new Date(),
+      roomName: `c+${this.props.client_id}+a1`,
+      toId: this.adminId,
+      formId: 1,
+      adminId: 1,
+      cusId: parseInt(this.props.client_id)
     }
     this.props.dispatch({
       type: 'socketMsg/setMsg',
