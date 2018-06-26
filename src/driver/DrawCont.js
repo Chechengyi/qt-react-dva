@@ -29,15 +29,19 @@ export default class DrawCont extends PureComponent {
   }
 
   componentDidMount(){
+    // this.noWork()
     if ( this.props.isWork ) {
       this.work()
+    } else {
+      this.noWork()
     }
   }
 
   componentWillUnmount(){
-    if ( timer ) {
-      this.noWork()
-    }
+    // if ( timer ) {
+    //   this.noWork()
+    // }
+    // this.noWork()
   }
 
   handle_work = (e) => {
@@ -163,8 +167,13 @@ export default class DrawCont extends PureComponent {
               },
               {
                 text: '确定', onPress: ()=>{
+                  // 退出登录 下班
+                  this.noWork()
                   this.props.dispatch({
-                    type: 'driver_login/logout'
+                    type: 'driver_login/logout',
+                    payload: {
+                      sign: 'cou'
+                    }
                   })
                 }
               }

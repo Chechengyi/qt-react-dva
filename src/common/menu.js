@@ -31,6 +31,16 @@ const menuData = [
         name: '未分配订单',
         path: 'noDisOrder'
       },
+      // 等待快递员确认订单
+      {
+        name: '待确认订单',
+        path: 'noConfirm'
+      },
+      // 等待客户付款的订单
+      {
+        name: '待付款订单',
+        path: 'noPay'
+      },
       {
         name: '配送中订单',
         path: 'ships'

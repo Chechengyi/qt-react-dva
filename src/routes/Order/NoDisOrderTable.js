@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Table, Input, Select, Popconfirm, message, Form, Modal} from 'antd';
+import { Table, Input, Select, Popconfirm,
+  message, Form, Modal, Tooltip} from 'antd';
 import { cancelOrder } from '../../services/api'
 
 const { TextArea } = Input;
@@ -38,6 +39,7 @@ const SelectInput = ({getFieldDecorator, value, text, selectArr, width}) => (
   // total: state.courier.total,
   admin_id: state.admin_login.admin_id,
   roleId: state.admin_login.roleId,
+  total: state.noDisOrder.count
 }))
 
 export default class FrontDesk_table extends  PureComponent {
@@ -86,46 +88,7 @@ export default class FrontDesk_table extends  PureComponent {
   }
 
   handleSave = (val, index) => {
-    // console.log('ok')
-    this.props.form.validateFields( (err,values)=>{
-      if (err) {
-        Modal.error({
-          title: '输入的信息不能为空！'
-        })
-        return
-      }
-      updateCourier({
-        adminId: parseInt(this.props.admin_id),  // 管理员id
-        id: val.id,  // 需要修改状态的快递员的id
-        roleId: parseInt(this.props.roleId), //当前管理员的权限id
-        // isActive: values.is_active
-        ...values
-      })
-        .then( res=>{
-          let next_data = [...this.state.data]
-          next_data[index].isActive = values.isActive
-          next_data[index].username = values.username
-          next_data[index].tel = values.tel
-          if (res.status==='OK') {
-            message.success('修改成功',1)
-            this.setState({
-              selectWriteKey: null,
-              data: next_data
-            })
-          } else {
-            message.error('修改失败，请重新尝试',1)
-            this.setState({
-              selectWriteKey: null,
-            })
-          }
-        } )
-        .catch( res=>{
-          message.error('修改出错',1)
-          this.setState({
-            selectWriteKey: null,
-          })
-        } )
-    } )
+    // 设置 state selectWriteKey 为空
   }
 
   componentWillReceiveProps ( nextProps ) {
@@ -134,23 +97,6 @@ export default class FrontDesk_table extends  PureComponent {
         data: nextProps.data
       })
     }
-  }
-
-  gotoDetails = (val) => {
-    this.props.history.push(`/admin/cont/goods/goodsDetails/${val.id}`)
-  }
-
-  resetPsw=id=>{
-    resetCourierPsw({
-      id
-    })
-      .then(res=>{
-        if (res.status==="OK") {
-          message.success('重置成功', 1)
-        } else {
-          message.error('重置失败', 1)
-        }
-      })
   }
 
   handleModal = (id, index) => {
@@ -216,15 +162,11 @@ export default class FrontDesk_table extends  PureComponent {
         title: '客户姓名',
         dataIndex: 'username',
         width: 100,
-        // render: (val, text, index)=>(
-        //   <div>
-        //     {/*{text.typeId==2?*/}
-        //       {/*text.receiverName:*/}
-        //       {/*text.senderName*/}
-        //     {/*}*/}
-        //     {}
-        //   </div>
-        // )
+        render: (val, text, index)=>(
+          <div>
+            {text.typeId==2?text.receiverName:text.senderName}
+          </div>
+        )
       },
       {
         title: '联系电话 ',
@@ -240,10 +182,57 @@ export default class FrontDesk_table extends  PureComponent {
         }
       },
       {
+        title: '预计金额',
+        dataIndex: 'money',
+        render: (val, text, index)=>(
+          <div>
+            <span style={{color: '#ff6700'}} >{text.fee}</span> 元
+          </div>
+        )
+      },
+      {
         title: '订单类型',
         dataIndex: 'typeId',
+        width: 80,
         render: (val, text, index)=>(
           this.idToName(val, [{id: 1, category_name: '同城急送'},{id:2,category_name: '代购服务'}, {id: 3,category_name: '快递物流'}], 'category_name')
+        )
+      },
+      {
+        title: '寄件地址',
+        dataIndex: 'address',
+        width: 300,
+        render: (val, text, index)=>(
+          <div>
+            {
+              text.typeId==3?text.senderAddress:'快递员上门'
+            }
+          </div>
+        )
+      },
+      {
+        title: '收件地址',
+        dataIndex: 'shou',
+        width: 300,
+        render: (val, text, index)=>(
+          <div>
+            {text.typeId==2?
+              text.senderAddress:
+              text.receiverAddr
+            }
+          </div>
+        )
+      },
+      {
+        title: '距离／省归属地',
+        dataIndex: 'dis',
+        render: (val, text, index)=>(
+          <div>
+            {text.typeId==3?
+              '快递物流':
+              <div>{text.distance} 公里</div>
+            }
+          </div>
         )
       },
       {
@@ -253,8 +242,23 @@ export default class FrontDesk_table extends  PureComponent {
         render: val => <span>{new Date(val).toLocaleString()}</span>
       },
       {
+        title: '客户备注',
+        width: 80,
+        dataIndex: 'comment',
+        render: (val, record, index)=>(
+          <div>
+            {val&&
+            <Tooltip title={val} >
+              <span style={{cursor: 'pointer'}} >查看备注</span>
+            </Tooltip>
+            }
+          </div>
+        )
+      },
+      {
         title: '操作',
         width: 200,
+        fixed: 'right',
         render: (val, text, index) => (
           <div>
             <a href={`/#/orderMap/${val.id}/${val.cusLongitude},${val.cusLatitude}`} >查看周边快递员</a>
@@ -303,13 +307,14 @@ export default class FrontDesk_table extends  PureComponent {
         </Form.Item>
       </Modal>
       <Table
+        scroll={{ x: 1800 }}
         columns={columns}
         dataSource={this.state.data}
         rowKey={record => record.id }
         pagination={
           {
             // total: this.props.total,
-            total: 200,
+            total: this.props.total,
             defaultCurrent: 1,
             showQuickJumper: true,
             current: this.props.pageNo,

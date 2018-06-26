@@ -57,9 +57,11 @@ export default class StartAddress extends Component {
   }
   submit=()=>{
     // let address = this.refs.address.value   //用户填写的详细地址
-    let {tel, receiverName, address} = this.props.form.getFieldsValue()  // 用户填写的电话和寄件人姓名
+    // let {tel, receiverName, address} = this.props.form.getFieldsValue()  // 用户填写的电话和寄件人姓名
+    let { address } = this.props.form.getFieldsValue()
+
     // 无论是哪类型的订单， 下面的信息不能少
-    if ( Object.keys(this.props.startPoint).length==0 ||!tel||!receiverName ) {
+    if ( Object.keys(this.props.startPoint).length==0 ) {  // ||!tel||!receiverName
       this.renderModal('请将信息完善后在提交')
       return
     }
@@ -72,17 +74,17 @@ export default class StartAddress extends Component {
       this.renderModal('选择区域不能为空', '请选择后在提交')
       return
     }
-    if (/^[\s]*$/.test(receiverName)) {
-      this.renderModal('姓名信息不能为空白')
-      return
-    }
-    tel = tel.replace(/\s+/g,"")
-    // 设置下单人信息(起点)的电话和姓名
+    // if (/^[\s]*$/.test(receiverName)) {
+    //   this.renderModal('姓名信息不能为空白')
+    //   return
+    // }
+    // tel = tel.replace(/\s+/g,"")
+    // 设置下单人信息(起点)的电话和姓名 改为直接使用本账户的名字和电话信息
     this.props.dispatch({
       type: 'orderAddress/setStartMsg',
       payload: {
-        tel,
-        receiverName
+        tel: this.props.client_tel,
+        receiverName: this.props.client_name
       }
     })
     // 设置下单地点的详细地址  快递物流订单需要这个字段
@@ -214,20 +216,20 @@ export default class StartAddress extends Component {
         </div>
       </List>
       <List renderHeader={ ()=>'第三步：完善基本信息' } >
-        <InputItem
-          placeholder='请输入联系电话'
-          {...getFieldProps('tel', {
-            initialValue: this.toTeltype(this.props.client_tel)
-          })}
-          // defaultValue={this.props.startMsg.tel}
-          type='phone' >联系电话</InputItem>
-        <InputItem
-          placeholder='请输入姓名'
-          {...getFieldProps('receiverName', {
-            initialValue: this.props.client_name
-          })}
-          defaultValue={this.props.startMsg.receiverName}
-        >姓名</InputItem>
+        {/*<InputItem*/}
+          {/*placeholder='请输入联系电话'*/}
+          {/*{...getFieldProps('tel', {*/}
+            {/*initialValue: this.toTeltype(this.props.client_tel)*/}
+          {/*})}*/}
+          {/*// defaultValue={this.props.startMsg.tel}*/}
+          {/*type='phone' >联系电话</InputItem>*/}
+        {/*<InputItem*/}
+          {/*placeholder='请输入姓名'*/}
+          {/*{...getFieldProps('receiverName', {*/}
+            {/*initialValue: this.props.client_name*/}
+          {/*})}*/}
+          {/*defaultValue={this.props.startMsg.receiverName}*/}
+        {/*>姓名</InputItem>*/}
         {this.typeId==3?<TextareaItem
           {...getFieldProps('address', {
             initialValue: this.props.startAddress

@@ -1,6 +1,10 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
+// 退出登录  传入参数：singel
+export async function logout(params) {
+  return request(`/loginOut?${stringify(params)}`)
+}
 
 // 聊天类请求
 // 管理员获取聊天对象

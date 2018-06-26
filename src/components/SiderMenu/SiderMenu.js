@@ -147,7 +147,7 @@ export default class SiderMenu extends PureComponent {
         <div className={styles.logo}>
           <Link to="/">
             {/*<img src={'http://h50007.www5.hpe.com/caas-static/images/hpe-logo-printable.png'} alt="logo" />*/}
-            <h1>强通快递</h1>
+            <h1>强通速递</h1>
           </Link>
         </div>
         <Menu

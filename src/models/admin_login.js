@@ -1,4 +1,4 @@
-import { adminLogin, dealerLogin } from '../services/api'
+import { adminLogin, dealerLogin, logout } from '../services/api'
 import {routerRedux} from "dva/router";
 
 
@@ -59,6 +59,25 @@ export default {
         type: 'changeLogin',
         payload: false
       })
+    },
+    *logout({payload}, {call, put}){
+      const res = yield call( logout, payload )
+      if (res.status==='OK') {
+        window.sessionStorage.removeItem('admin_id')
+        window.sessionStorage.removeItem('admin_name')
+        window.sessionStorage.removeItem('roleId')
+        window.sessionStorage.removeItem('admin_status')
+        yield put({
+          type: 'saveLogin',
+          payload: {
+            admin_id: null,
+            admin_name: null,
+            admin_status: null,
+            roleId: null
+          }
+        })
+        yield put(routerRedux.push('/admin/user/login'))
+      }
     }
   },
   reducers: {

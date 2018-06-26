@@ -23,8 +23,6 @@ export default {
   },
   effects: {
     *setMsg({payload}, {call, put}){
-      console.log('====')
-      console.log(payload)
       yield put({
         type: 'saveMsg',
         payload
@@ -38,7 +36,6 @@ export default {
       } else {
         res = yield call(adminGetChatMsg, payload)
       }
-      console.log(res)
       yield put({
         type: 'saveAjaxMsg',
         payload: {
@@ -49,7 +46,6 @@ export default {
     },
     *setUserList({payload}, {call, put}){
       let res
-      console.log('....')
       if (payload.type==='admin') {
         res = yield call( adminGetChatObj, {adminId: payload.adminId} )
       } else {
@@ -109,7 +105,6 @@ export default {
       }
     },
     saveAjaxMsg( state, {payload}){
-      console.log(payload)
       let toUserId = payload.toUserId
       let obj = {...state.userList}
       obj[toUserId]['msg'] = payload.msg

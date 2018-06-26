@@ -12,7 +12,8 @@ const { Option } = Select;
   // categoryList: state.drop.category
   roleId: state.admin_login.roleId,
   admin_id: state.admin_login.admin_id,
-  orderType: state.orderType.data
+  orderType: state.orderType.data,
+  notification: state.noDisOrder
 }))
 @Form.create()
 export default class Cai extends PureComponent {
@@ -26,6 +27,8 @@ export default class Cai extends PureComponent {
   };
 
   componentDidMount() {
+    // 进入未分配订单页面， 不需要在显示订单消息提示单
+
     if ( this.props.orderType.length===0 ) {
       this.props.dispatch({
         type: 'orderType/getData'
@@ -40,6 +43,10 @@ export default class Cai extends PureComponent {
         adminId: this.props.admin_id
       }
     })
+  }
+
+  componentWillUnmount(){
+
   }
 
   handle_delete = () => {

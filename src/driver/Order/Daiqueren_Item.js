@@ -57,16 +57,8 @@ export default class Daiqueren_Item extends Component {
     const {data} = this.props
     if ( data.typeId==2 ) { //代购服务
       return <div style={{padding: '10px 7px', marginBottom: 8, backgroundColor: '#fff7f4'}} >
-        <Flex wrap='wrap' >
-          <FlexItem style={{fontSize: '1.1em', fontWeight: 500,
-            flex: 'auto'}} >
-            订单编号: {data.ono}
-          </FlexItem>
-          <FlexItem style={{fontSize: '1.1em', fontWeight: 500,
-            flex: 'auto', textAlign: 'right', paddingRight: 15}} >
-            {this.renderOrderType(data.typeId)}
-          </FlexItem>
-        </Flex>
+        <Flex>订单编号：{data.ono}</Flex>
+        <Flex>订单类型：{this.renderOrderType(data.typeId)}</Flex>
         <Flex>
           <FlexItem>
             客户姓名：{data.receiverName}
@@ -76,7 +68,8 @@ export default class Daiqueren_Item extends Component {
           </FlexItem>
         </Flex>
         <Flex>
-          下单时间：{new Date(data.createTime).toLocaleString()}
+          {data.createTime}
+          {/*下单时间：{new Date(data.createTime).toLocaleString()}*/}
         </Flex>
         {this.renderOrderPlace(data.typeId, data)}
         <Flex style={{justifyContent: 'center', marginTop: 10}} >
@@ -104,7 +97,8 @@ export default class Daiqueren_Item extends Component {
           </FlexItem>
         </Flex>
         <Flex>
-          下单时间：{new Date(data.createTime).toLocaleString()}
+          {/*{data.createTime}*/}
+          下单时间：{ new Date(data.createTime).toLocaleString() }
         </Flex>
         {this.renderOrderPlace(data.typeId, data)}
         <Flex style={{justifyContent: 'center', marginTop: 10}} >

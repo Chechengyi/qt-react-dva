@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { NavBar, Icon, WingBlank, WhiteSpace, Flex,
-  InputItem, Modal, Toast, List, Button, ActivityIndicator
+  InputItem, Modal, Toast, List, Button, ActivityIndicator, TextareaItem
 } from 'antd-mobile'
 import { connect } from 'dva'
 import { createForm } from 'rc-form'
@@ -66,7 +66,7 @@ export default class ByOrderTongcheng extends Component {
   submit=()=> {
     // 从sessionStorage里取出当前订单的提价比例
     const feeRate = window.sessionStorage.getItem('feeRate')
-    let {weight, goodsType} = this.props.form.getFieldsValue()
+    let {weight, goodsType, comment} = this.props.form.getFieldsValue()
     const {startPoint, endPoint, startMsg, endMsg, client_id, adminId, endAddress, provinceCode} = this.props
 
     // 检验商品信息是否完善
@@ -88,46 +88,55 @@ export default class ByOrderTongcheng extends Component {
         text: '确定', onPress: ()=>{}
       }])
     }
-    let posData = {
-      adminId: parseInt(adminId),
-      cusId: client_id,
-      typeId: this.typeId,
-      feeRate: parseFloat(feeRate),
-      weight: parseFloat(weight),
-      // distance: this.distance,  // 具体以后估算的为准
-      receiverName: endMsg.receiverName,
-      receiverTel: endMsg.tel,
-      receiverAddr: endAddress,
-      senderName: startMsg.receiverName,
-      senderTel: startMsg.tel,
-      senderAddress: this.props.startAddress,
-      cusLongitude: startPoint.lnt,
-      cusLatitude: startPoint.lat,
-      // endLongitude: endPoint.lnt,
-      // endLatitude: endPoint.lat,
-      goodsType,
-      proCode: provinceCode,
-      fee: this.state.expectedFee
-    }
-    console.log(posData)
-    addOrder({...posData})
-      .then( res=> {
-        this.setState({
-          loading: false
-        })
-        if (res.status==='OK') {
-          Modal.alert('下单成功，快递员正在向您赶来的路上。可在订单中心查看订单详情','', [{
-            text: '确认', onPress: ()=> { this.props.history.replace('/cont/index') }
-          }])
-        } else {
-          Toast.fail('下单失败，请重新尝试', 1)
+
+    Modal.alert(`订单预算费用为 ${this.state.expectedFee}元`,'确认提交订单？', [{
+      text: '取消', onPress: ()=>{}
+    }, {
+      text: '确认', onPress: ()=>{
+        let posData = {
+          adminId: parseInt(adminId),
+          cusId: client_id,
+          typeId: this.typeId,
+          feeRate: parseFloat(feeRate),
+          weight: parseFloat(weight),
+          // distance: this.distance,  // 具体以后估算的为准
+          receiverName: endMsg.receiverName,
+          receiverTel: endMsg.tel,
+          receiverAddr: endAddress,
+          senderName: startMsg.receiverName,
+          senderTel: startMsg.tel,
+          senderAddress: this.props.startAddress,
+          cusLongitude: startPoint.lnt,
+          cusLatitude: startPoint.lat,
+          // endLongitude: endPoint.lnt,
+          // endLatitude: endPoint.lat,
+          comment,
+          goodsType,
+          proCode: provinceCode,
+          fee: this.state.expectedFee
         }
-      } )
-      .catch( err=>{
-        Modal.alert('服务器发生错误，请重新尝试','', [{
-          text: '确认', onPress: ()=>{}
-        }])
-      } )
+        console.log(posData)
+        addOrder({...posData})
+          .then( res=> {
+            this.setState({
+              loading: false
+            })
+            if (res.status==='OK') {
+              Modal.alert('下单成功，快递员正在向您赶来的路上。可在订单中心查看订单详情','', [{
+                text: '确认', onPress: ()=> { this.props.history.replace('/cont/index') }
+              }])
+            } else {
+              Toast.fail('下单失败，请重新尝试', 1)
+            }
+          } )
+          .catch( err=>{
+            Modal.alert('服务器发生错误，请重新尝试','', [{
+              text: '确认', onPress: ()=>{}
+            }])
+          } )
+      }
+    }])
+
   }
   // 获取起点与终点之间的距离，用于核算运费
   getDistance= e=> {
@@ -182,11 +191,11 @@ export default class ByOrderTongcheng extends Component {
             thumb={<img style={{width: 30, height: 30}} src="/qidian.png" alt=""/>}
             arrow="horizontal"
             onClick={ e=>this.props.history.push('/cont/startAddress') }
-          >起始位置(快递员上门位置)
+          >寄件位置
             <Brief>
               {Object.keys(this.props.startPoint).length!==0&&
               Object.keys(this.props.startMsg).length!==0&&
-                this.props.startAddress&&this.props.provinceCode
+                this.props.startAddress
                 ?'已填':'去完善'}
             </Brief>
           </ListItem>
@@ -225,6 +234,10 @@ export default class ByOrderTongcheng extends Component {
             placeholder='电子设备/文件/...'
           >商品类型
           </InputItem>
+          <TextareaItem
+            {...getFieldProps('comment')}
+            placeholder='可选'
+            title='备注' />
         </List>
         { this.state.expectedFee&&
         <WingBlank>

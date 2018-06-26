@@ -8,9 +8,17 @@ export default {
   state: {
     loading: false,
     data: [],
-    count: 0
+    count: 0,
+    notification: true
   },
   effects: {
+    // 设置消息全局提示框显隐状态
+    *notification({payload}, {call, put}){
+      yield put({
+        type: 'saveNotification',
+        payload
+      })
+    },
     // 进入页面获取data
     *getData( {payload}, {call, put} ){
       yield put({
@@ -42,6 +50,12 @@ export default {
     }
   },
   reducers: {
+    saveNotification(state, {payload}){
+      return {
+        ...state,
+        notification: payload
+      }
+    },
     saveCount( state, {payload} ){
       return {
         ...state,

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { NavBar, Icon, WingBlank, WhiteSpace, Flex,
-  InputItem, Modal, Toast, List, Button, ActivityIndicator
+  InputItem, Modal, Toast, List, Button, ActivityIndicator, TextareaItem
 } from 'antd-mobile'
 import { connect } from 'dva'
 import { createForm } from 'rc-form'
@@ -66,7 +66,7 @@ export default class ByOrderTongcheng extends Component {
   submit=()=> {
     // 从sessionStorage里取出当前订单的提价比例
     const feeRate = window.sessionStorage.getItem('feeRate')
-    let {weight, goodsType} = this.props.form.getFieldsValue()
+    let {weight, goodsType, comment} = this.props.form.getFieldsValue()
     const {startPoint, endPoint, startMsg, endMsg, client_id, adminId, endAddress} = this.props
 
     // 检验商品信息是否完善
@@ -89,12 +89,10 @@ export default class ByOrderTongcheng extends Component {
       return
     }
     // 下单之前先弹出窗口询问是否确定提交订单， 也检验在订单预算费用出来之后才提交订单
-    Modal.alert('订单预算费用为。元','确认提交订单？', [{
+    Modal.alert(`订单预算费用为 ${this.state.expectedFee}元`,'确认提交订单？', [{
       text: '取消', onPress: ()=> false
     }, {
       text: '确认', onPress: () => {
-        console.log('下单,,,')
-        return
         let posData = {
           adminId: parseInt(adminId),
           cusId: client_id,
@@ -112,7 +110,8 @@ export default class ByOrderTongcheng extends Component {
           endLongitude: endPoint.lnt,
           endLatitude: endPoint.lat,
           goodsType,
-          fee: this.state.expectedFee
+          fee: this.state.expectedFee,
+          comment
         }
         console.log(posData)
         addOrder({...posData})
@@ -221,13 +220,19 @@ export default class ByOrderTongcheng extends Component {
             })}
             onBlur={ this.sendGetExpectedFee }
             extra='公斤'
-            placeholder='输入物品的大概重量'
+            placeholder='输入物品的大概重量(必填)'
           >物品重量</InputItem>
           <InputItem
             {...getFieldProps('goodsType')}
-            placeholder='电子设备/文件/...'
-          >商品类型
-          </InputItem>
+            placeholder='电子设备/文件/...(必填)'
+          >商品类型</InputItem>
+          <TextareaItem
+            {...getFieldProps('comment')}
+            title='备注'
+            rows={3}
+            count={50}
+            placeholder=' 选填'
+          />
         </List>
         { this.state.expectedFee&&
           <WingBlank>

@@ -18,15 +18,15 @@ const links = [{
   href: '',
 }];
 
-const copyright = <div>Copyright <Icon type="copyright" /> 2018强通快递 </div>;
+const copyright = <div>Copyright <Icon type="copyright" /> 2018强通速递 </div>;
 
 class UserLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = '强通快递';
+    let title = '强通速递';
     if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - 强通快递`;
+      title = `${routerData[pathname].name} - 强通速递`;
     }
     return title;
   }
@@ -39,7 +39,7 @@ class UserLayout extends React.PureComponent {
             <div className={styles.header}>
               <Link to="/">
                 {/*<img alt="logo" className={styles.logo} src='/img/favicon.png' />*/}
-                <span className={styles.title}>强通快递</span>
+                <span className={styles.title}>强通速递</span>
               </Link>
             </div>
             <div className={styles.desc}>管理员系统</div>

@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router'
-import { driverLogin, getDriverMoneyAccount } from '../services/api'
+import { driverLogin, getDriverMoneyAccount, logout } from '../services/api'
 import store from 'store'
 
 export default {
@@ -50,22 +50,26 @@ export default {
         type: 'changeLoading',
         payload: true
       })
-      store.remove('driverData')
       // 退出登录异步请求
-      // 将redux状态重置为未登录
-      yield put({
-        type: 'saveLogin',
-        payload: {
-          driver_status: null,
-          driver_id: null,
-          driver_name: null
-        }
-      })
+      const res = yield call( logout, payload )
+      if (res.status=='OK') {
+        // 清除状态缓存
+        store.remove('driverData')
+        // 将redux状态重置为未登录
+        yield put({
+          type: 'saveLogin',
+          payload: {
+            driver_status: null,
+            driver_id: null,
+            driver_name: null
+          }
+        })
+        yield put(routerRedux.push('/driverLogin'))
+      }
       yield put({
         type: 'changeLoading',
         payload: false
       })
-      yield put(routerRedux.push('/driverLogin'))
     },
     *login ( {payload}, {call, put} ) {
       yield put({
@@ -73,18 +77,19 @@ export default {
         payload: true
       })
       const res = yield call(driverLogin, payload)
+      console.log(res)
       if ( res.status === "OK" ) {
         store.set('driverData', {
           driver_id: res.data.id,
           driver_status: res.status,
-          driver_name: res.data.User_name // 接口文档待验证
+          driver_name: res.data.username // 接口文档待验证
         })
         yield put({
           type: 'saveLogin',
           payload: {
             driver_status: 'OK',
             driver_id: res.data.id,
-            driver_name: res.data.User_name
+            driver_name: res.data.username
           }
         })
         yield put(routerRedux.push('/driverCont'))

@@ -13,7 +13,7 @@ export default class MsgItem extends Component {
     } else { // 与用户聊天的人的信息显示在左边
       return <div style={{float: 'left'}} >
         <div className={styles.msgBoxCus} style={{
-          marginLeft: 10, color: 'blue', minWidth: 200 }} >
+          marginLeft: 10, color: 'blue' }} >
           {this.props.username}
           <div className={styles.textBox} >{data.text}</div>
         </div>

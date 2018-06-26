@@ -14,6 +14,7 @@ export default class Login extends PureComponent {
 
   componentDidMount(){
     console.log(store.get('driverData'))
+    // 在登录页面验证一下
   }
 
   submit = () => {

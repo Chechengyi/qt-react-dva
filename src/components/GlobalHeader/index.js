@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Layout, Menu, Icon, Spin, Tag, Dropdown, Popconfirm,
   Avatar, message, Divider, Modal, Form, Input,
-  Badge
+  Badge, notification
 } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
@@ -18,11 +18,17 @@ import {routerRedux} from "dva/router";
 const { Header } = Layout;
 const FormItem = Form.Item
 
+notification.config({
+  duration: null,
+  top: 65
+})
+
 @connect(state=>({
   admin_name: state.admin_login.admin_name,
   roleId: state.admin_login.roleId,
   admin_id: state.admin_login.admin_id,
-  orderCount: state.noDisOrder.count
+  orderCount: state.noDisOrder.count,
+  notification: state.noDisOrder.notification
 }))
 @Form.create()
 export default class GlobalHeader extends PureComponent {
@@ -30,17 +36,58 @@ export default class GlobalHeader extends PureComponent {
     super(props)
     this.state={
       modalType: false,
-      loading: false
+      loading: false,
+      count: this.props.orderCount,
+      notification: true
     }
   }
   componentDidMount() {
+
   }
-  // 发送获取未分配订单个数的请求
-  getOrderCount(){
-    this.props.dispatch({
-      type: 'noDisOrder/backGetCount',
-      id: this.props.admin_id
-    })
+
+  // 播放音频函数
+  AudioPlay =()=> {
+    // 播放音频， 且全局提示
+    if (this.refs.audio) {
+      this.refs.audio.play()
+    }
+    if ( this.state.notification ) {
+      notification.info({
+        message: '有新的订单',
+        description: <div>
+          <a onClick={ ()=>{
+              this.setState({
+                notification: true
+              })
+            notification.destroy()
+          }}  href="/#/admin/cont/order/noDisOrder">马上去处理>></a>
+        </div>,
+        onClose: ()=> {
+          this.setState({
+            notification: true
+          })
+        }
+      })
+      this.setState({
+        notification: false
+      })
+    }
+  }
+
+  componentWillReceiveProps(nextProps){
+    // if (nextProps.orderCount!==this.props.orderCount) {
+    //   this.setState({
+    //     count: nextProps.orderCount
+    //   })
+    // }
+    if (nextProps.orderCount!==this.props.orderCount &&
+        nextProps.orderCount-this.props.orderCount>0
+    ) {
+      this.setState({
+        count: nextProps.orderCount
+      })
+      this.AudioPlay()
+    }
   }
   componentWillUnmount() {
     this.triggerResizeEvent.cancel();
@@ -89,8 +136,9 @@ export default class GlobalHeader extends PureComponent {
               content: '修改密码后要重新登录',
                onOk: e=>{
                 // 发送退出登录的请求 接口还没写
-                this.props.dispatch(routerRedux.push('/admin/user/login'))
+                // this.props.dispatch(routerRedux.push('/admin/user/login'))
                  modal.destroy()
+                 this.logout()
                }
             });
             // setTimeout(() => modal.destroy(), 1000);
@@ -103,6 +151,16 @@ export default class GlobalHeader extends PureComponent {
         } )
     } )
   }
+
+  logout =()=> {
+    this.props.dispatch({
+      type: 'admin_login/logout',
+      payload: {
+        sign: 'admin'
+      }
+    })
+  }
+
   render() {
     const {
       currentUser, collapsed, fetchingNotices, isMobile,
@@ -117,7 +175,12 @@ export default class GlobalHeader extends PureComponent {
           <a onClick={ ()=>this.handleModal(true) } style={{color: 'rgba(0, 0, 0, 0.65)'}} ><Icon type="unlock" />修改密码</a>
         </Menu.Item>
         <Menu.Divider />
-        <Menu.Item key="logout"><Icon type="logout" />退出登录</Menu.Item>
+        <Menu.Item key="logout">
+          <div onClick={ this.logout } >
+            <Icon type="logout" />
+            退出登录
+          </div>
+        </Menu.Item>
       </Menu>
     );
 
@@ -180,8 +243,11 @@ export default class GlobalHeader extends PureComponent {
           onClick={this.toggle}
         />
         <div className={styles.right}>
+          <div className={styles.right}>
+            <audio ref='audio' src="http://data.huiyi8.com/2014/lxy/05/14/10.mp3"></audio>
+          </div>
           <div style={{marginRight: 50}} >
-            <Badge count={this.props.orderCount} >
+            <Badge count={this.state.count} >
               <a href='/#/admin/cont/order/noDisOrder' style={{paddingRight: 10, color: 'rgba(0,0,0,0.65)'}} >
                 <Icon type="notification" /> 未分配订单
               </a>

@@ -85,8 +85,15 @@ export default class DrawCont extends PureComponent {
       }} >
         <div style={{flex: 2}} ></div>
         <div style={{flex: 3}} >
-          <a>退出登录</a>
-          <a href='/#/cont/upDatePsw'>修改密码</a>
+          <a onClick={ ()=>{
+              this.props.dispatch({
+                type: 'client_login/logout',
+                payload: {
+                  sign: 'cus'
+                }
+              })
+          }} >退出登录</a>
+          <a style={{marginLeft: 5}} href='/#/cont/upDatePsw'>修改密码</a>
         </div>
       </Flex>
     </div>

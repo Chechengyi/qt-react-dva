@@ -1,4 +1,4 @@
-import { clientLogin } from '../services/api'
+import { clientLogin, logout } from '../services/api'
 import { routerRedux } from 'dva/router';
 import store from 'store'
 
@@ -25,7 +25,7 @@ export default {
           client_name: res.data.username,
           client_status: 'OK',
           client_tel: res.data.tel
-        })
+        }, new Date().getTime() + 5*24*60*60*1000)
         yield put({
           type: 'saveLogin',
           payload: {
@@ -50,7 +50,20 @@ export default {
       })
     },
     *logout ( {payload}, {call, put} ) {
-
+      const res = yield call( logout, payload )
+      if (res.status=='OK') {
+        store.remove('clientData')
+        yield put({
+          type: 'saveLogin',
+          payload: {
+            client_id: null,
+            client_name: null,
+            client_status: null,
+            client_tel: null
+          }
+        })
+        yield put(routerRedux.push('/clientUser/login'))
+      }
     }
   },
   reducers: {

@@ -124,44 +124,50 @@ export default class ByOrderDaigou extends Component {
       return
       }
 
-    let posData = {
-      adminId: parseInt(adminId),
-      cusId: parseInt(client_id),
-      typeId: parseInt(this.typeId),
-      feeRate: parseFloat(window.sessionStorage.getItem('feeRate')),
-      weight: parseFloat(weight),
-      comment,   //客户填写的订单备注
-      distance: this.distance,
-      receiverName: startMsg.receiverName,
-      receiverTel: this.props.client_tel,
-      endLongitude: startPoint.lnt,
-      endLatitude: startPoint.lat,
-      cusLongitude: endPoint.lnt,
-      cusLatitude: endPoint.lat,
-      goodsType,
-      fee: this.state.expectedFee,
-      couPay: parseFloat(couPay)
-    }
-
-    console.log(posData)
-    addOrder({ ...posData })
-      .then( res=> {
-        this.setState({
-          loading: false
-        })
-        if (res.status==='OK') {
-          Modal.alert('下单成功，快递员正在向您赶来的路上。可在订单中心查看订单详情','', [{
-            text: '确认', onPress: ()=> { this.props.history.replace('/cont/index') }
-          }])
-        } else {
-          Toast.fail('下单失败，请重新尝试', 1)
+    Modal.alert(`订单预算费用为 ${this.state.expectedFee}元`,'确认提交订单？', [{
+      text: '取消', onPress: ()=>{}
+    }, {
+      text: '确认', onPress: ()=> {
+        let posData = {
+          adminId: parseInt(adminId),
+          cusId: parseInt(client_id),
+          typeId: parseInt(this.typeId),
+          feeRate: parseFloat(window.sessionStorage.getItem('feeRate')),
+          weight: parseFloat(weight),
+          comment,   //客户填写的订单备注
+          distance: this.distance,
+          receiverName: startMsg.receiverName,
+          receiverTel: this.props.client_tel,
+          endLongitude: startPoint.lnt,
+          endLatitude: startPoint.lat,
+          cusLongitude: endPoint.lnt,
+          cusLatitude: endPoint.lat,
+          goodsType,
+          fee: this.state.expectedFee,
+          couPay: parseFloat(couPay)
         }
-      } )
-      .catch( err=>{
-        Modal.alert('服务器发生错误，请重新尝试','', [{
-          text: '确认', onPress: ()=>{}
-        }])
-      } )
+
+        console.log(posData)
+        addOrder({ ...posData })
+          .then( res=> {
+            this.setState({
+              loading: false
+            })
+            if (res.status==='OK') {
+              Modal.alert('下单成功，快递员正在向您赶来的路上。可在订单中心查看订单详情','', [{
+                text: '确认', onPress: ()=> { this.props.history.replace('/cont/index') }
+              }])
+            } else {
+              Toast.fail('下单失败，请重新尝试', 1)
+            }
+          } )
+          .catch( err=>{
+            Modal.alert('服务器发生错误，请重新尝试','', [{
+              text: '确认', onPress: ()=>{}
+            }])
+          } )
+      }
+    }])
 
   }
 
@@ -212,6 +218,7 @@ export default class ByOrderDaigou extends Component {
             placeholder='输入物品的大概重量'
           >商品重量</InputItem>
           <InputItem
+            extra='元'
             placeholder='输入要购买商品的价格'
             {...getFieldProps('couPay', {  // 垫付商品的价格
               normalize: (v, prev) => {  //验证金额(再次验证重量)

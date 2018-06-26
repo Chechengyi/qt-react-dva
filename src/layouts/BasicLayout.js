@@ -64,7 +64,7 @@ enquireScreen((b) => {
 });
 
 @connect( state => ({
-  login: state.admin_login
+  login: state.admin_login,
 }) )
 
 class BasicLayout extends React.PureComponent {
@@ -92,7 +92,7 @@ class BasicLayout extends React.PureComponent {
     }
     //轮询获取未分配订单展示
     this.getOrderCount()
-    window.timer = setInterval( this.getOrderCount.bind(this), 180000 ) //  三分钟 180，000
+    window.timer = setInterval( this.getOrderCount.bind(this), 1000*30 ) //  三分钟 180，000
     enquireScreen((b) => {
       this.setState({
         isMobile: !!b,
@@ -130,16 +130,16 @@ class BasicLayout extends React.PureComponent {
     this.props.dispatch({
       type: 'noDisOrder/backGetCount',
       payload: {
-        adminId: this.props.admin_id
+        adminId: parseInt(this.props.login.admin_id)
       }
     })
   }
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = '强通快递';
+    let title = '强通速递';
     if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - 强通快递`;
+      title = `${routerData[pathname].name} - 强通速递`;
     }
     return title;
   }
@@ -196,7 +196,7 @@ class BasicLayout extends React.PureComponent {
               // }]}
               copyright={
                 <div>
-                  Copyright <Icon type="copyright" /> 2017 强通快递
+                  Copyright <Icon type="copyright" /> 2018 强通速递
                 </div>
               }
             />
