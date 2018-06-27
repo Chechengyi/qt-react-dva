@@ -30,7 +30,8 @@ export default class Done extends Component {
       refreshing: false,
       pageNo: 0,
       pageSize: 20,
-      data: []
+      data: [],
+      isOver: false
     }
     this.data = []
   }
@@ -48,7 +49,7 @@ export default class Done extends Component {
         couId: this.props.driver_id,
         pageNo: this.state.pageNo + 1 ,
         pageSize: this.state.pageSize,
-        refreshing: false
+        // refreshing: false
       }
     })
   }
@@ -85,10 +86,9 @@ export default class Done extends Component {
         pageNo: this.state.pageNo + 1 ,
         pageSize: this.state.pageSize,
         refreshing: false,
-        isOver: false
+        // isOver: false
       }
     })
-    // this.setState( (prev) )
   }
 
   onRefresh=e=> {

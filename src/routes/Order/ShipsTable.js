@@ -210,42 +210,118 @@ export default class FrontDesk_table extends  PureComponent {
       {
         title: '订单编号',
         dataIndex: 'ono',
-        width:100
+        width:150,
+        fixed: 'left'
       },
       {
         title: '客户姓名',
-        dataIndex: 'cusUsername',
-        width: 100
+        dataIndex: 'username',
+        width: 100,
+        render: (val, text, index)=>(
+          <div>
+            {text.typeId==2?text.receiverName:text.senderName}
+          </div>
+        )
       },
       {
         title: '联系电话 ',
         dataIndex: 'tel',
         width: 150,
-        render: (val, text, index) => (
+        render: (val, text, index) => {
+          return <div>
+            {text.typeId==2?
+              text.receiverTel:
+              text.senderTel
+            }
+          </div>
+        }
+      },
+      {
+        title: '预计金额',
+        dataIndex: 'money',
+        render: (val, text, index)=>(
           <div>
-            {this.state.selectWriteKey===index?this.renderWriteInput(getFieldDecorator,val,'tel'): val}
+            <span style={{color: '#ff6700'}} >{text.fee}</span> 元
           </div>
         )
       },
       {
-        title: '配送快递员',
-        dataIndex: 'couUsername'
+        title: '订单类型',
+        dataIndex: 'typeId',
+        width: 80,
+        render: (val, text, index)=>(
+          this.idToName(val, [{id: 1, category_name: '同城急送'},{id:2,category_name: '代购服务'}, {id: 3,category_name: '快递物流'}], 'category_name')
+        )
+      },
+      {
+        title: '寄件地址',
+        dataIndex: 'address',
+        width: 300,
+        render: (val, text, index)=>(
+          <div>
+            {
+              text.typeId==3?text.senderAddress:'快递员上门'
+            }
+          </div>
+        )
+      },
+      {
+        title: '收件地址',
+        dataIndex: 'shou',
+        width: 300,
+        render: (val, text, index)=>(
+          <div>
+            {text.typeId==2?
+              text.senderAddress:
+              text.receiverAddr
+            }
+          </div>
+        )
+      },
+      {
+        title: '距离／省归属地',
+        dataIndex: 'dis',
+        render: (val, text, index)=>(
+          <div>
+            {text.typeId==3?
+              '快递物流':
+              <div>{text.distance} 公里</div>
+            }
+          </div>
+        )
       },
       {
         title: '下单时间',
         dataIndex: 'createTime',
-        // width:80,
         render: val => <span>{new Date(val).toLocaleString()}</span>
       },
       {
-        title: '操作',
-        width: 100,
-        render: (val, text, index) => (
+        title: '客户备注',
+        width: 80,
+        dataIndex: 'comment',
+        render: (val, record, index)=>(
           <div>
-
+            {val&&
+            <Tooltip title={val} >
+              <span style={{cursor: 'pointer'}} >查看备注</span>
+            </Tooltip>
+            }
           </div>
         )
-      }
+      },
+      // {
+      //   title: '操作',
+      //   width: 200,
+      //   fixed: 'right',
+      //   render: (val, text, index) => (
+      //     <div>
+      //       <a href={`/#/orderMap/${val.id}/${val.cusLongitude},${val.cusLatitude}`} >查看周边快递员</a>
+      //       <a style={{color: 'red', marginLeft: 5}}
+      //          onClick={ ()=>{ this.handleModal(val.id, index) } }
+      //       >取消订单</a>
+      //     </div>
+      //   )
+      // }
     ]
     var self = this
     const rowSelection = {
@@ -285,6 +361,7 @@ export default class FrontDesk_table extends  PureComponent {
         </Form.Item>
       </Modal>
       <Table
+        scroll={{ x: 1600 }}
         columns={columns}
         dataSource={this.state.data}
         rowKey={record => record.id }

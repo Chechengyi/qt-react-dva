@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Table, Input, Select, Popconfirm, message, Form, Modal, Tooltip} from 'antd';
+import { Table, Input, Select, Popconfirm,
+  message, Form, Modal, Tooltip} from 'antd';
 import { cancelOrder } from '../../services/api'
 
 const { TextArea } = Input;
@@ -33,8 +34,8 @@ const SelectInput = ({getFieldDecorator, value, text, selectArr, width}) => (
 
 @Form.create()
 @connect(state => ({
-  data: state.cancelOrder.data,
-  loading: state.cancelOrder.loading,
+  data: state.admin_nopay.data,
+  loading: state.admin_nopay.loading,
   // total: state.courier.total,
   admin_id: state.admin_login.admin_id,
   roleId: state.admin_login.roleId,
@@ -86,46 +87,7 @@ export default class FrontDesk_table extends  PureComponent {
   }
 
   handleSave = (val, index) => {
-    // console.log('ok')
-    this.props.form.validateFields( (err,values)=>{
-      if (err) {
-        Modal.error({
-          title: '输入的信息不能为空！'
-        })
-        return
-      }
-      updateCourier({
-        adminId: parseInt(this.props.admin_id),  // 管理员id
-        id: val.id,  // 需要修改状态的快递员的id
-        roleId: parseInt(this.props.roleId), //当前管理员的权限id
-        // isActive: values.is_active
-        ...values
-      })
-        .then( res=>{
-          let next_data = [...this.state.data]
-          next_data[index].isActive = values.isActive
-          next_data[index].username = values.username
-          next_data[index].tel = values.tel
-          if (res.status==='OK') {
-            message.success('修改成功',1)
-            this.setState({
-              selectWriteKey: null,
-              data: next_data
-            })
-          } else {
-            message.error('修改失败，请重新尝试',1)
-            this.setState({
-              selectWriteKey: null,
-            })
-          }
-        } )
-        .catch( res=>{
-          message.error('修改出错',1)
-          this.setState({
-            selectWriteKey: null,
-          })
-        } )
-    } )
+    // 设置 state selectWriteKey 为空
   }
 
   componentWillReceiveProps ( nextProps ) {
@@ -134,23 +96,6 @@ export default class FrontDesk_table extends  PureComponent {
         data: nextProps.data
       })
     }
-  }
-
-  gotoDetails = (val) => {
-    this.props.history.push(`/admin/cont/goods/goodsDetails/${val.id}`)
-  }
-
-  resetPsw=id=>{
-    resetCourierPsw({
-      id
-    })
-      .then(res=>{
-        if (res.status==="OK") {
-          message.success('重置成功', 1)
-        } else {
-          message.error('重置失败', 1)
-        }
-      })
   }
 
   handleModal = (id, index) => {
@@ -368,7 +313,7 @@ export default class FrontDesk_table extends  PureComponent {
         pagination={
           {
             // total: this.props.total,
-            total: 200,
+            total: 500,
             defaultCurrent: 1,
             showQuickJumper: true,
             current: this.props.pageNo,

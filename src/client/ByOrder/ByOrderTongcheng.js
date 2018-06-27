@@ -188,7 +188,7 @@ export default class ByOrderTongcheng extends Component {
             thumb={<img style={{width: 30, height: 30}} src="/qidian.png" alt=""/>}
             arrow="horizontal"
             onClick={ e=>this.props.history.push('/cont/startAddress') }
-          >起始位置(快递员上门位置)
+          >寄件位置(快递员上门位置)
             <Brief>
               {Object.keys(this.props.startPoint).length!==0&&
               Object.keys(this.props.startMsg).length!==0?'已填':'去完善'}
@@ -198,7 +198,7 @@ export default class ByOrderTongcheng extends Component {
             thumb={<img style={{width: 30, height: 30}} src="/zhongdian.png" alt=""/>}
             arrow="horizontal"
             onClick={ e=>this.props.history.push('/cont/endAddress') }
-          >收货地址填写
+          >收货地址
             <Brief>
               {Object.keys(this.props.endPoint).length!==0&&
               Object.keys(this.props.endMsg).length!==0?'已填':'去完善'}

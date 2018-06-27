@@ -24,26 +24,35 @@ export default class NoPay extends Component {
     const dataSource = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
       sectionHeaderHasChanged: (s1, s2) => s1 !== s2,
-    });
-    this.state = {
+    })
+    this.state={
       dataSource,
       refreshing: false,
+      pageNo: 0,
+      pageSize: 20,
+      data: [],
       isOver: false
     }
   }
 
   componentWillReceiveProps(nextProps){
-    this.setState({
-      refreshing: false
-    })
-    if ( nextProps.data!==this.props.data ) {
+    if ( this.props.data !== nextProps.data ) {
+      this.setState({
+        refreshing: false
+      })
       if (nextProps.data.length===0) {
         this.setState({
           isOver: true
         })
+      } else {
+        this.setState( prevState=>({
+          pageNo: prevState.pageNo + 1
+        }) )
       }
+      let arr = this.state.data.slice()
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(nextProps.data),
+        dataSource: this.state.dataSource.cloneWithRows(arr.concat(nextProps.data)),
+        data: arr.concat(nextProps.data)
       })
     }
   }
@@ -57,19 +66,42 @@ export default class NoPay extends Component {
     this.props.dispatch({
       type: 'CusNoPay/getData',
       payload: {
-        client_id: this.props.client_id
+        cusId: this.props.client_id,
+        pageNo: this.state.pageNo + 1 ,
+        pageSize: this.state.pageSize,
       }
     })
   }
 
+  onEndReached= e=> {
+    console.log('去加载把')
+    if ( this.props.loading ) return
+    this.props.dispatch({
+      type: 'CusNoPay/getData',
+      payload: {
+        couId: this.props.driver_id,
+        pageNo: this.state.pageNo + 1 ,
+        pageSize: this.state.pageSize,
+        refreshing: false,
+        // isOver: false
+      }
+    })
+  }
+
+  // type: 'CusNoPay/refresh',
   onRefresh=e=> {
+    this.data = []
     this.setState({
-      refreshing: true
+      refreshing: true,
+      pageNo: 0,
+      pageSize: 20
     })
     this.props.dispatch({
       type: 'CusNoPay/refresh',
       payload: {
-        cusId: this.props.client_id
+        couId: this.props.driver_id,
+        pageNo: 1,
+        pageSize: 20
       }
     })
   }
@@ -98,6 +130,7 @@ export default class NoPay extends Component {
         renderFooter={ (e)=><div style={{textAlign: 'center'}} >
           {this.state.isOver&&<span style={{}} >没有订单了...</span>}
         </div> }
+        onEndReached={this.onEndReached}
         pullToRefresh={
           <PullToRefresh
             refreshing={this.state.refreshing}

@@ -180,6 +180,14 @@ export async function getDealers(params) {
 export async function getNoDisOrder(params) {
   return request(`/order/getDistributes?${stringify(params)}`)
 }
+// 经销商或管理员获取待确认的订单
+export async function adminGetOrderConfirm(params) {
+  return request(`/order/getCouAccepted?${stringify(params)}`)
+}
+// 经销商或管理员获取客户还未付款的订单
+export async function adminGetOrderNopay(params) {
+  return request(`/order/getIsPay?${stringify(params)}`)
+}
 // 获取未分配订单的个数 参数：admiId 经销商的id
 export async function getNoDisOrderCount(params) {
   return request(`/order/getDistributesCount?${stringify(params)}`)
@@ -206,6 +214,10 @@ export async function dealerDoneOrder(params) {
 // 经销商查看以取消的订单
 export async function dealerCancelOrder(params) {
   return request(`/order/getCancels?${stringify(params)}`)
+}
+// 管理员查看快递员送单时间
+export async function adminGetCouTime(params) {
+  return request(`/order/getOrderHour?${stringify(params)}`)
 }
 // 管理员获取快递员提款未处理的请求
 export async function adminGetCouMoneyNoDis(params) {
@@ -340,7 +352,7 @@ export async function cusGetNoPayCount(params) {
 }
 // 客户获取为付款订单请求
 export async function cusGetNoPayList(params) {
-  return request(`/ceshi/order/cusGetNoPay?${stringify(params)}`)
+  return request(`/order/cusGetNoPays?${stringify(params)}`)
 }
 // 客户获取进行中的订单列表
 export async function cusGetOngoing(params) {
@@ -357,7 +369,13 @@ export async function cusCancelOrder(params) {
     body: params
   })
 }
-
+// 客户付款
+export async function cusPay(params) {
+  return request('/order/cusPay', {
+    method: 'POST',
+    body: params
+  })
+}
 
 /*
 *   快递员端API

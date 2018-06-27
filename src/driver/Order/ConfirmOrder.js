@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { NavBar, Icon, Flex, List, InputItem,
-  WhiteSpace, WingBlank, Button, Modal, Toast } from 'antd-mobile'
+  WhiteSpace, WingBlank, Button, Modal, Toast, TextareaItem } from 'antd-mobile'
 import { createForm } from 'rc-form'
 import { connect } from 'dva'
 import { courierConfirmOrder } from '../../services/api'
@@ -34,7 +34,7 @@ export default class ConfirmOrder extends Component {
 
   submit= data=> {
     if (this.state.loading) return
-    let {weight, goodsType, actualFee, price} = this.props.form.getFieldsValue()
+    let {weight, goodsType, actualFee, price, couComment} = this.props.form.getFieldsValue()
     if ( !weight || !actualFee || /^[\s]*$/.test(goodsType) ) {
       Modal.alert('提交的信息不能为空', '请检查表单', [{
         text: '确认', onPress: ()=> {}
@@ -63,6 +63,7 @@ export default class ConfirmOrder extends Component {
           couId: this.props.driver_id,
           weight,
           goodsType,
+          couComment,
           actualFee: parseFloat(actualFee),
         })
           .then( res=> {
@@ -166,6 +167,12 @@ export default class ConfirmOrder extends Component {
           >
             真实运费
           </InputItem>
+          <TextareaItem
+            {...getFieldProps('couComment')}
+            rows={3}
+            count={50}
+            title='备注'
+          />
         </List>
         <WingBlank>
           <WhiteSpace />

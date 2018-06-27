@@ -37,7 +37,9 @@ export default class Daifukuan_Item extends Component {
         <FlexItem>实际重量：{data.weight} 公斤</FlexItem>
       </Flex>
       <Flex>
-        <FlexItem>下单时间：{new Date(data.createTime).toLocaleString()}</FlexItem>
+        <FlexItem>
+          下单时间：{ new Date(data.createTime.substring(0, data.createTime.lastIndexOf('.'))).toLocaleString() }
+        </FlexItem>
       </Flex>
       <Flex justify='center' style={{marginTop: 5}} >
         订单实际价格：<span style={{fontSize: '1.1em', color: '#ff6700'}} >{data.actualFee} 元</span>

@@ -17,9 +17,13 @@ export default {
       })
       const res = yield call( dealerShpisOrder, payload )
       if (res.data) {
+        const listData = []
+        res.data.forEach( item=>{
+          listData.push(item[0])
+        })
         yield put({
           type: 'saveData',
-          payload: res.data
+          payload: listData
         })
       } else {
         yield put({

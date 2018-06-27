@@ -98,7 +98,7 @@ export default class Daiqueren_Item extends Component {
         </Flex>
         <Flex>
           {/*{data.createTime}*/}
-          下单时间：{ new Date(data.createTime).toLocaleString() }
+          下单时间：{ new Date(data.createTime.substring(0, data.createTime.lastIndexOf('.'))).toLocaleString() }
         </Flex>
         {this.renderOrderPlace(data.typeId, data)}
         <Flex style={{justifyContent: 'center', marginTop: 10}} >

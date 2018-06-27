@@ -36,10 +36,16 @@ export default {
         payload: true
       })
       const res = yield call( cusGetNoPayList, payload )
+      console.log(res.data)
       if (res.data) {
+         const listData = []
+         res.data.forEach( item=>{
+           listData.push(item[0])
+         })
+         console.log(listData)
          yield put({
            type: 'saveData',
-           payload: res.data
+           payload: listData
          })
       }
       yield put({

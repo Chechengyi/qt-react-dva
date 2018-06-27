@@ -59,8 +59,17 @@ export const getRouterData = (app) => {
     '/admin/cont/couMoney/dis': {
       component: dynamicWrapper(app, ['admin_login', 'adminCouMoneyDis', 'orderType'], () => import('../routes/CouMoney/Dis')),
     },
+    '/admin/cont/orderTime': {
+      component: dynamicWrapper(app, ['admin_login', 'noDisOrder', 'orderType'], () => import('../routes/OrderTime/OrderTime'))
+    },
     '/admin/cont/order/noDisOrder': {
       component: dynamicWrapper(app, ['admin_login', 'noDisOrder', 'orderType'], () => import('../routes/Order/NoDisOrder'))
+    },
+    '/admin/cont/order/noConfirm': {
+      component: dynamicWrapper(app, ['admin_login', 'admin_confirm', 'orderType'], () => import('../routes/Order/Confirm'))
+    },
+    '/admin/cont/order/nopay': {
+      component: dynamicWrapper(app, ['admin_login', 'admin_nopay', 'orderType'], () => import('../routes/Order/Nopay'))
     },
     '/admin/cont/order/ships': {
       component: dynamicWrapper(app, ['admin_login', 'shipOrder', 'orderType'], () => import('../routes/Order/Ships'))

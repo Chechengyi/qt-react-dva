@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Flex } from 'antd-mobile'
+import { cusPay } from '../services/api'
 
 const FlexItem = Flex.Item
 
@@ -26,6 +27,15 @@ export default class NoPayItem extends Component {
         content: userObj
       }
     })
+  }
+
+  pay =ono=> {
+    cusPay({
+      ono
+    })
+      .then( res=>{
+
+      })
   }
 
   render(){
@@ -65,6 +75,7 @@ export default class NoPayItem extends Component {
       <div>订单实际费用：<span style={{color:'#ff6700', fontSize: '1.1em'}} >{data.actualFee} 元</span></div>
       <div style={{textAlign: 'center', marginTop: 10}} >
         <button
+          onClick={()=>this.pay(data.ono)}
           style={{padding: '3px 30px', border: 'none',
                   backgroundColor: '#ff6700', color: '#fff'
           }} >
