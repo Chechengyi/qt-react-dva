@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Flex } from 'antd-mobile'
+import { Flex, Toast } from 'antd-mobile'
 import { cusPay } from '../services/api'
 
 const FlexItem = Flex.Item
@@ -34,7 +34,11 @@ export default class NoPayItem extends Component {
       ono
     })
       .then( res=>{
-
+        if (res.status=='OK') {
+          Toast.success('付款成功', 1)
+        } else {
+          Toast.fail('付款失败！', 1)
+        }
       })
   }
 

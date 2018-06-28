@@ -13,7 +13,8 @@ let mapObj = null
   orderData: state.orderType.data,
   orderLoading: state.orderType.loading,
   client_status: state.client_login.client_status,
-  count: state.CusNoPay.count
+  count: state.CusNoPay.count,
+  client_id: state.client_login.client_id
 }))
 export default class Index extends PureComponent {
 

@@ -348,7 +348,7 @@ export async function addOrder(params) {
 }
 // 客户获取未付款订单个数
 export async function cusGetNoPayCount(params) {
-  return request(`/ceshi/order/cusGetNoPayCount?${stringify(params)}`)
+  return request(`/order/cusGetNoPayCount?${stringify(params)}`)
 }
 // 客户获取为付款订单请求
 export async function cusGetNoPayList(params) {

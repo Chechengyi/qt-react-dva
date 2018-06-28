@@ -109,7 +109,7 @@ export default class ByOrderDaigou extends Component {
       loading: true
     })
     const { weight, goodsType, comment, couPay } = this.props.form.getFieldsValue()
-    const {startPoint, endPoint, startMsg, client_id, adminId} = this.props
+    const {startPoint, endPoint, startMsg, client_id, adminId, startAddress} = this.props
     //验证商品基本信息是否为空
     if ( !weight || !goodsType || !couPay ) {
       this.renderModal('请先将商品信息完善')
@@ -142,12 +142,11 @@ export default class ByOrderDaigou extends Component {
           endLatitude: startPoint.lat,
           cusLongitude: endPoint.lnt,
           cusLatitude: endPoint.lat,
+          receiverAddr: startAddress,
           goodsType,
           fee: this.state.expectedFee,
           couPay: parseFloat(couPay)
         }
-
-        console.log(posData)
         addOrder({ ...posData })
           .then( res=> {
             this.setState({

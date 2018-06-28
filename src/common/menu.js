@@ -153,3 +153,6 @@ function formatter(data, roleId, parentPath = '') {
 }
 
 export const getMenuData = (roleId) => formatter(menuData, roleId);
+
+// "2018-06-27T07:27:50.000+0000"
+// "2018-06-27T07:28:08.000+0000"

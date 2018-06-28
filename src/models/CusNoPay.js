@@ -18,6 +18,7 @@ export default {
   effects:{
     *getCount( {payload}, {call, put} ){
       const res = yield call( cusGetNoPayCount, payload )
+      console.log(res.data)
       yield put({
         type: 'saveCount',
         payload: res.data
@@ -25,10 +26,22 @@ export default {
     },
     *refresh( {payload}, {call, put} ){
       const res = yield call( cusGetNoPayList, payload )
-      yield put({
-        type: 'saveData',
-        payload: res.data
-      })
+      if (res.data){
+        const listData = []
+        res.data.forEach( item=>{
+          listData.push({
+            ...item[0],
+            couName: item[2].username,
+            couTel: item[2].tel,
+            adminId: item[3].id,
+            adminUsername: item[3].username
+          })
+        })
+        yield put({
+          type: 'saveData',
+          payload: listData
+        })
+      }
     },
     *getData( {payload}, {call, put} ){
       yield put({
@@ -40,7 +53,13 @@ export default {
       if (res.data) {
          const listData = []
          res.data.forEach( item=>{
-           listData.push(item[0])
+           listData.push({
+             ...item[0],
+             couName: item[2].username,
+             couTel: item[2].tel,
+             adminId: item[3].id,
+             adminUsername: item[3].username
+           })
          })
          console.log(listData)
          yield put({

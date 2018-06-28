@@ -67,7 +67,7 @@ export default class ByOrderTongcheng extends Component {
     // 从sessionStorage里取出当前订单的提价比例
     const feeRate = window.sessionStorage.getItem('feeRate')
     let {weight, goodsType, comment} = this.props.form.getFieldsValue()
-    const {startPoint, endPoint, startMsg, endMsg, client_id, adminId, endAddress, provinceCode} = this.props
+    const {startPoint, endPoint, startMsg, endMsg, client_id, adminId, endAddress, provinceCode, startAddress} = this.props
 
     // 检验商品信息是否完善
     if ( !weight || !goodsType ) {
@@ -105,11 +105,9 @@ export default class ByOrderTongcheng extends Component {
           receiverAddr: endAddress,
           senderName: startMsg.receiverName,
           senderTel: startMsg.tel,
-          senderAddress: this.props.startAddress,
+          senderAddress: startAddress,
           cusLongitude: startPoint.lnt,
           cusLatitude: startPoint.lat,
-          // endLongitude: endPoint.lnt,
-          // endLatitude: endPoint.lat,
           comment,
           goodsType,
           proCode: provinceCode,
@@ -175,7 +173,7 @@ export default class ByOrderTongcheng extends Component {
         this.setState({
           expectedFee: res.data.fee
         })
-      } )
+      })
   }
 
   render () {
@@ -184,7 +182,7 @@ export default class ByOrderTongcheng extends Component {
       <NavBar
         onLeftClick={ ()=>{ this.props.history.push('/cont/index') } }
         icon={<Icon type='left' ></Icon>}
-      >同城急送</NavBar>
+      >快递物流</NavBar>
       <div>
         <List renderHeader={ ()=>'位置信息(必填)' } >
           <ListItem

@@ -27,7 +27,13 @@ export default class Cai extends PureComponent {
   };
 
   componentDidMount() {
-    // 进入未分配订单页面， 不需要在显示订单消息提示单
+    // 进入此页面就发送一次查询未分配订单个数请求
+    this.props.dispatch({
+      type: 'noDisOrder/backGetCount',
+      payload: {
+        adminId: parseInt(this.props.admin_id)
+      }
+    })
 
     if ( this.props.orderType.length===0 ) {
       this.props.dispatch({

@@ -10,7 +10,7 @@ export default class OrderTime extends Component{
       pageSize: 20
     })
       .then(res=>{
-        console.log(res.data)
+        console.log(res)
       })
   }
 
@@ -30,3 +30,6 @@ export default class OrderTime extends Component{
     </div>
   }
 }
+
+// 快递员确认订单时间(confirmTime) - 管理员分配订单时间(distrubuteTime)
+// 订单完成时间(updateTime) - 订单支付时间(payTime)

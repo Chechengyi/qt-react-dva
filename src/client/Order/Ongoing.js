@@ -65,7 +65,7 @@ export default class Ongoing extends Component {
 
   onRefresh=e=> {
     this.setState({
-      refreshing: true
+      refreshing: true,
     })
     this.props.dispatch({
       type: 'clientOngoing/refresh',

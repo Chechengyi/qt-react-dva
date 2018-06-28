@@ -67,7 +67,7 @@ export default class ByOrderTongcheng extends Component {
     // 从sessionStorage里取出当前订单的提价比例
     const feeRate = window.sessionStorage.getItem('feeRate')
     let {weight, goodsType, comment} = this.props.form.getFieldsValue()
-    const {startPoint, endPoint, startMsg, endMsg, client_id, adminId, endAddress} = this.props
+    const {startPoint, endPoint, startMsg, endMsg, client_id, adminId, endAddress, startAddress} = this.props
 
     // 检验商品信息是否完善
     if ( !weight || !goodsType ) {
@@ -105,6 +105,8 @@ export default class ByOrderTongcheng extends Component {
           receiverAddr: endAddress,
           senderName: startMsg.receiverName,
           senderTel: startMsg.tel,
+          senderAddress: startAddress,
+          // Cou_pay: startAddress,
           cusLongitude: startPoint.lnt,
           cusLatitude: startPoint.lat,
           endLongitude: endPoint.lnt,

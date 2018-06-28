@@ -16,7 +16,7 @@ function MyBody(props) {
   loading: state.CusNoPay.loading,
   client_id: state.client_login.client_id,
   orderType: state.orderType.data,
-}) )
+}))
 export default class NoPay extends Component {
 
   constructor(props){
@@ -92,6 +92,8 @@ export default class NoPay extends Component {
   onRefresh=e=> {
     this.data = []
     this.setState({
+      // dataSource: this.state.dataSource.cloneWithRows([]),
+      data: [],
       refreshing: true,
       pageNo: 0,
       pageSize: 20

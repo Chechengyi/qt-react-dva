@@ -56,7 +56,6 @@ export default class StartAddress extends Component {
     }])
   }
   submit=()=>{
-    // let address = this.refs.address.value   //用户填写的详细地址
     // let {tel, receiverName, address} = this.props.form.getFieldsValue()  // 用户填写的电话和寄件人姓名
     let { address } = this.props.form.getFieldsValue()
 
@@ -65,8 +64,8 @@ export default class StartAddress extends Component {
       this.renderModal('请将信息完善后在提交')
       return
     }
-    // 订单类型为快递物流时， 寄货人地址不能为空
-    if (/^[\s]*$/.test(address) ) {
+    // 设置下单地点的详细地址， 代购订单里就是收获地址， 此字段不能为空
+    if (/^[\s]*$/.test(address) || !address ) {
       this.renderModal('寄货地址信息不能为空')
       return
     }
@@ -74,12 +73,6 @@ export default class StartAddress extends Component {
       this.renderModal('选择区域不能为空', '请选择后在提交')
       return
     }
-    // if (/^[\s]*$/.test(receiverName)) {
-    //   this.renderModal('姓名信息不能为空白')
-    //   return
-    // }
-    // tel = tel.replace(/\s+/g,"")
-    // 设置下单人信息(起点)的电话和姓名 改为直接使用本账户的名字和电话信息
     this.props.dispatch({
       type: 'orderAddress/setStartMsg',
       payload: {
@@ -87,14 +80,11 @@ export default class StartAddress extends Component {
         receiverName: this.props.client_name
       }
     })
-    // 设置下单地点的详细地址  快递物流订单需要这个字段
-    if ( this.typeId==3 ) {
-      console.log('sdasd')
-      this.props.dispatch({
-        type: 'orderAddress/startAddress',
-        payload: address
-      })
-    }
+    // 设置下单地点的详细地址， 代购订单里就是收获地址， 此字段不能为空
+    this.props.dispatch({
+      type: 'orderAddress/startAddress',
+      payload: address
+    })
     // 跳回下单的页面
     this.handleLink()
   }
@@ -230,13 +220,20 @@ export default class StartAddress extends Component {
           {/*})}*/}
           {/*defaultValue={this.props.startMsg.receiverName}*/}
         {/*>姓名</InputItem>*/}
-        {this.typeId==3?<TextareaItem
+        {/*{this.typeId==3||this.typeId==1?<TextareaItem*/}
+          {/*{...getFieldProps('address', {*/}
+            {/*initialValue: this.props.startAddress*/}
+          {/*})}*/}
+          {/*count={50}*/}
+          {/*clear rows={3}*/}
+          {/*title='寄件地址' />:null}*/}
+        <TextareaItem
           {...getFieldProps('address', {
             initialValue: this.props.startAddress
           })}
           count={50}
           clear rows={3}
-          title='寄件地址' />:null}
+          title='寄件地址' />
       </List>
       <WhiteSpace />
       <WingBlank>
