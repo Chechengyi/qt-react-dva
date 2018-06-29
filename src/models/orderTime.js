@@ -1,23 +1,23 @@
 /*
-* 管理员端待确定订单
+* 每一笔订单的完成时间
 * */
 
-import { adminGetOrderConfirm } from '../services/api'
+import { adminGetCouTime } from '../services/api'
 
 export default {
-  namespace: 'admin_confirm',
+  namespace: 'orderTime',
   state: {
-    loading: false,
-    data: []
+    data: [],
+    loading: false
   },
   effects: {
-    *getData( {payload}, {call, put} ){
+    *getData({payload}, {call, put}){
       yield put({
         type: 'changeLoading',
         payload: true
       })
-      const res = yield call( adminGetOrderConfirm, payload )
-      if(res.data){
+      const res = yield call(adminGetCouTime, payload)
+      if (res.data) {
         let listData = []
         res.data.forEach( (item, i)=>{
           listData.push({
@@ -40,17 +40,18 @@ export default {
     }
   },
   reducers: {
-    saveData( state, {payload} ){
+    saveData(state, {payload}){
       return {
         ...state,
         data: payload
       }
     },
-    changeLoading( state, {payload} ){
+    changeLoading(state, {payload}){
       return {
         ...state,
         loading: payload
       }
     }
   }
+
 }

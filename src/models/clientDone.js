@@ -20,10 +20,24 @@ export default {
         payload: true
       })
       const res = yield call( cusGetDone, payload )
-      yield put({
-        type: 'saveData',
-        payload: res.data
-      })
+      console.log(res.data)
+      if (res.data) {
+        let listData = []
+        res.data.forEach( item=>{
+          listData.push({
+            ...item[0],
+            cusUsername: item[1].username,
+            cusTel: item[1].tel,
+            couUsername: item[2].username,
+            couTel: item[2].tel,
+            isRate: item[4]?true:false
+          })
+        })
+        yield put({
+          type: 'saveData',
+          payload: listData
+        })
+      }
       yield put({
         type: 'changeLoading',
         payload: false

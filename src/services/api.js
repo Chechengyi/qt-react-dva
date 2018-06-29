@@ -261,6 +261,18 @@ export async function adminPutProvincePrice(params) {
     body: params
   })
 }
+// 管理员或经销商查看订单评价或订单仲裁请求
+export async function adminGetOrderRate(params) {
+  return request(`/estimate/getEstimates?${stringify(params)}`)
+}
+// 管理员发起仲裁
+export async function adminSendArbitration(params) {
+  return request('/estimate/sendArbitraOrder', {
+    method: 'POST',
+    body: params
+  })
+}
+
 
 /*
 *   客户端API
@@ -360,11 +372,18 @@ export async function cusGetOngoing(params) {
 }
 // 客户获取已经完成的订单
 export async function cusGetDone(params) {
-  return request(`/ceshi/order/cusGetDone?${stringify(params)}`)
+  return request(`/order/getCusDone?${stringify(params)}`)
 }
 // 客户取消订单（只有在管理员分配之前才能取消）
 export async function cusCancelOrder(params) {
   return request('/ceshi/order/cusCancelOrder', {
+    method: 'POST',
+    body: params
+  })
+}
+// 客户评价订单
+export async function cusRate(params) {
+  return request('/estimate/saveEstimate', {
     method: 'POST',
     body: params
   })

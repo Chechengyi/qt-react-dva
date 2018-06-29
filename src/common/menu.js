@@ -1,16 +1,25 @@
+import { getRoleMenu } from './getRoleMenu'
+
+/*
+* role代表权限， 现在系统中存在三个角色， 超级管理员， 经销商， 文员
+* 超级管理员roleId为0， 经销商roleId 大于0， 文员roleId等于0
+* 如果当前菜单项没有role， 则代表所有角色都可以访问
+* 如果有的话， 则有  admin， dealer ， 及clerk
+* */
 
 const menuData = [
   {
+    role: ['admin', 'dealer'],
     name: '平台人员管理',
     icon: 'usergroup-add',
     path: 'admin/cont/people',
     children: [
       {
-        isAdmin: true,
         name: '经销商管理',
         path: 'dealer'
       },
       {
+        role: ['admin'],
         isAdmin: true, // isAdmin代表只有管理员可以看到该菜单栏， 经销商看不到
         name: '用户管理',
         // icon: 'user',
@@ -60,6 +69,7 @@ const menuData = [
     ]
   },
   {
+    role: ['admin'],
     name: '订单管理',
     icon: 'setting',
     isAdmin: true,
@@ -90,6 +100,7 @@ const menuData = [
     path: '/admin/cont/chat'
   },
   {
+    role: ['admin', 'clerk'],
     name: '快递员提款',
     isAdmin: true,
     icon: 'pay-circle-o',
@@ -106,53 +117,57 @@ const menuData = [
     ]
   },
   {
+    role: ['admin', 'clerk'],
     name: '快递员送单管理',
-    path: 'admin/cont/orderTime'
+    path: 'admin/cont/orderTime',
+    icon: 'contacts'
+  },
+  {
+    name: '快递员评价',
+    path: 'admin/cont/rate',
+    icon: 'meh-o',
+    children: [
+      {
+        role: ['admin', 'clerk'],
+        name: '订单评价',
+        path: 'orderRate'
+      },
+      {
+        role: ['admin', 'clerk'],
+        name: '查看仲裁订单',
+        path: 'arbitration'
+      }
+    ]
   }
   ]
 
-function formatter(data, roleId, parentPath = '') {
+function formatter(data, parentPath = '') {
   const list = [];
   data.forEach((item) => {
     if (item.children) {
-      // 判断是否需要管理员全县
-      if ( item.isAdmin ) {
-        if (roleId==0) { // 如果该项需要管理员权限，验证roleId是否为0
-          list.push({
-            ...item,
-            path: `${parentPath}${item.path}`,
-            children: formatter(item.children, roleId, `${parentPath}${item.path}/`),
-          })
-        }
-      } else {
-        list.push({
-          ...item,
-          path: `${parentPath}${item.path}`,
-          children: formatter(item.children, roleId, `${parentPath}${item.path}/`),
-        })
-      }
-
+      list.push({
+        ...item,
+        path: `${parentPath}${item.path}`,
+        children: formatter(item.children, `${parentPath}${item.path}/`),
+      });
     } else {
-      if (item.isAdmin) {
-        // 验证roleId， 管理员具有的一些操作权限经销商不能看到
-        if (roleId==0){
-          list.push({
-            ...item,
-            path: `${parentPath}${item.path}`,
-          });
-        }
-      } else {
-        list.push({
-          ...item,
-          path: `${parentPath}${item.path}`,
-        });
-      }
+      list.push({
+        ...item,
+        path: `${parentPath}${item.path}`,
+      });
     }
   });
   return list;
 }
 
-export const getMenuData = (roleId) => formatter(menuData, roleId);
+// export const getMenuData = (roleId) => formatter(menuData, roleId);
+
+
+export const getMenuData = (roleId) => {
+  const menu = getRoleMenu(roleId, menuData)
+  return formatter(menu)
+}
+
 
 // "2018-06-27T07:27:50.000+0000"
 // "2018-06-27T07:28:08.000+0000"

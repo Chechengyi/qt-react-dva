@@ -20,7 +20,13 @@ export default {
       if(res.data){
         let listData = []
         res.data.forEach( (item, i)=>{
-          listData.push(item[0])
+          listData.push({
+            ...item[0],
+            cusUsername: item[1].username,
+            cusTel: item[1].tel,
+            couUsername: item[2].username,
+            couTel: item[2].tel
+          })
         })
         yield put({
           type: 'saveData',

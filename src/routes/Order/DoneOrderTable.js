@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Table, Input, Select, Popconfirm, message, Form, Modal} from 'antd';
+import { Table, Input, Select, Popconfirm, message, Form, Modal, Tooltip} from 'antd';
 import { cancelOrder } from '../../services/api'
 
 const { TextArea } = Input;
@@ -214,8 +214,12 @@ export default class FrontDesk_table extends  PureComponent {
         fixed: 'left'
       },
       {
+        title: '订单评分',
+        dataIndex: 'start'
+      },
+      {
         title: '客户姓名',
-        dataIndex: 'username',
+        dataIndex: 'cusUsername',
         width: 100,
         render: (val, text, index)=>(
           <div>
@@ -224,8 +228,8 @@ export default class FrontDesk_table extends  PureComponent {
         )
       },
       {
-        title: '联系电话 ',
-        dataIndex: 'tel',
+        title: '客户电话 ',
+        dataIndex: 'cusTel',
         width: 150,
         render: (val, text, index) => {
           return <div>
@@ -237,11 +241,28 @@ export default class FrontDesk_table extends  PureComponent {
         }
       },
       {
+        title: '快递员姓名',
+        dataIndex: 'couUsername'
+      },
+      {
+        title: '快递员电话',
+        dataIndex: 'couTel'
+      },
+      {
         title: '预计金额',
         dataIndex: 'money',
         render: (val, text, index)=>(
           <div>
             <span style={{color: '#ff6700'}} >{text.fee}</span> 元
+          </div>
+        )
+      },
+      {
+        title: '实际金额',
+        dataIndex: 'actualFee',
+        render: (val, text, index)=>(
+          <div>
+            <span style={{color: '#ff6700'}} >{text.actualFee}</span> 元
           </div>
         )
       },
@@ -256,25 +277,24 @@ export default class FrontDesk_table extends  PureComponent {
       {
         title: '寄件地址',
         dataIndex: 'address',
-        width: 300,
+        width: 100,
         render: (val, text, index)=>(
           <div>
-            {
-              text.typeId==3?text.senderAddress:'快递员上门'
-            }
+            <Tooltip title={text.typeId==2?'代购服务':text.senderAddress||'地址为空'} >
+              <a style={{color: 'green'}} >查看地址</a>
+            </Tooltip>
           </div>
         )
       },
       {
         title: '收件地址',
         dataIndex: 'shou',
-        width: 300,
+        width: 100,
         render: (val, text, index)=>(
           <div>
-            {text.typeId==2?
-              text.senderAddress:
-              text.receiverAddr
-            }
+            <Tooltip title={text.typeId==2?text.senderAddress:text.receiverAddr} >
+              <a style={{color: 'green'}} >查看地址</a>
+            </Tooltip>
           </div>
         )
       },

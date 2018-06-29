@@ -205,7 +205,7 @@ export default class FrontDesk_table extends  PureComponent {
         render: (val, text, index)=>(
           <div>
             {
-              text.typeId==3?text.senderAddress:'快递员上门'
+              text.typeId==3||text.typeId==1?text.senderAddress:'商品代购'
             }
           </div>
         )

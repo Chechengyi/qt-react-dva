@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'dva'
-import { Row, Col, Card, Form, Input, Select, Button, message} from 'antd'
-import Frontdesk_table from './DoneOrderTable'
+import { Row, Col, Card, Form, Input, Select, Button, message,
+  List
+} from 'antd'
 import PageHeaderLayout from '../../layouts/PageHeaderLayout'
-import styles from './TableList.less'
+import styles from '../Order/TableList.less'
+import OrderRate_item from './OrderRate_Item'
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -12,18 +14,26 @@ const { Option } = Select;
   // categoryList: state.drop.category
   roleId: state.admin_login.roleId,
   admin_id: state.admin_login.admin_id,
-  orderType: state.orderType.data
+  orderType: state.orderType.data,
+  data: state.adminRate.data,
+  loading: state.adminRate.loading
 }))
 @Form.create()
 export default class Cai extends PureComponent {
-  state = {
-    selectedRows: [],
-    selectKeys: [],
-    formValues: {},
-    pageNo: 1,
-    pageSize: 10,
-    delete_key: []
-  };
+
+  constructor(props){
+    super(props)
+    this.parameter = {
+      adminStatus: 0,
+      disposeStatus: 0,
+      arbitraStatus: 0
+    }
+    this.state = {
+      formValues: {},
+      pageNo: 1,
+      pageSize: 10,
+    }
+  }
 
   componentDidMount() {
     if ( this.props.orderType.length===0 ) {
@@ -32,12 +42,11 @@ export default class Cai extends PureComponent {
       })
     }
     this.props.dispatch({
-      type: 'donesOrder/getData',
+      type: 'adminRate/getData',
       payload: {
+        ...this.parameter,
         pageNo: this.state.pageNo,
         pageSize: this.state.pageSize,
-        roleId: this.props.roleId,
-        adminId: this.props.admin_id
       }
     })
   }
@@ -51,7 +60,7 @@ export default class Cai extends PureComponent {
 
   handle_page_change = (page, pageSize) => {
     this.props.dispatch({
-      type: 'donesOrder/getData',
+      type: 'adminRate/getData',
       payload: {
         pageNo: page,
         pageSize: this.state.pageSize,
@@ -89,7 +98,7 @@ export default class Cai extends PureComponent {
         pageSize: 1
       });
       this.props.dispatch({
-        type: 'donesOrder/getData',
+        type: 'adminRate/getData',
         payload: {
           pageNo: 1,
           pageSize: 10,
@@ -102,7 +111,7 @@ export default class Cai extends PureComponent {
   }
 
   handle_reset = () => {
-    this.props.history.replace('/admin/cont/order/ships')
+    this.props.history.replace('/admin/cont/rate/orderRate')
     // return
     // this.props.form.resetFields()
     // this.setState({
@@ -168,6 +177,19 @@ export default class Cai extends PureComponent {
               )}
             </FormItem>
           </Col>
+          <Col md={5} sm={10} >
+            <FormItem label="星级">
+              {getFieldDecorator('starLevel')(
+                <Select>
+                  <Option value={1} >1 星</Option>
+                  <Option value={2} >2 星</Option>
+                  <Option value={3} >3 星</Option>
+                  <Option value={4} >4 星</Option>
+                  <Option value={5} >5 星</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
           <Col md={4} sm={10}>
             <FormItem>
             <span className={styles.submitButtons}>
@@ -183,6 +205,9 @@ export default class Cai extends PureComponent {
 
   render() {
     const { selectedRows } = this.state;
+    const row = item => (
+      <OrderRate_item data={item} orderType={this.props.orderType} />
+    )
 
     return (
       <PageHeaderLayout title="">
@@ -192,14 +217,29 @@ export default class Cai extends PureComponent {
               { this.renderSimpleForm() }
               {/*<Button onClick={ ()=>this.props.history.push('/admin/cont/people/addCourier') } >添加快递员</Button>*/}
             </div>
-            <Frontdesk_table
-              selectedRows={selectedRows}
-              formValues={this.state.formValues}
-              onSelectRow={this.handleSelectRows}
-              onChange={this.handle_page_change}
-              pageNo = {this.state.pageNo}
-              delete_key = {this.state.delete_key}
-              history={this.props.history}
+            <List
+              itemLayout="vertical"
+              loading={this.props.loading}
+              dataSource={this.props.data}
+              renderItem={row}
+              pagination={{
+                onChange: (page) => {
+                  // 分页请求发送
+                  this.props.dispatch({
+                    type: 'adminRate/getData',
+                    payload: {
+                      pageNo: page,
+                      pageSize: this.state.pageSize
+                    }
+                  })
+                  this.setState({
+                    pageNo: page
+                  })
+                },
+                pageSize: 10,
+                total: 100,
+                current: this.state.pageNo
+              }}
             />
           </div>
         </Card>

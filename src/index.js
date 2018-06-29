@@ -22,5 +22,5 @@ app.model(require('./models/global'));
 // 4. Router
 app.router(require('./router'));
 
-// 5. Start
+// 5. Star
 app.start('#root');

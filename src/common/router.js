@@ -60,7 +60,10 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['admin_login', 'adminCouMoneyDis', 'orderType'], () => import('../routes/CouMoney/Dis')),
     },
     '/admin/cont/orderTime': {
-      component: dynamicWrapper(app, ['admin_login', 'noDisOrder', 'orderType'], () => import('../routes/OrderTime/OrderTime'))
+      component: dynamicWrapper(app, ['admin_login', 'orderType', 'orderTime'], () => import('../routes/OrderTime/OrderTime'))
+    },
+    '/admin/cont/cusToCou': {
+      component: dynamicWrapper(app, ['admin_login', 'orderType'], () => import('../routes/OrderTime/CusToCou'))
     },
     '/admin/cont/order/noDisOrder': {
       component: dynamicWrapper(app, ['admin_login', 'noDisOrder', 'orderType'], () => import('../routes/Order/NoDisOrder'))
@@ -107,15 +110,18 @@ export const getRouterData = (app) => {
     '/admin/cont/people/addDealer': {
       component: dynamicWrapper(app, ['admin_login'], ()=>import('../routes/Staff/AddDealer'))
     },
-    '/admin/cont/home/frontdesk': {
-      component: dynamicWrapper(app, ['frontdesk', 'global_drop'], ()=>import('../routes/Frontdesk/TableList'))
+    '/admin/cont/rate/orderRate': {
+      component: dynamicWrapper(app, ['admin_login', 'adminRate', 'orderType'], ()=>import('../routes/Rate/OrderRate'))
     },
-    '/admin/cont/home/ceshi': {
-      component: dynamicWrapper(app, [], ()=>import('../routes/Frontdesk/Ceshi'))
-    },
-    '/admin/cont/home/getPosition': {
-      component: dynamicWrapper(app, [], ()=>import('../routes/Frontdesk/Position'))
-    },
+    // '/admin/cont/home/frontdesk': {
+    //   component: dynamicWrapper(app, ['frontdesk', 'global_drop'], ()=>import('../routes/Frontdesk/TableList'))
+    // },
+    // '/admin/cont/home/ceshi': {
+    //   component: dynamicWrapper(app, [], ()=>import('../routes/Frontdesk/Ceshi'))
+    // },
+    // '/admin/cont/home/getPosition': {
+    //   component: dynamicWrapper(app, [], ()=>import('../routes/Frontdesk/Position'))
+    // },
     '/admin/user': {
       component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
     },
@@ -154,7 +160,10 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['client_login', 'clientOngoing', 'orderType'], () => import('../client/Order/Ongoing')),
     },
     '/cont/done': {
-      component: dynamicWrapper(app, ['client_login', 'clientOngoing', 'orderType'], () => import('../client/Order/Done'))
+      component: dynamicWrapper(app, ['client_login', 'clientDone', 'orderType'], () => import('../client/Order/Done'))
+    },
+    '/cont/star/:id': {
+      component: dynamicWrapper(app, ['client_login', 'clientDone', 'orderType'], () => import('../client/Star'))
     },
     '/cont/chooseLocation/:type': {
       component: dynamicWrapper(app, ['client_login', 'orderAddress'], () => import('../client/ChooseLocation')),

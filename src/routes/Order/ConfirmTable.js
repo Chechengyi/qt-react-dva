@@ -160,7 +160,7 @@ export default class FrontDesk_table extends  PureComponent {
       },
       {
         title: '客户姓名',
-        dataIndex: 'username',
+        dataIndex: 'cusUsername',
         width: 100,
         render: (val, text, index)=>(
           <div>
@@ -169,8 +169,8 @@ export default class FrontDesk_table extends  PureComponent {
         )
       },
       {
-        title: '联系电话 ',
-        dataIndex: 'tel',
+        title: '客户电话 ',
+        dataIndex: 'cusTel',
         width: 150,
         render: (val, text, index) => {
           return <div>
@@ -180,6 +180,14 @@ export default class FrontDesk_table extends  PureComponent {
             }
           </div>
         }
+      },
+      {
+        title: '快递员姓名',
+        dataIndex: 'couUsername'
+      },
+      {
+        title: '快递员电话',
+        dataIndex: 'couTel'
       },
       {
         title: '预计金额',
@@ -201,25 +209,24 @@ export default class FrontDesk_table extends  PureComponent {
       {
         title: '寄件地址',
         dataIndex: 'address',
-        width: 300,
+        width: 100,
         render: (val, text, index)=>(
           <div>
-            {
-              text.typeId==3?text.senderAddress:'快递员上门'
-            }
+            <Tooltip title={text.typeId==2?'代购服务':text.senderAddress||'地址为空'} >
+              <a style={{color: 'green'}} >查看地址</a>
+            </Tooltip>
           </div>
         )
       },
       {
         title: '收件地址',
         dataIndex: 'shou',
-        width: 300,
+        width: 100,
         render: (val, text, index)=>(
           <div>
-            {text.typeId==2?
-              text.senderAddress:
-              text.receiverAddr
-            }
+            <Tooltip title={text.typeId==2?text.senderAddress:text.receiverAddr} >
+              <a style={{color: 'green'}} >查看地址</a>
+            </Tooltip>
           </div>
         )
       },

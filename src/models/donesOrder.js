@@ -1,5 +1,5 @@
 /*
-* 以完成的订单
+*  管理员以完成的订单
 * */
 import { dealerDoneOrder } from '../services/api'
 
@@ -18,8 +18,15 @@ export default {
       const res = yield call( dealerDoneOrder, payload )
       if (res.data) {
         const listData = []
+        console.log(res.data)
         res.data.forEach( item=>{
-          listData.push(item[0])
+          listData.push({
+            ...item[0],
+            cusUsername: item[1].username,
+            cusTel: item[1].tel,
+            couUsername: item[2].username,
+            couTel: item[2].tel
+          })
         })
         yield put({
           type: 'saveData',

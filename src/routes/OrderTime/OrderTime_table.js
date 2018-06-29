@@ -34,8 +34,8 @@ const SelectInput = ({getFieldDecorator, value, text, selectArr, width}) => (
 
 @Form.create()
 @connect(state => ({
-  data: state.admin_nopay.data,
-  loading: state.admin_nopay.loading,
+  data: state.orderTime.data,
+  loading: state.orderTime.loading,
   // total: state.courier.total,
   admin_id: state.admin_login.admin_id,
   roleId: state.admin_login.roleId,
@@ -158,52 +158,32 @@ export default class FrontDesk_table extends  PureComponent {
         width:150,
         fixed: 'left'
       },
+      // 快递员确认订单时间(confirmTime) - 管理员分配订单时间(distrubuteTime)
+      // 订单完成时间(updateTime) - 订单支付时间(payTime)
       {
-        title: '客户姓名',
-        dataIndex: 'cusUsername',
-        width: 100,
-        render: (val, text, index)=>(
-          <div>
-            {text.typeId==2?text.receiverName:text.senderName}
-          </div>
-        )
-      },
-      {
-        title: '客户电话 ',
-        dataIndex: 'cusTel',
-        width: 150,
-        render: (val, text, index) => {
-          return <div>
-            {text.typeId==2?
-              text.receiverTel:
-              text.senderTel
-            }
-          </div>
+        title: '派单时间',
+        dataIndex: 'time',
+        render: (val, record, index)=> {
+          // {new Date(record.confirmTime)-new Date(record.distributedTime)}
+          // {new Date(record.updateTime)-new Date(record.payTime)}
+          const confirmTime = new Date(record.confirmTime)-new Date(record.distributedTime)
+          const endTime = new Date(record.updateTime)-new Date(record.payTime)
+          return (
+            <div>
+              <span style={{color: '#ff6700'}} >{Math.ceil((confirmTime+endTime)/1000/60)} 分钟</span>
+            </div>
+          )
         }
       },
       {
-        title: '快递员姓名',
-        dataIndex: 'couUsername'
-      },
-      {
-        title: '快递员电话',
-        dataIndex: 'couTel'
-      },
-      {
-        title: '预计金额',
-        dataIndex: 'money',
+        title: '距离／省归属地',
+        dataIndex: 'dis',
         render: (val, text, index)=>(
           <div>
-            <span style={{color: '#ff6700'}} >{text.fee}</span> 元
-          </div>
-        )
-      },
-      {
-        title: '实际金额',
-        dataIndex: 'actualFee',
-        render: (val, text, index)=>(
-          <div>
-            <span style={{color: '#ff6700'}} >{text.actualFee}</span> 元
+            {text.typeId==3?
+              '快递物流':
+              <div>{text.distance} 公里</div>
+            }
           </div>
         )
       },
@@ -239,15 +219,52 @@ export default class FrontDesk_table extends  PureComponent {
           </div>
         )
       },
+      // {
+      //   title: '客户姓名',
+      //   dataIndex: 'cusUsername',
+      //   width: 100,
+      //   render: (val, text, index)=>(
+      //     <div>
+      //       {text.typeId==2?text.receiverName:text.senderName}
+      //     </div>
+      //   )
+      // },
+      // {
+      //   title: '客户电话 ',
+      //   dataIndex: 'cusTel',
+      //   width: 150,
+      //   render: (val, text, index) => {
+      //     return <div>
+      //       {text.typeId==2?
+      //         text.receiverTel:
+      //         text.senderTel
+      //       }
+      //     </div>
+      //   }
+      // },
       {
-        title: '距离／省归属地',
-        dataIndex: 'dis',
+        title: '快递员姓名',
+        dataIndex: 'couUsername'
+      },
+      {
+        title: '快递员电话',
+        dataIndex: 'couTel'
+      },
+      {
+        title: '预计金额',
+        dataIndex: 'money',
         render: (val, text, index)=>(
           <div>
-            {text.typeId==3?
-              '快递物流':
-              <div>{text.distance} 公里</div>
-            }
+            <span style={{color: '#ff6700'}} >{text.fee}</span> 元
+          </div>
+        )
+      },
+      {
+        title: '实际金额',
+        dataIndex: 'actualFee',
+        render: (val, text, index)=>(
+          <div>
+            <span style={{color: '#ff6700'}} >{text.actualFee}</span> 元
           </div>
         )
       },
@@ -256,20 +273,20 @@ export default class FrontDesk_table extends  PureComponent {
         dataIndex: 'createTime',
         render: val => <span>{new Date(val).toLocaleString()}</span>
       },
-      {
-        title: '客户备注',
-        width: 80,
-        dataIndex: 'comment',
-        render: (val, record, index)=>(
-          <div>
-            {val&&
-            <Tooltip title={val} >
-              <span style={{cursor: 'pointer'}} >查看备注</span>
-            </Tooltip>
-            }
-          </div>
-        )
-      },
+      // {
+      //   title: '客户备注',
+      //   width: 80,
+      //   dataIndex: 'comment',
+      //   render: (val, record, index)=>(
+      //     <div>
+      //       {val&&
+      //       <Tooltip title={val} >
+      //         <span style={{cursor: 'pointer'}} >查看备注</span>
+      //       </Tooltip>
+      //       }
+      //     </div>
+      //   )
+      // },
       // {
       //   title: '操作',
       //   width: 200,

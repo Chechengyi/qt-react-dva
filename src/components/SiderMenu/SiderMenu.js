@@ -15,7 +15,7 @@ const { SubMenu } = Menu;
 export default class SiderMenu extends PureComponent {
   constructor(props) {
     super(props);
-    this.menus = getMenuData(this.props.roleId);
+    this.menus = getMenuData(parseInt(props.roleId));
     this.state = {
       openKeys: this.getDefaultCollapsedSubMenus(props),
     };

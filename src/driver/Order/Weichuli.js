@@ -42,6 +42,7 @@ export default class Weichuli extends PureComponent {
   }
 
   componentDidMount(){
+
     if ( this.props.orderType.length===0 ) {
       this.props.dispatch({
         type: 'orderType/getData'
@@ -96,7 +97,7 @@ export default class Weichuli extends PureComponent {
 
   render () {
     const row = (item, i)=> (
-      <RowItem orderType={this.props.orderType} data={item} wrap={true} />
+      <RowItem driver_id={this.props.driver_id} orderType={this.props.orderType} data={item} wrap={true} />
     )
     return <div>
       <ListView

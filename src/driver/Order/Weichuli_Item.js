@@ -41,7 +41,14 @@ export default class Weichuli_Item extends Component {
                 isCancel: true
               })
             }
-          } )
+            // 完成一条后更新数量
+            this.props.dispatch({
+              type: 'courierNoAccept/getCount',
+              payload: {
+                id: this.props.driver_id
+              }
+            })
+          })
       }
     }])
   }
