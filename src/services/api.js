@@ -272,7 +272,20 @@ export async function adminSendArbitration(params) {
     body: params
   })
 }
-
+// 管理员确认仲裁订单
+export async function adminArbitration(params) {
+  return request('/estimate/adminArbitraOrder', {
+    method: 'POST',
+    body: params
+  })
+}
+// 经销商填写仲裁订单意见
+export async function dealerSendArbitration(params) {
+  return request('/estimate/dealerOpinionOrder', {
+    method: 'POST',
+    body: params
+  })
+}
 
 /*
 *   客户端API
@@ -358,17 +371,21 @@ export async function addOrder(params) {
     body: params
   })
 }
+// 客户获取待确认待订单
+export async function cusGetNoConfime(params) {
+  return request(`/order/getCusNoConfirm?${stringify(params)}`)
+}
 // 客户获取未付款订单个数
 export async function cusGetNoPayCount(params) {
   return request(`/order/cusGetNoPayCount?${stringify(params)}`)
 }
-// 客户获取为付款订单请求
+// 客户获取未付款订单请求
 export async function cusGetNoPayList(params) {
   return request(`/order/cusGetNoPays?${stringify(params)}`)
 }
 // 客户获取进行中的订单列表
 export async function cusGetOngoing(params) {
-  return request(`/ceshi/order/cusGetOngoing?${stringify(params)}`)
+  return request(`/order/getCusOngoing?${stringify(params)}`)
 }
 // 客户获取已经完成的订单
 export async function cusGetDone(params) {
@@ -395,6 +412,11 @@ export async function cusPay(params) {
     body: params
   })
 }
+// 客户获取openId
+export async function cusGetCode(params) {
+  return request('/weixin/getCode')
+}
+
 
 /*
 *   快递员端API
@@ -435,6 +457,15 @@ export async function driverTixian(parmas) {
     method: 'POST',
     body: parmas
   })
+}
+// 快递员查看提现记录   参数 couId
+export async function driverGetMoneyRecord(params) {
+  return request(`/courier/getCouPutRecord?${stringify(params)}`)
+}
+// 快递员查看收益
+export async function driverGetMoneyCash(params) {
+  // return request(`/order/getCouCount?${stringify(params)}`)
+  return request(`/order/getCouCount?${stringify(params)}`)
 }
 // 快递员添加提现账户请求
 export async function addAccount(params) {

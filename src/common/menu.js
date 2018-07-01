@@ -1,4 +1,5 @@
 import { getRoleMenu } from './getRoleMenu'
+import clonedeep from 'lodash.clonedeep'
 
 /*
 * role代表权限， 现在系统中存在三个角色， 超级管理员， 经销商， 文员
@@ -133,8 +134,8 @@ const menuData = [
         path: 'orderRate'
       },
       {
-        role: ['admin', 'clerk'],
-        name: '查看仲裁订单',
+        role: ['admin', 'clerk', 'dealer'],
+        name: '发起仲裁订单',
         path: 'arbitration'
       }
     ]
@@ -164,7 +165,7 @@ function formatter(data, parentPath = '') {
 
 
 export const getMenuData = (roleId) => {
-  const menu = getRoleMenu(roleId, menuData)
+  const menu = getRoleMenu(roleId, clonedeep(menuData))
   return formatter(menu)
 }
 

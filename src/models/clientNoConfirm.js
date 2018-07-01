@@ -1,14 +1,15 @@
-import { cusGetOngoing } from "../services/api";
+
+import { cusGetNoConfime } from "../services/api";
 
 export default {
-  namespace: 'clientOngoing',
+  namespace: 'clientNoConfirm',
   state: {
-    loading: false,
-    data: []
+    data: [],
+    loading: false
   },
   effects: {
     *refresh( {payload}, {call, put} ){
-      const res = yield call( cusGetOngoing, payload )
+      const res = yield call( cusGetNoConfime, payload )
       if (res.data) {
         let listData = []
         res.data.forEach( item=>{
@@ -33,7 +34,8 @@ export default {
         type: 'changeLoading',
         payload: true
       })
-      const res = yield call( cusGetOngoing, payload )
+      const res = yield call( cusGetNoConfime, payload )
+      console.log(res.data)
       if (res.data) {
         let listData = []
         res.data.forEach( item=>{

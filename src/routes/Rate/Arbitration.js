@@ -1,12 +1,9 @@
-import React, { PureComponent } from 'react'
-import { connect } from 'dva'
-import { Row, Col, Card, Form, Input, Select, Button, message,
-  List
-} from 'antd'
-import PageHeaderLayout from '../../layouts/PageHeaderLayout'
-import styles from '../Order/TableList.less'
-// import OrderRate_item from './OrderRate_Item'
-import Frontdesk_table from './OrderRate_table'
+import React, { PureComponent } from 'react';
+import { connect } from 'dva';
+import { Row, Col, Card, Form, Input, Select, Button, message} from 'antd';
+import Frontdesk_table from './Arbitration_table'
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import styles from '../Order/TableList.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -15,41 +12,47 @@ const { Option } = Select;
   // categoryList: state.drop.category
   roleId: state.admin_login.roleId,
   admin_id: state.admin_login.admin_id,
-  orderType: state.orderType.data,
-  // data: state.adminRate.data,
-  // loading: state.adminRate.loading
+  orderType: state.orderType.data
 }))
 @Form.create()
 export default class Cai extends PureComponent {
+  state = {
+    selectedRows: [],
+    selectKeys: [],
+    formValues: {},
+    pageNo: 1,
+    pageSize: 10,
+    delete_key: []
+  };
 
-  constructor(props){
-    super(props)
-    this.parameter = {
-      adminStatus: 0,
-      disposeStatus: 0,
-      arbitraStatus: 0
-    }
-    this.state = {
-      formValues: {},
-      pageNo: 1,
-      pageSize: 10,
-    }
+  parameter = {
+    adminStatus: 1,
+    // disposeStatus: 0,
+    // arbitraStatus: 0
   }
 
   componentDidMount() {
+    // 进入未分配订单页面， 不需要在显示订单消息提示单
+
     if ( this.props.orderType.length===0 ) {
       this.props.dispatch({
         type: 'orderType/getData'
       })
     }
     this.props.dispatch({
-      type: 'adminRate/getData',
+      type: 'adminArbitration/getData',
       payload: {
         ...this.parameter,
         pageNo: this.state.pageNo,
         pageSize: this.state.pageSize,
+        // roleId: this.props.roleId,
+        adminId: this.props.admin_id
       }
     })
+  }
+
+  componentWillUnmount(){
+
   }
 
   handle_delete = () => {
@@ -61,14 +64,14 @@ export default class Cai extends PureComponent {
 
   handle_page_change = (page, pageSize) => {
     this.props.dispatch({
-      type: 'adminRate/getData',
+      type: 'adminArbitration/getData',
       payload: {
         ...this.parameter,
         pageNo: page,
         pageSize: this.state.pageSize,
         ...this.state.formValues,
         // roleId: this.props.roleId,
-        // adminId: this.props.admin_id
+        adminId: this.props.admin_id
       }
     })
     this.setState({
@@ -100,36 +103,21 @@ export default class Cai extends PureComponent {
         pageSize: 1
       });
       this.props.dispatch({
-        type: 'adminRate/getData',
+        type: 'adminArbitration/getData',
         payload: {
           ...this.parameter,
           pageNo: 1,
           pageSize: 10,
           ...fieldsValue,
           // roleId: this.props.roleId,
-          // adminId: this.props.admin_id
+          adminId: this.props.admin_id
         }
       })
     });
   }
 
   handle_reset = () => {
-    this.props.history.replace('/admin/cont/rate/orderRate')
-    // return
-    // this.props.form.resetFields()
-    // this.setState({
-    //   formValues: {},
-    //   pageNo: 1
-    // })
-    // this.props.dispatch({
-    //   type: 'donesOrder/getData',
-    //   payload: {
-    //     pageNo: 1,
-    //     pageSize: 10,
-    //     roleId: this.props.roleId,
-    //     adminId: this.props.admin_id
-    //   }
-    // })
+    this.props.history.replace('/admin/cont/rate/arbitration')
   }
 
   renderSimpleForm() {
@@ -171,7 +159,7 @@ export default class Cai extends PureComponent {
           </Col>
           <Col md={5} sm={10} >
             <FormItem label="订单类型">
-              {getFieldDecorator('orderType')(
+              {getFieldDecorator('orderTypeId')(
                 <Select>
                   {this.props.orderType.map( item=>(
                     <Option key={item.id} value={item.id} >{item.type}</Option>
@@ -181,14 +169,21 @@ export default class Cai extends PureComponent {
             </FormItem>
           </Col>
           <Col md={5} sm={10} >
-            <FormItem label="星级">
-              {getFieldDecorator('starLevel')(
+            <FormItem label="是否处理">
+              {getFieldDecorator('disposeStatus')(
                 <Select>
-                  <Option value={1} >1 星</Option>
-                  <Option value={2} >2 星</Option>
-                  <Option value={3} >3 星</Option>
-                  <Option value={4} >4 星</Option>
-                  <Option value={5} >5 星</Option>
+                  <Option value={0} >未处理</Option>
+                  <Option value={1} >已处理</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={5} sm={10} >
+            <FormItem label="是否仲裁">
+              {getFieldDecorator('arbitraStatus')(
+                <Select>
+                  <Option value={0} >未仲裁</Option>
+                  <Option value={1} >已仲裁</Option>
                 </Select>
               )}
             </FormItem>
@@ -208,9 +203,6 @@ export default class Cai extends PureComponent {
 
   render() {
     const { selectedRows } = this.state;
-    const row = item => (
-      <OrderRate_item data={item} orderType={this.props.orderType} />
-    )
 
     return (
         <Card bordered={false}>
@@ -220,6 +212,7 @@ export default class Cai extends PureComponent {
               {/*<Button onClick={ ()=>this.props.history.push('/admin/cont/people/addCourier') } >添加快递员</Button>*/}
             </div>
             <Frontdesk_table
+              orderType={this.props.orderType}
               selectedRows={selectedRows}
               formValues={this.state.formValues}
               onSelectRow={this.handleSelectRows}

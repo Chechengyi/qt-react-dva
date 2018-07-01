@@ -4,7 +4,7 @@ import { cusCancelOrder } from '../../services/api'
 
 const FlexItem = Flex.Item
 
-export default class Ongoing_item extends Component {
+export default class NoConfirmItem extends Component {
 
   constructor(props){
     super(props)
@@ -91,6 +91,21 @@ export default class Ongoing_item extends Component {
     }
   }
 
+  gotoMsg =(id, username)=> {
+    var userObj = {
+      adminId: id,
+      username,
+      msg: []
+    }
+    this.props.dispatch({
+      type: 'socketMsg/addUser',
+      payload: {
+        toUserId: id,
+        content: userObj
+      }
+    })
+  }
+
   render(){
     const {data} = this.props
     return <div
@@ -99,8 +114,13 @@ export default class Ongoing_item extends Component {
       }}
     >
       {this.renderOrderItem(data.typeId, data)}
+      <div>
+        <a onClick={ e=>this.gotoMsg(data.adminId, data.adminUsername) } >
+          <img style={{width: 25, height: 25}} src="/wechat.png" alt=""/> 与管理员聊天
+        </a>
+      </div>
       <Flex>
-        订单预算费用：{data.actualFee} 元
+        订单预算费用：{data.fee} 元
       </Flex>
       {!data.couId&&
       <Flex justify='center' style={{margin: '5px 0'}} >

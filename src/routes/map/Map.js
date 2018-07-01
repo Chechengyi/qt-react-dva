@@ -21,6 +21,9 @@ export default class Map extends PureComponent {
       loading: false
     }
     this.markers = {}
+    this.id = this.props.match.params.id
+    this.lnt = this.props.match.params.location.split(',')[0]
+    this.lat = this.props.match.params.location.split(',')[1]
   }
   // 获取快递员位置信息请求
   getPosition = async e=>{
@@ -108,9 +111,6 @@ export default class Map extends PureComponent {
   componentDidMount () {
     //   27.70846  107.05683
     console.log(this)
-    this.id = this.props.match.params.id
-    this.lnt = this.props.match.params.location.split(',')[0]
-    this.lat = this.props.match.params.location.split(',')[1]
 
     let self = this
     AMap = Object.AMap
@@ -144,7 +144,7 @@ export default class Map extends PureComponent {
   //  显示圆范围   r 为圆的半径
   drawRound = (r) => {
     let circle = circle = new AMap.Circle({
-      center: new AMap.LngLat("107.05683","27.70846"),// 圆心位置
+      center: new AMap.LngLat(this.lnt,this.lat),// 圆心位置
       // radius: r, //半径 /m
       // strokeColor: "#FF33FF", //线颜色
       // strokeOpacity: 0.2, //线透明度

@@ -1,14 +1,10 @@
-/*
-*  管理员查看订单评价, 经销商查看仲裁订单
-* */
-
-import {adminGetOrderRate} from "../services/api";
+import { adminGetOrderRate } from '../services/api'
 
 export default {
-  namespace: 'adminRate',
+  namespace: 'adminArbitration',
   state: {
-    data: [],
-    loading: false
+    loading: false,
+    data: []
   },
   effects: {
     *getData({payload}, {call, put}){

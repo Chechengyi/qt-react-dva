@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Flex, Toast } from 'antd-mobile'
-import { cusPay } from '../services/api'
+import { cusPay, cusGetCode } from '../services/api'
+// import { cusGetCode } from '../services/api'
 
 const FlexItem = Flex.Item
 
@@ -30,15 +31,42 @@ export default class NoPayItem extends Component {
   }
 
   pay =ono=> {
-    cusPay({
-      ono
-    })
+    fetch('/wxpay')
       .then( res=>{
-        if (res.status=='OK') {
-          Toast.success('付款成功', 1)
-        } else {
-          Toast.fail('付款失败！', 1)
-        }
+        return res.json()
+      })
+      .then( d=>{
+        WeixinJSBridge.invoke(
+          'getBrandWCPayRequest', {
+            "appId":d.appId,     //公众号名称，由商户传入
+            "timeStamp":d.timeStamp,         //时间戳，自1970年以来的秒数
+            "nonceStr":d.nonceStr, //随机串
+            "package":d.package,
+            "signType":d.signType,         //微信签名方式：
+            "paySign":d.paySign //微信签名
+          },
+          function(res){
+            if(res.err_msg == "get_brand_wcpay_request:ok" ) {  // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+              // alert("支付成功");
+              cusPay({
+                ono
+              })
+                .then( res=>{
+                  if (res.status=='OK') {
+                    Toast.success('付款成功', 1)
+                  } else {
+                    Toast.fail('付款失败！', 1)
+                  }
+                })
+            }else if(res.err_msg == "get_brand_wcpay_request:cancel"){
+              // alert('支付取消');
+            }else if(res.err_msg == "get_brand_wcpay_request:fail"){
+              // alert(JSON.stringify(res));
+              // alert('支付失败' + res.err_msg);
+              //WeixinJSBridge.call('closeWindow');
+            }
+          }
+        );
       })
   }
 

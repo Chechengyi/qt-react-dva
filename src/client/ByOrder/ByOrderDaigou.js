@@ -182,20 +182,20 @@ export default class ByOrderDaigou extends Component {
           <ListItem
             thumb={<img style={{width: 30, height: 30}} src="/qidian.png" alt=""/>}
             arrow="horizontal"
-            onClick={ e=>this.props.history.push('/cont/startAddress') }
-          >收货位置
+            onClick={ e=>this.props.history.push('/cont/endAddress') }
+          >购货地址
             <Brief>
-              {Object.keys(this.props.startPoint).length!==0&&
-              Object.keys(this.props.startMsg).length!==0?'已填':'去完善'}
+              {Object.keys(this.props.endPoint).length!==0?'已填':'去完善'}
             </Brief>
           </ListItem>
           <ListItem
             thumb={<img style={{width: 30, height: 30}} src="/zhongdian.png" alt=""/>}
             arrow="horizontal"
-            onClick={ e=>this.props.history.push('/cont/endAddress') }
-          >购货位置
+            onClick={ e=>this.props.history.push('/cont/startAddress') }
+          >收货地址
             <Brief>
-              {Object.keys(this.props.endPoint).length!==0?'已填':'去完善'}
+              {Object.keys(this.props.startPoint).length!==0&&
+              Object.keys(this.props.startMsg).length!==0?'已填':'去完善'}
             </Brief>
           </ListItem>
         </List>

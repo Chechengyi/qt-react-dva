@@ -190,7 +190,7 @@ export default class ByOrderTongcheng extends Component {
             thumb={<img style={{width: 30, height: 30}} src="/qidian.png" alt=""/>}
             arrow="horizontal"
             onClick={ e=>this.props.history.push('/cont/startAddress') }
-          >寄件位置(快递员上门位置)
+          >寄件地址
             <Brief>
               {Object.keys(this.props.startPoint).length!==0&&
               Object.keys(this.props.startMsg).length!==0?'已填':'去完善'}

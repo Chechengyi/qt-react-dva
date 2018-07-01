@@ -189,7 +189,7 @@ export default class ByOrderTongcheng extends Component {
             thumb={<img style={{width: 30, height: 30}} src="/qidian.png" alt=""/>}
             arrow="horizontal"
             onClick={ e=>this.props.history.push('/cont/startAddress') }
-          >寄件位置
+          >寄件地址
             <Brief>
               {Object.keys(this.props.startPoint).length!==0&&
               Object.keys(this.props.startMsg).length!==0&&
@@ -203,8 +203,7 @@ export default class ByOrderTongcheng extends Component {
             onClick={ e=>this.props.history.push('/cont/endAddress') }
           >收货地址
             <Brief>
-              {Object.keys(this.props.endPoint).length!==0&&
-              Object.keys(this.props.endMsg).length!==0&&
+              { Object.keys(this.props.endMsg).length!==0&&
                 this.props.endAddress && this.props.provinceCode ?
                 '已填':'去完善'}
             </Brief>

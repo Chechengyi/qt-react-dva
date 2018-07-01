@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { NavBar, Icon, ListView, PullToRefresh, ActivityIndicator } from 'antd-mobile'
 import { connect } from 'dva'
-import DoneItem from './Done_item'
+// import DoneItem from './DoneItem'
+import { driverGetMoneyCash } from '../services/api'
 
 function MyBody(props) {
   return (
@@ -12,10 +13,10 @@ function MyBody(props) {
 }
 
 @connect( state=>({
-  client_id: state.client_login.client_id,
-  orderType: state.orderType.data,
-  loading: state.clientDone.loading,
-  data: state.clientDone.data
+  driver_id: state.driver_login.driver_id,
+  // orderType: state.orderType.data,
+  loading: state.couMoneyRecord.loading,
+  data: state.couMoneyRecord.data
 }) )
 export default class Done extends Component {
 
@@ -37,16 +38,18 @@ export default class Done extends Component {
   }
 
   componentDidMount(){
-    if ( this.props.orderType.length===0 ) {
-      this.props.dispatch({
-        type: 'orderType/getData'
-      })
-    }
+    // driverGetMoneyCash({
+    //   couId: this.props.driver_id
+    // })
+    //   .then( res=>{
+    //     // 返回res类型 [ 数量，订单类型id， 金额 ]
+    //     console.log(res)
+    //   })
     // 发送获取快递员以完成订单的请求
     this.props.dispatch({
-      type: 'clientDone/getData',
+      type: 'couMoneyRecord/getData',
       payload: {
-        cusId: this.props.client_id,
+        couId: this.props.driver_id,
         pageNo: this.state.pageNo + 1 ,
         pageSize: this.state.pageSize,
         // refreshing: false
@@ -80,9 +83,9 @@ export default class Done extends Component {
     console.log('去加载把')
     if ( this.props.loading ) return
     this.props.dispatch({
-      type: 'clientDone/getData',
+      type: 'couMoneyRecord/getData',
       payload: {
-        cusId: this.props.client_id,
+        couId: this.props.driver_id,
         pageNo: this.state.pageNo + 1 ,
         pageSize: this.state.pageSize,
         refreshing: false,
@@ -96,13 +99,12 @@ export default class Done extends Component {
     this.setState({
       refreshing: true,
       pageNo: 0,
-      pageSize: 20,
-      data: []
+      pageSize: 20
     })
     this.props.dispatch({
-      type: 'clientDone/refresh',
+      type: 'couMoneyRecord/refresh',
       payload: {
-        cusId: this.props.client_id,
+        couId: this.props.driver_id,
         pageNo: 1,
         pageSize: 20
       }
@@ -111,13 +113,14 @@ export default class Done extends Component {
 
   render(){
     const row = (item)=>(
-      <DoneItem dispatch={this.props.dispatch} data={item} orderType={this.props.orderType} />
+      //<DoneItem data={item} orderType={this.props.orderType} />
+      <div>一列一列的</div>
     )
     return <div>
       <NavBar
         icon={ <Icon type='left' ></Icon> }
         onLeftClick={ ()=>this.props.history.goBack() }
-      >送单统计</NavBar>
+      >提现记录</NavBar>
       <ListView
         initialListSize={20}
         style={{height: document.documentElement.clientHeight-45,

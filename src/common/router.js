@@ -113,6 +113,9 @@ export const getRouterData = (app) => {
     '/admin/cont/rate/orderRate': {
       component: dynamicWrapper(app, ['admin_login', 'adminRate', 'orderType'], ()=>import('../routes/Rate/OrderRate'))
     },
+    '/admin/cont/rate/arbitration': {
+      component: dynamicWrapper(app, ['admin_login', 'adminArbitration', 'orderType'], ()=>import('../routes/Rate/Arbitration'))
+    },
     // '/admin/cont/home/frontdesk': {
     //   component: dynamicWrapper(app, ['frontdesk', 'global_drop'], ()=>import('../routes/Frontdesk/TableList'))
     // },
@@ -152,6 +155,9 @@ export const getRouterData = (app) => {
     },
     '/cont': {
       component: dynamicWrapper(app, ['client_login', 'socketMsg','CusNoPay'], () => import('../client/Cont')),
+    },
+    '/cont/noConfirm': {
+      component: dynamicWrapper(app, ['client_login', 'socketMsg','clientNoConfirm', 'orderType'], () => import('../client/Order/NoConfirm')),
     },
     '/cont/nopay': {
       component: dynamicWrapper(app, ['client_login','CusNoPay', 'orderType', 'socketMsg'], () => import('../client/NoPay')),
@@ -256,7 +262,13 @@ export const getRouterData = (app) => {
     },
     '/driverElseCont/account': {
       component: dynamicWrapper(app, ['driver_login'], () => import('../driver/AccountManagement')),
-    }
+    },
+    '/driverElseCont/moneyRecord': {
+      component: dynamicWrapper(app, ['driver_login', 'couMoneyRecord'], () => import('../driver/MoneyRecord')),
+    },
+    // '/driverElseCont/moneyCount': {
+    //   component: dynamicWrapper(app, ['driver_login', 'couMoneyRecord'], () => import('../driver/MoneyCount ')),
+    // },
   };
   // Get name from ./menu.js or just set it in the router data.
   const menuData = getFlatMenuData(getMenuData());

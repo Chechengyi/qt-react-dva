@@ -33,7 +33,6 @@ export default {
             ...item[0],
             couName: item[2].username,
             couTel: item[2].tel,
-            adminId: item[3].id,
             adminUsername: item[3].username
           })
         })
@@ -57,7 +56,6 @@ export default {
              ...item[0],
              couName: item[2].username,
              couTel: item[2].tel,
-             adminId: item[3].id,
              adminUsername: item[3].username
            })
          })

@@ -9,10 +9,24 @@ export default {
   effects: {
     *refresh( {payload}, {call, put} ){
       const res = yield call( cusGetDone, payload )
-      yield put({
-        type: 'saveData',
-        payload: res.data
-      })
+      if (res.data) {
+        let listData = []
+        res.data.forEach( item=>{
+          listData.push({
+            ...item[0],
+            cusUsername: item[1].username,
+            cusTel: item[1].tel,
+            couUsername: item[2].username,
+            couTel: item[2].tel,
+            isRate: item[4]?true:false,
+            adminUsername: item[3].username
+          })
+        })
+        yield put({
+          type: 'saveData',
+          payload: listData
+        })
+      }
     },
     *getData( {payload}, {call, put} ){
       yield put({
@@ -30,7 +44,8 @@ export default {
             cusTel: item[1].tel,
             couUsername: item[2].username,
             couTel: item[2].tel,
-            isRate: item[4]?true:false
+            isRate: item[4]?true:false,
+            adminUsername: item[3].username
           })
         })
         yield put({

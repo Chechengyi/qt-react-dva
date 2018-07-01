@@ -1,6 +1,11 @@
 
 
 export function getRoleMenu (roleId, menu){
+  // 验证roleId必须为数字
+  if (typeof roleId !== 'number') {
+    new Error('roleId必须为数字！')
+    return []
+  }
   let roleMenu = []
 
   // 超级管理员

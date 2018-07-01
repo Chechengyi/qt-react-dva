@@ -40,9 +40,22 @@ export default class DrawCont extends PureComponent {
       <List>
         <ListItem
           arrow='horizontal'
+          onClick={ e=>this.props.history.push('/cont/noConfirm') }
+        >待确认订单</ListItem>
+        <ListItem
+          arrow='horizontal'
           onClick={ e=>this.props.history.push('/cont/nopay') }
           extra={<Badge text={this.props.count} ></Badge>}
-        >待付款订单</ListItem>
+        >
+          {/*待付款订单*/}
+          <a
+            href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe75752031ce1c286&redirect_uri=http://www.laikexin.cc/weixin/auth&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+            className="btn btn-primary">待付款订单</a>
+        </ListItem>
+        <ListItem
+          arrow='horizontal'
+          onClick={ e=>this.props.history.push('/cont/ongoing') }
+        >配送中订单</ListItem>
         {menu.map( (item, i)=>(
           <ListItem
             // thumb={item.iconPath}

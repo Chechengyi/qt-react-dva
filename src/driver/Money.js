@@ -209,9 +209,11 @@ export default class Money extends PureComponent {
            >账户管理</ListItem>
            <ListItem
              arrow="horizontal"
+             onClick={ ()=>this.props.history.push('/driverElseCont/moneyRecord') }
            >提现记录</ListItem>
            <ListItem
              arrow="horizontal"
+             onClick={ ()=>this.props.history.push('/driverElseCont/moneyCount') }
            >我的收益</ListItem>
          </List>
       </div>

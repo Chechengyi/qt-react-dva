@@ -14,7 +14,7 @@ const ListItem = List.Item
   endMsg: state.orderAddress.endMsg,
   endAddress: state.orderAddress.endAddress,
   provinceList: state.orderAddress.provinceList,
-  provinceCode: state.orderAddress.provinceCode
+      provinceCode: state.orderAddress.provinceCode
 }) )
 export default class EndAddress extends PureComponent {
 
@@ -46,7 +46,12 @@ export default class EndAddress extends PureComponent {
         this.renderModal('目的地的省归属地不能为空！')
         return
       }
-      if (Object.keys(this.props.endPoint).length==0 ||!tel||!receiverName || !address ) {
+      // 同城寄送参数验证目标地点经纬度不能为空
+      if (this.type==1&&Object.keys(this.props.endPoint).length==0) {
+        this.renderModal('请将信息完善后在提交')
+      }
+      // 快递物流与同城急送都适用的参数验证规则
+      if ( !tel||!receiverName || !address ) {
         this.renderModal('请将信息完善后在提交')
         return
       }
@@ -119,24 +124,27 @@ export default class EndAddress extends PureComponent {
         icon={ <Icon type='left' /> }
         onLeftClick={ e=>this.handleBack() }
       >{this.title}</NavBar>
-      <List renderHeader={ ()=>`第一步，选择${this.title}` } >
-        <div style={{display: this.props.endPoint.address?'none':'block',
-          padding: 10, textAlign: 'center'
-        }} >
-          <a onClick={ ()=>this.props.history.push('/cont/chooseEndLocation') } >
-            选择准确地址</a>
-        </div>
-        <div style={{
-          padding: '10px 20px',
-          display: !this.props.endPoint.address?'none':'block'
-        }} >
-          {this.props.endPoint.address}
-          {this.props.endPoint.name}
-          <div style={{textAlign: 'center', marginTop: 5}} >
-            <a onClick={ ()=>this.props.history.push('/cont/chooseEndLocation') } >重新选择</a>
+      {
+        this.typeId!=3&&
+        <List renderHeader={ ()=>`选择${this.title}` } >
+          <div style={{display: this.props.endPoint.address?'none':'block',
+            padding: 10, textAlign: 'center'
+          }} >
+            <a onClick={ ()=>this.props.history.push('/cont/chooseEndLocation') } >
+              选择准确地址</a>
           </div>
-        </div>
-      </List>
+          <div style={{
+            padding: '10px 20px',
+            display: !this.props.endPoint.address?'none':'block'
+          }} >
+            {this.props.endPoint.address}
+            {this.props.endPoint.name}
+            <div style={{textAlign: 'center', marginTop: 5}} >
+              <a onClick={ ()=>this.props.history.push('/cont/chooseEndLocation') } >重新选择</a>
+            </div>
+          </div>
+        </List>
+      }
       {
         this.typeId==2?null:
           <List renderHeader={ ()=>'第二步，完善收货人基本信息' } >

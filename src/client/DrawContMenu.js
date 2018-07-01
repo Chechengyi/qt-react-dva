@@ -24,10 +24,10 @@ export default [
   //   iconPath: '/dingdan.png',
   //   linkTo: ''
   // },
-  {
-    title: '进行中订单',
-    linkTo: '/cont/ongoing'
-  },
+  // {
+  //   title: '进行中订单',
+  //   linkTo: '/cont/ongoing'
+  // },
   {
     title: '已完成订单',
     linkTo: '/cont/done'

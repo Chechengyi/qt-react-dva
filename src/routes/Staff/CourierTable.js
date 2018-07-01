@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Table, Input, Select, Popconfirm, message, Form, Modal} from 'antd';
 import { updateCourier, resetCourierPsw } from '../../services/api'
+import ModalCount from './ModalCouOrderCount'
 
 const Option = Select.Option
 const WriteInput = ({getFieldDecorator, value, text}) => (
@@ -196,7 +197,7 @@ export default class FrontDesk_table extends  PureComponent {
       },
       {
         title: '操作',
-        width: 150,
+        width: 200,
         render: (val, text, index) => (
           <div>
             {this.state.selectWriteKey===index?
@@ -208,6 +209,7 @@ export default class FrontDesk_table extends  PureComponent {
                 <Popconfirm title="确定重置密码？" onConfirm={ ()=>{ this.resetPsw(val.id) } } >
                   <a style={{marginLeft: '5px'}} >重置密码</a>
                 </Popconfirm>
+                <a style={{marginLeft: 5, color: 'green'}} >送单统计</a>
               </div>
             }
           </div>
@@ -229,6 +231,7 @@ export default class FrontDesk_table extends  PureComponent {
     };
 
     return <div>
+      <ModalCount />
       <Table
         columns={columns}
         dataSource={this.state.data}
