@@ -31,7 +31,8 @@ export default class Cai extends PureComponent {
     this.props.dispatch({
       type: 'noDisOrder/backGetCount',
       payload: {
-        adminId: parseInt(this.props.admin_id)
+        // adminId: parseInt(this.props.admin_id)
+        adminId: this.props.admin_id
       }
     })
 

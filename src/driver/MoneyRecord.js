@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { NavBar, Icon, ListView, PullToRefresh, ActivityIndicator } from 'antd-mobile'
 import { connect } from 'dva'
-// import DoneItem from './DoneItem'
+import MoneyRecordItem from './MoneyRecordItem'
 import { driverGetMoneyCash } from '../services/api'
 
 function MyBody(props) {
@@ -34,7 +34,6 @@ export default class Done extends Component {
       data: [],
       isOver: false
     }
-    this.data = []
   }
 
   componentDidMount(){
@@ -45,7 +44,7 @@ export default class Done extends Component {
     //     // 返回res类型 [ 数量，订单类型id， 金额 ]
     //     console.log(res)
     //   })
-    // 发送获取快递员以完成订单的请求
+    // 发送获取快递员提现记录的请求
     this.props.dispatch({
       type: 'couMoneyRecord/getData',
       payload: {
@@ -80,26 +79,25 @@ export default class Done extends Component {
   }
 
   onEndReached= e=> {
-    console.log('去加载把')
-    if ( this.props.loading ) return
+    console.log('区加载把')
+    if ( this.props.loading || this.state.isOver ) return
     this.props.dispatch({
       type: 'couMoneyRecord/getData',
       payload: {
         couId: this.props.driver_id,
         pageNo: this.state.pageNo + 1 ,
         pageSize: this.state.pageSize,
-        refreshing: false,
-        // isOver: false
+        isOver: false
       }
     })
   }
 
   onRefresh=e=> {
-    this.data = []
     this.setState({
       refreshing: true,
       pageNo: 0,
-      pageSize: 20
+      pageSize: 20,
+      data: []
     })
     this.props.dispatch({
       type: 'couMoneyRecord/refresh',
@@ -111,19 +109,28 @@ export default class Done extends Component {
     })
   }
 
+  shouldComponentUpdate(nextProps, nextState){
+    if (this.state.data!=nextState.data) {
+      return false
+    }
+    return true
+  }
+
   render(){
     const row = (item)=>(
       //<DoneItem data={item} orderType={this.props.orderType} />
-      <div>一列一列的</div>
+      <MoneyRecordItem data={item} />
     )
     return <div>
       <NavBar
+        // style={{position: 'fixed', width: '100%', top: 0, bottom: 0}}
         icon={ <Icon type='left' ></Icon> }
         onLeftClick={ ()=>this.props.history.goBack() }
       >提现记录</NavBar>
       <ListView
         initialListSize={20}
         style={{height: document.documentElement.clientHeight-45,
+          // marginTop: 45,
           backgroundColor: '#f1f1f1',
           width: document.documentElement.clientWidth}}
         renderBodyComponent={() => <MyBody />}
@@ -134,7 +141,7 @@ export default class Done extends Component {
           <ActivityIndicator animating={this.props.loading} ></ActivityIndicator>
         </div> }
         renderFooter={ (e)=><div style={{textAlign: 'center'}} >
-          {this.state.isOver&&<span style={{}} >没有订单了...</span>}
+          {(this.state.isOver&&!this.props.loading)&&<span style={{}} >没有订单了...</span>}
           {this.props.loading&&'加载中...'}
         </div> }
         onEndReachedThreshold={200}

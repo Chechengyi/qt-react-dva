@@ -64,6 +64,14 @@ export default class ByOrderTongcheng extends Component {
   * */
 
   submit=()=> {
+    if (!this.props.client_id) {
+      Modal.alert('下单请先登录！','',[{
+        text: '确定', onPress: ()=>{
+          this.props.history.replace('/clientUser/login')
+        }
+      }])
+      return
+    }
     // 从sessionStorage里取出当前订单的提价比例
     const feeRate = window.sessionStorage.getItem('feeRate')
     let {weight, goodsType, comment} = this.props.form.getFieldsValue()
@@ -88,8 +96,12 @@ export default class ByOrderTongcheng extends Component {
       }])
       return
     }
+    // 如果预计费用还没有返回
+    if (!this.state.expectedFee) {
+      return
+    }
     // 下单之前先弹出窗口询问是否确定提交订单， 也检验在订单预算费用出来之后才提交订单
-    Modal.alert(`订单预算费用为 ${this.state.expectedFee}元`,'确认提交订单？', [{
+    Modal.alert(`订单预算费用为 ${this.state.expectedFee.toFixed(2)}元`,'确认提交订单？', [{
       text: '取消', onPress: ()=> false
     }, {
       text: '确认', onPress: () => {
@@ -115,7 +127,6 @@ export default class ByOrderTongcheng extends Component {
           fee: this.state.expectedFee,
           comment
         }
-        console.log(posData)
         addOrder({...posData})
           .then( res=> {
             this.setState({
@@ -155,8 +166,6 @@ export default class ByOrderTongcheng extends Component {
   sendGetExpectedFee = e=> {
     // 首先判断 物品距离，重量等信息是否为空 不为空才能发送请求
     const {weight} = this.props.form.getFieldsValue()
-    // 如果已经估过价， 返回， 不在继续估价
-    if (this.state.expectedFee) return
 
     if ( !weight||!this.distance ) return
     this.setState({
@@ -200,7 +209,7 @@ export default class ByOrderTongcheng extends Component {
             thumb={<img style={{width: 30, height: 30}} src="/zhongdian.png" alt=""/>}
             arrow="horizontal"
             onClick={ e=>this.props.history.push('/cont/endAddress') }
-          >收货地址
+          >收件地址
             <Brief>
               {Object.keys(this.props.endPoint).length!==0&&
               Object.keys(this.props.endMsg).length!==0?'已填':'去完善'}
@@ -245,7 +254,7 @@ export default class ByOrderTongcheng extends Component {
               <div>
                 <div style={{color: '#888', marginTop: 13}} >订单预算费用</div>
                 <div style={{textAlign: 'center', padding: '5px'}} >
-                  <span>{this.state.expectedFee} 元</span>
+                  <span>{this.state.expectedFee.toFixed(2)} 元</span>
                 </div>
               </div>
             }

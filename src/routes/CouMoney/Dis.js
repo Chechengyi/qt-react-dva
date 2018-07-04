@@ -93,9 +93,7 @@ export default class Cai extends PureComponent {
       delete fieldsValue.time
       const values = {
         ...fieldsValue,
-        // startTime: start_time || undefined,
         startTime: start_time ? new Date(start_time) : undefined,
-        // endTime: end_time || undefined
         endTime: end_time ? new Date(end_time) : undefined
       }
       this.setState({

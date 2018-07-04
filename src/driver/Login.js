@@ -13,8 +13,9 @@ import store from 'store'
 export default class Login extends PureComponent {
 
   componentDidMount(){
-    console.log(store.get('driverData'))
+    // console.log(store.get('driverData'))
     // 在登录页面验证一下
+    console.log(this.props.driver_status)
   }
 
   submit = () => {
@@ -23,13 +24,16 @@ export default class Login extends PureComponent {
       Toast.fail('用户名或密码不能为空', 1)
       return
     }
-    this.props.dispatch({
-      type: 'driver_login/login',
-      payload: {
-        account: username,
-        password: password
-      }
-    })
+    // 设置一个定时器， 让键盘有足够的失交的时间
+    setTimeout( ()=>{
+      this.props.dispatch({
+        type: 'driver_login/login',
+        payload: {
+          account: username,
+          password: password
+        }
+      })
+    }, 200)
   }
 
   renderMessage = (message) => {

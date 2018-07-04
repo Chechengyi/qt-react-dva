@@ -32,11 +32,11 @@ export default [
     title: '已完成订单',
     linkTo: '/cont/done'
   },
-  {
-    title: '个人中心',
-    iconPath: '/grzx.png',
-    linkTo: ''
-  },
+  // {
+  //   title: '个人中心',
+  //   iconPath: '/grzx.png',
+  //   linkTo: ''
+  // },
   {
     title: '我的地址簿',
     linkTo: '/cont/myAdress'

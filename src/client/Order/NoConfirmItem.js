@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Flex, Modal } from 'antd-mobile'
-import { cusCancelOrder } from '../../services/api'
+import { cancelOrder } from '../../services/api'
 
 const FlexItem = Flex.Item
 
@@ -21,33 +21,40 @@ export default class NoConfirmItem extends Component {
     }
   }
 
-  cancelOrder = id=> {
-    cusCancelOrder({
-      id
-    })
-      .then( res=>{
-        console.log(res.status)
-        if (res.status==='OK') {
-          Modal.alert('订单取消成功', '', [{
-            text: '确认', onPress: ()=> {
-              this.setState({
-                isCancel: true
-              })
+  handleCancelOrder = id=> {
+    Modal.alert('确认取消订单？', '', [{
+      text: '取消', onPress: ()=>{}
+    }, {
+      text: '确认', onPress: ()=>{
+        cancelOrder({
+          id,
+          cancelStatus: 2
+        })
+          .then( res=>{
+            console.log(res.status)
+            if (res.status==='OK') {
+              Modal.alert('订单取消成功', '', [{
+                text: '确认', onPress: ()=> {
+                  this.setState({
+                    isCancel: true
+                  })
+                }
+              }])
+            } else {
+              Modal.alert('快递员已经在来的路上来', '暂不能取消订单', [{
+                text: '确认', onPress: ()=>{
+                  this.props.history.replace('/cont/ongoing')
+                }
+              }])
             }
-          }])
-        } else {
-          Modal.alert('快递员已经在来的路上来', '暂不能取消订单', [{
-            text: '确认', onPress: ()=>{
-              this.props.history.replace('/cont/ongoing')
-            }
-          }])
-        }
-      })
-      .catch( err=>{
-        Modal.alert('暂不能取消订单，请联系管理员', '', [{
-          text: '确认', onPress: ()=>{}
-        }])
-      })
+          })
+          .catch( err=>{
+            Modal.alert('暂不能取消订单，请联系管理员', '', [{
+              text: '确认', onPress: ()=>{}
+            }])
+          })
+      }
+    }])
   }
 
   renderOrderItem = (typeId, data) => {
@@ -127,7 +134,7 @@ export default class NoConfirmItem extends Component {
         <button style={{backgroundColor:'#ff6700',
           border: 'none', color: '#fff', width: 100,
           borderRadius: 3, textAlign: 'centers'
-        }} onClick={ e=>this.cancelOrder(data.id) } >取消订单</button>
+        }} onClick={ e=>this.handleCancelOrder(data.id) } >取消订单</button>
       </Flex>
       }
     </div>

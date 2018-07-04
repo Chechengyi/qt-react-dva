@@ -65,6 +65,7 @@ enquireScreen((b) => {
 
 @connect( state => ({
   login: state.admin_login,
+  adminId: state.admin_login.admin_id
 }) )
 
 class BasicLayout extends React.PureComponent {
@@ -102,39 +103,49 @@ class BasicLayout extends React.PureComponent {
     });
   }
 
+
+
   getSokcet= async ()=> {
 
     if ( !window.cusWS ) {
-      try {
-        window.cusWS = await openSocket('ws://localhost:8080/wschat')
-      } catch (e) {
-        return
-      }
+      setTimeout( async ()=>{
+        try {
+          window.cusWS = await openSocket('ws://localhost:8080/wschat')
+          setTimeout( ()=>{
+            window.cusWS.onmessage = e=> {
+              console.log('接收')
+              let obj = JSON.parse(e.data)
+              console.log(obj)
+              if (!obj.fromId||obj.toId!==this.props.login.admin_id ) return
+              console.log('渲染啊')
+              this.props.dispatch({
+                type: 'socketMsg/setMsg',
+                payload: {
+                  toUserId: obj.fromId,
+                  msg: obj
+                }
+              })
+            }
+          }, 1000)
+        } catch (e) {
+          return
+        }
+      }, 2000)
     } else {
       return
-    }
-    window.cusWS.onmessage = e=> {
-      console.log('接收')
-      let obj = JSON.parse(e.data)
-      if (!obj.fromId||!obj.toId) return
-      this.props.dispatch({
-        type: 'socketMsg/setMsg',
-        payload: {
-          toUserId: obj.fromId,
-          msg: obj
-        }
-      })
     }
   }
 
   // 发送获取未分配订单个数的请求
   getOrderCount(){
-    this.props.dispatch({
-      type: 'noDisOrder/backGetCount',
-      payload: {
-        adminId: parseInt(this.props.login.admin_id)
-      }
-    })
+    if (this.props.adminId) {
+      this.props.dispatch({
+        type: 'noDisOrder/backGetCount',
+        payload: {
+          adminId: this.props.adminId
+        }
+      })
+    }
   }
   getPageTitle() {
     const { routerData, location } = this.props;

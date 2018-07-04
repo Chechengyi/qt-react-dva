@@ -171,8 +171,10 @@ export default class GlobalHeader extends PureComponent {
         {this.props.roleId!==0&&<Menu.Item >
           <a style={{color: 'rgba(0, 0, 0, 0.65)'}} href='/#/admin/else/updateMsg' ><Icon type="edit" />修改信息</a>
         </Menu.Item>}
-        <Menu.Item>
-          <a onClick={ ()=>this.handleModal(true) } style={{color: 'rgba(0, 0, 0, 0.65)'}} ><Icon type="unlock" />修改密码</a>
+        <Menu.Item style={{display: this.props.admin_id==1?'none':''}} >
+          <a onClick={ ()=>this.handleModal(true) } style={{color: 'rgba(0, 0, 0, 0.65)'}} >
+            <Icon type="unlock" />修改密码
+          </a>
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item key="logout">

@@ -2,14 +2,14 @@ import React, { PureComponent } from 'react';
 import NavBar from '../components/NavBar/Index'
 import { Icon, List, InputItem, WhiteSpace,
   WingBlank, Button, Flex, Toast, Modal } from 'antd-mobile'
-import { clientUpdatePsw } from '../services/api'
+import { clientUpdatePsw, getCode } from '../services/api'
 import { createForm } from 'rc-form'
 import { connect } from 'dva'
 
-const alert = Modal.alert
 @createForm()
 @connect(state=>({
-  client_name: state.client_login.client_name
+  client_name: state.client_login.client_name,
+  client_tel: state.client_tel
 }))
 export default class UpdatePsw extends PureComponent {
 
@@ -43,7 +43,7 @@ export default class UpdatePsw extends PureComponent {
     })
     // 发送更改密码的请求
     clientUpdatePsw({
-      tel: this.props.client_name,
+      tel: this.props.client_tel,
       password,
       authCode
     })
@@ -52,17 +52,18 @@ export default class UpdatePsw extends PureComponent {
           loading: false
         })
         if (res.status==='OK') {
-          alert('修改密码成功', '请重新登录', [{
+          Modal.alert('修改密码成功', '请重新登录', [{
             text: '确认',
             onPress: ()=> {
               // 密码修改成功就要重新登录
-              // this.props.dispatch({
-              //   type: 'driver_login/logout'
-              // })
+              this.props.dispatch({
+                type: 'client_login/logout'
+              })
+              this.props.history.replace('/clientUser/login')
             }
           }])
         }
-      } )
+      })
   }
 
   getAuthCode=()=>{
@@ -80,6 +81,19 @@ export default class UpdatePsw extends PureComponent {
       return
     }
     // 发送获取验证码的请求
+    getCode({
+      tel: this.props.client_cel
+    })
+      .then( res=>{
+        if (res.status==='ERROR') {
+          Toast.fail('操作太频繁，请稍后在试', 1)
+        } else {
+          this.setTime()
+          this.setState({
+            sendAuthCode: true
+          })
+        }
+      })
     this.setTime()
     this.setState({
       sendAuthCode: true

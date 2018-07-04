@@ -84,7 +84,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['admin_login', 'cancelOrder', 'orderType'], () => import('../routes/Order/CancelOrder'))
     },
     '/admin/cont/order/orderStatistical': {
-      component: dynamicWrapper(app, ['admin_login', 'cancelOrder', 'orderType'], () => import('../routes/Order/OrderStatistical'))
+      component: dynamicWrapper(app, ['admin_login', 'orderCount'], () => import('../routes/Order/OrderStatistical'))
     },
     '/admin/cont/orderSetting/jisong': {
       component: dynamicWrapper(app, ['admin_login'], () => import('../routes/OrderSetting/Tongcheng'))
@@ -99,16 +99,19 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['admin_login', 'customer'], ()=>import('../routes/Staff/Cus'))
     },
     '/admin/cont/people/courier': {
-      component: dynamicWrapper(app, ['courier','admin_login'], ()=>import('../routes/Staff/Courier'))
+      component: dynamicWrapper(app, ['courier','admin_login','couOrderNum'], ()=>import('../routes/Staff/Courier'))
     },
     '/admin/cont/people/addCourier': {
       component: dynamicWrapper(app, ['admin_login'], ()=>import('../routes/Staff/AddCourier'))
     },
     '/admin/cont/people/dealer': {
-      component: dynamicWrapper(app, ['dealer','admin_login'], ()=>import('../routes/Staff/Dealer'))
+      component: dynamicWrapper(app, ['dealer','admin_login', 'dealerOrderCount'], ()=>import('../routes/Staff/Dealer'))
     },
     '/admin/cont/people/addDealer': {
       component: dynamicWrapper(app, ['admin_login'], ()=>import('../routes/Staff/AddDealer'))
+    },
+    '/admin/cont/people/couPos': {
+      component: dynamicWrapper(app, ['admin_login', 'courierPos'], ()=>import('../routes/Staff/CouPos'))
     },
     '/admin/cont/rate/orderRate': {
       component: dynamicWrapper(app, ['admin_login', 'adminRate', 'orderType'], ()=>import('../routes/Rate/OrderRate'))
@@ -151,7 +154,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, [], () => import('../client/Reg')),
     },
     '/clientUser/forgetPsw': {
-      component: dynamicWrapper(app, [], () => import('../client/ForgetPsw')),
+      component: dynamicWrapper(app, ['client_login'], () => import('../client/ForgetPsw')),
     },
     '/cont': {
       component: dynamicWrapper(app, ['client_login', 'socketMsg','CusNoPay'], () => import('../client/Cont')),
@@ -159,7 +162,7 @@ export const getRouterData = (app) => {
     '/cont/noConfirm': {
       component: dynamicWrapper(app, ['client_login', 'socketMsg','clientNoConfirm', 'orderType'], () => import('../client/Order/NoConfirm')),
     },
-    '/cont/nopay': {
+    '/cont/nopay/:openid': {
       component: dynamicWrapper(app, ['client_login','CusNoPay', 'orderType', 'socketMsg'], () => import('../client/NoPay')),
     },
     '/cont/ongoing': {
@@ -266,9 +269,9 @@ export const getRouterData = (app) => {
     '/driverElseCont/moneyRecord': {
       component: dynamicWrapper(app, ['driver_login', 'couMoneyRecord'], () => import('../driver/MoneyRecord')),
     },
-    // '/driverElseCont/moneyCount': {
-    //   component: dynamicWrapper(app, ['driver_login', 'couMoneyRecord'], () => import('../driver/MoneyCount ')),
-    // },
+    '/driverElseCont/moneyCount': {
+      component: dynamicWrapper(app, ['driver_login', 'couOrderNum'], () => import('../driver/MoneyCount')),
+    },
   };
   // Get name from ./menu.js or just set it in the router data.
   const menuData = getFlatMenuData(getMenuData());

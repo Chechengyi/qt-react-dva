@@ -48,29 +48,31 @@ export default class Cont extends PureComponent {
   // 连接socket
   getSocket = async ()=> {
     let self = this
-
     if ( !window.cusWS ) {
-      try {
-        window.cusWS = await openSocket('ws://localhost:8080/wschat')
-      } catch (e) {
-        return
-      }
+      setTimeout( async ()=>{
+        try {
+          window.cusWS = await openSocket('ws://localhost:8080/wschat')
+          setTimeout( ()=>{
+            window.cusWS.onmessage = e=> {
+              console.log('接收')
+              let obj = JSON.parse(e.data)
+              console.log(obj)
+              if (!obj.fromId||obj.toId!==this.props.login.admin_id ) return
+              this.props.dispatch({
+                type: 'socketMsg/setMsg',
+                payload: {
+                  toUserId: obj.fromId,
+                  msg: obj
+                }
+              })
+            }
+          }, 1000)
+        } catch (e) {
+          return
+        }
+      }, 2000)
     } else {
       return
-    }
-
-    window.cusWS.onmessage = e=> {
-      console.log('接收')
-      let obj = JSON.parse(e.data)
-      console.log(obj)
-      if (!obj.fromId||!obj.toId) return
-      this.props.dispatch({
-        type: 'socketMsg/setMsg',
-        payload: {
-          toUserId: obj.fromId,
-          msg: obj
-        }
-      })
     }
   }
 

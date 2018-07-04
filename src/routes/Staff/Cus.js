@@ -82,7 +82,7 @@ export default class Cai extends PureComponent {
         type: 'customer/getData',
         payload: {
           pageNo: 1,
-          pageSize: 10,
+          pageSize: this.state.pageSize,
           ...fieldsValue
         }
       })
@@ -134,13 +134,13 @@ export default class Cai extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={6} sm={10} >
-            <FormItem label="地址">
-              {getFieldDecorator('address')(
-                <Input placeholder="输入用户地址查询" />
-              )}
-            </FormItem>
-          </Col>
+          {/*<Col md={6} sm={10} >*/}
+            {/*<FormItem label="地址">*/}
+              {/*{getFieldDecorator('address')(*/}
+                {/*<Input placeholder="输入用户地址查询" />*/}
+              {/*)}*/}
+            {/*</FormItem>*/}
+          {/*</Col>*/}
           <Col md={5} sm={10} >
             <FormItem label="激活／未激活">
               {getFieldDecorator('is_active')(

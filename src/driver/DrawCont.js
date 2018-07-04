@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { Flex, Switch, WingBlank, WhiteSpace, List, Modal } from 'antd-mobile'
 import { connect } from 'dva'
 import { throttle } from '../services/utils'
@@ -19,7 +19,7 @@ let timer = null
   driver_name: state.driver_login.driver_name,
   isWork: state.driver_login.isWork
 }))
-export default class DrawCont extends PureComponent {
+export default class DrawCont extends Component{
 
   constructor(props) {
     super(props)
@@ -29,11 +29,15 @@ export default class DrawCont extends PureComponent {
   }
 
   componentDidMount(){
+    console.log('...')
+    console.log(this.props.driver_id)
     // this.noWork()
-    if ( this.props.isWork ) {
-      this.work()
-    } else {
-      this.noWork()
+    if ( this.props.driver_id ) {
+      if ( this.props.isWork ) {
+        this.work()
+      } else {
+        this.noWork()
+      }
     }
   }
 
@@ -74,6 +78,7 @@ export default class DrawCont extends PureComponent {
   }
   //  上班
   work = async () => {
+
     let self = this
     mapObj = new AMap.Map('iCenter');
     mapObj.plugin('AMap.Geolocation', function () {
@@ -92,7 +97,7 @@ export default class DrawCont extends PureComponent {
       });
       mapObj.addControl(geolocation);
       geolocation.getCurrentPosition()
-      AMap.event.addListener(geolocation, 'complete', throttle(self.senPos,4000, self))
+      AMap.event.addListener(geolocation, 'complete', throttle(self.senPos,60000, self))
       AMap.event.addListener(geolocation, 'error', (err) => {console.log(err)});      //返回定位出错信息
     });
   }
@@ -103,8 +108,10 @@ export default class DrawCont extends PureComponent {
     }
     console.log(e)
   }
-  // 发送位置为后台
+  // 发送位置给后台
   senPos = (e) => {
+    console.log('...')
+    console.log(this.props.driver_id)
     if (this.props.isWork){
       geolocation.getCurrentPosition()
       console.log(e.position.lng)
@@ -116,7 +123,7 @@ export default class DrawCont extends PureComponent {
       })
         .then( res=>{
 
-        } )
+        })
     } else {
       console.log('已经下班了')
     }

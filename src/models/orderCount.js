@@ -1,32 +1,22 @@
 /*
-* 快递员提现记录
+* 平台所有订单数据的报表
 * */
 
-import { driverGetMoneyRecord } from '../services/api'
+import { getDealerOrderCount } from '../services/api'
 
 export default {
-  namespace: 'couMoneyRecord',
+  namespace: 'orderCount',
   state: {
     loading: false,
     data: []
   },
   effects: {
-    *refresh({payload}, {call, put}){
-      const res = yield call( driverGetMoneyRecord, payload )
-      if (res.data) {
-        yield put({
-          type: 'saveData',
-          payload: res.data
-        })
-      }
-    },
     *getData({payload}, {call, put}){
       yield put({
         type: 'changeLoading',
         payload: true
       })
-      const res = yield call( driverGetMoneyRecord, payload )
-      console.log(res.data)
+      const res = yield call( getDealerOrderCount, payload )
       if (res.data) {
         yield put({
           type: 'saveData',
@@ -40,13 +30,13 @@ export default {
     }
   },
   reducers: {
-    saveData( state, {payload} ){
+    saveData(state, {payload}){
       return {
         ...state,
         data: payload
       }
     },
-    changeLoading( state, {payload} ){
+    changeLoading(state, {payload}){
       return {
         ...state,
         loading: payload

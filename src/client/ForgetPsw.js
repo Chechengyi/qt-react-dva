@@ -1,12 +1,14 @@
 import React, { PureComponent } from 'react'
 import { NavBar, Icon, List, InputItem,
-  WingBlank, Flex, Button, WhiteSpace,
+  WingBlank, Flex, Button, WhiteSpace, Modal,
   Toast
 } from 'antd-mobile'
 import { clientForgetPsw, getCode } from '../services/api'
 import { createForm } from 'rc-form';
+import { connect } from 'dva'
 
 @createForm()
+@connect()
 export default class Reg extends PureComponent {
 
   constructor(props){
@@ -92,8 +94,18 @@ export default class Reg extends PureComponent {
         this.setState({
           loading: false
         })
-        if (res.status==="OK") {
-          Toast.success('修改成功！', 1)
+        if (res.status=="OK") {
+          // Toast.success('修改成功！', 1)
+          Modal.alert('修改密码成功', '请重新登录', [{
+            text: '确认',
+            onPress: ()=> {
+              // 密码修改成功就要重新登录
+              this.props.dispatch({
+                type: 'client_login/logout'
+              })
+              this.props.history.replace('/clientUser/login')
+            }
+          }])
         } else if (res.status==="REPEAT") {
           Toast.fail('电话已经注册，请直接登录', 1)
         } else {

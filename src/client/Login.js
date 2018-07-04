@@ -27,13 +27,16 @@ export default class Login extends PureComponent {
       Toast.fail('用户名或密码不能为空', 1)
       return
     }
-    this.props.dispatch({
-      type: 'client_login/login',
-      payload: {
-        account: username,
-        password
-      }
-    })
+    // 设置一个200毫秒的延时， 让键盘有足够的失去焦点的时间
+    setTimeout( ()=>{
+      this.props.dispatch({
+        type: 'client_login/login',
+        payload: {
+          account: username,
+          password
+        }
+      })
+    }, 200)
   }
 
   render () {

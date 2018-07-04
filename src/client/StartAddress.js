@@ -16,7 +16,7 @@ import { createForm } from 'rc-form'
   client_name: state.client_login.client_name,
   client_tel: state.client_login.client_tel,
   adminId: state.orderAddress.adminId
-}) )
+}))
 @createForm()
 export default class StartAddress extends Component {
 
@@ -56,17 +56,20 @@ export default class StartAddress extends Component {
     }])
   }
   submit=()=>{
-    // let {tel, receiverName, address} = this.props.form.getFieldsValue()  // 用户填写的电话和寄件人姓名
-    let { address } = this.props.form.getFieldsValue()
-
+    let {tel, receiverName, address} = this.props.form.getFieldsValue()  // 用户填写的电话和寄件人姓名
+    tel = tel.replace(/\s+/g,"")
     // 无论是哪类型的订单， 下面的信息不能少
-    if ( Object.keys(this.props.startPoint).length==0 ) {  // ||!tel||!receiverName
+    if ( Object.keys(this.props.startPoint).length==0 ||!tel||!receiverName ) {  // ||!tel||!receiverName
       this.renderModal('请将信息完善后在提交')
       return
     }
     // 设置下单地点的详细地址， 代购订单里就是收获地址， 此字段不能为空
     if (/^[\s]*$/.test(address) || !address ) {
-      this.renderModal('寄货地址信息不能为空')
+      if (this.typeId==2) {
+        this.renderModal('收货地址信息不能为空')
+      } else {
+        this.renderModal('寄货地址信息不能为空')
+      }
       return
     }
     if (!this.props.adminId) {
@@ -76,8 +79,8 @@ export default class StartAddress extends Component {
     this.props.dispatch({
       type: 'orderAddress/setStartMsg',
       payload: {
-        tel: this.props.client_tel,
-        receiverName: this.props.client_name
+        tel,
+        receiverName
       }
     })
     // 设置下单地点的详细地址， 代购订单里就是收获地址， 此字段不能为空
@@ -173,9 +176,9 @@ export default class StartAddress extends Component {
         icon={<Icon type='left' ></Icon>}
         onLeftClick={ this.handleLink }
       >
-        起始位置(快递员上门位置)
+        {this.typeId==2?'收货地址':'起始位置(快递员上门位置)'}
       </NavBar>
-      <List renderHeader={ ()=>'第一步：选择地理行政区域' } >
+      <List renderHeader={ ()=>'选择地理行政区域' } >
         <Picker
           ref='picker'
           cols={4}
@@ -187,7 +190,7 @@ export default class StartAddress extends Component {
           <List.Item>选择区域</List.Item>
         </Picker>
       </List>
-      <List renderHeader={ ()=>'第二步：选择我的准确地址' } >
+      <List renderHeader={ ()=>'选择我的准确地址' } >
         <div style={{display: this.props.startPoint.address?'none':'block',
                      padding: 10, textAlign: 'center'
         }} >
@@ -205,21 +208,21 @@ export default class StartAddress extends Component {
           </div>
         </div>
       </List>
-      <List renderHeader={ ()=>'第三步：完善基本信息' } >
-        {/*<InputItem*/}
-          {/*placeholder='请输入联系电话'*/}
-          {/*{...getFieldProps('tel', {*/}
-            {/*initialValue: this.toTeltype(this.props.client_tel)*/}
-          {/*})}*/}
-          {/*// defaultValue={this.props.startMsg.tel}*/}
-          {/*type='phone' >联系电话</InputItem>*/}
-        {/*<InputItem*/}
-          {/*placeholder='请输入姓名'*/}
-          {/*{...getFieldProps('receiverName', {*/}
-            {/*initialValue: this.props.client_name*/}
-          {/*})}*/}
-          {/*defaultValue={this.props.startMsg.receiverName}*/}
-        {/*>姓名</InputItem>*/}
+      <List renderHeader={ ()=>'完善基本信息' } >
+        <InputItem
+          placeholder='请输入联系电话'
+          {...getFieldProps('tel', {
+            initialValue: this.toTeltype(this.props.client_tel)
+          })}
+          // defaultValue={this.props.startMsg.tel}
+          type='phone' >联系电话</InputItem>
+        <InputItem
+          placeholder='请输入姓名'
+          {...getFieldProps('receiverName', {
+            initialValue: this.props.client_name
+          })}
+          // defaultValue={this.props.startMsg.receiverName}
+        >姓名</InputItem>
         {/*{this.typeId==3||this.typeId==1?<TextareaItem*/}
           {/*{...getFieldProps('address', {*/}
             {/*initialValue: this.props.startAddress*/}
@@ -233,7 +236,7 @@ export default class StartAddress extends Component {
           })}
           count={50}
           clear rows={3}
-          title='寄件地址' />
+          title={this.typeId==2?'收货地址':'寄件地址'} />
       </List>
       <WhiteSpace />
       <WingBlank>

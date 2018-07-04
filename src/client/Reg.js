@@ -95,6 +95,7 @@ export default class Reg extends PureComponent {
         })
         if (res.status==="OK") {
           Toast.success('注册成功！', 1)
+          this.props.history.replace('/clientUser/login')
         } else if (res.status==="REPEAT") {
           Toast.fail('电话已经注册，请直接登录', 1)
         } else {

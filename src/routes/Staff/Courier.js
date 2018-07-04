@@ -21,7 +21,8 @@ export default class Cai extends PureComponent {
     formValues: {},
     pageNo: 1,
     pageSize: 10,
-    delete_key: []
+    delete_key: [],
+    isModal: false
   };
 
   componentDidMount() {

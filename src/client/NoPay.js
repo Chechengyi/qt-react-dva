@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { NavBar, Icon, ListView, PullToRefresh, ActivityIndicator } from 'antd-mobile'
 import { connect } from 'dva'
 import NoPayItem from './NoPayItem'
+import loginHoc from '../Hoc/LoginHoc'
+import {Toast} from "antd-mobile/lib/index";
 
 function MyBody(props) {
   return (
@@ -16,7 +18,16 @@ function MyBody(props) {
   loading: state.CusNoPay.loading,
   client_id: state.client_login.client_id,
   orderType: state.orderType.data,
+  client_status: state.client_login.client_status
 }))
+@loginHoc({
+  redirectPath: '/#/clientUser/login',
+  propsSelector: props=>props.client_status == 'OK',
+  redirectBefore: ()=> {
+    Toast.fail('需要登录才能进行此操作，请先登录', 1.5)
+  },
+  // redirectBeforeTime: 1000
+})
 export default class NoPay extends Component {
 
   constructor(props){
@@ -33,6 +44,7 @@ export default class NoPay extends Component {
       data: [],
       isOver: false
     }
+    this.openid = this.props.match.params.openid
   }
 
   componentWillReceiveProps(nextProps){
@@ -79,7 +91,7 @@ export default class NoPay extends Component {
     this.props.dispatch({
       type: 'CusNoPay/getData',
       payload: {
-        couId: this.props.driver_id,
+        cusId: this.props.client_id,
         pageNo: this.state.pageNo + 1 ,
         pageSize: this.state.pageSize,
         refreshing: false,
@@ -101,7 +113,7 @@ export default class NoPay extends Component {
     this.props.dispatch({
       type: 'CusNoPay/refresh',
       payload: {
-        couId: this.props.driver_id,
+        cusId: this.props.client_id,
         pageNo: 1,
         pageSize: 20
       }
@@ -110,7 +122,9 @@ export default class NoPay extends Component {
 
   render(){
     const row = (item)=>(
-      <NoPayItem dispatch={this.props.dispatch}
+      <NoPayItem
+        history={this.props.history}
+        openid={this.openid} dispatch={this.props.dispatch}
                  orderType={this.props.orderType} data={item} />
     )
     return <div>

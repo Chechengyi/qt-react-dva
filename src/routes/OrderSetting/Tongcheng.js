@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Form, Input, Button, message } from 'antd'
-import { adminGetOrderTypePrice } from '../../services/api'
+import { adminGetOrderTypePrice, adminPutOrderTypePrice } from '../../services/api'
 
 const FormItem = Form.Item
 
@@ -44,7 +44,7 @@ export default class Tongcheng extends Component {
           this.setState({
             loading: false
           })
-          if (res.statu=='OK') {
+          if (res.status=='OK') {
             message.success('修改成功', 1)
           }
         })

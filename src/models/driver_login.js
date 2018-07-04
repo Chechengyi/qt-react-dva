@@ -7,7 +7,8 @@ export default {
   state: {
     driver_id: store.get('driverData')?store.get('driverData').driver_id:null,
     // isWork: false,   //是否上班,
-    isWork: window.sessionStorage.getItem('driverWork')=='work'?true:false,
+    // isWork: window.sessionStorage.getItem('driverWork')=='work'?true:false,
+    isWork: store.get('driverWork'),
     // workLoading: false
     driver_status: store.get('driverData')?store.get('driverData').driver_status:null,
     driver_name: store.get('driverData')?store.get('driverData').driver_name:null,
@@ -46,6 +47,7 @@ export default {
     },
     // 退出登录
     *logout ( {payload}, {call,put} ) {
+      console.log('退出登录执行了')
       yield put({
         type: 'changeLoading',
         payload: true
@@ -55,6 +57,7 @@ export default {
       if (res.status=='OK') {
         // 清除状态缓存
         store.remove('driverData')
+        store.remove('driverWork')
         // 将redux状态重置为未登录
         yield put({
           type: 'saveLogin',
@@ -79,7 +82,7 @@ export default {
       const res = yield call(driverLogin, payload)
       console.log(res)
       if ( res.status === "OK" ) {
-        store.set('driverData', {
+        yield store.set('driverData', {
           driver_id: res.data.id,
           driver_status: res.status,
           driver_name: res.data.username // 接口文档待验证
@@ -111,14 +114,16 @@ export default {
         type: 'saveWork',
         payload: true
       })
-      window.sessionStorage.setItem('driverWork', 'work')
+      // window.sessionStorage.setItem('driverWork', 'work')
+      store.set('driverWork', 'work')
     },
     *noWork ( {payload}, {call, put} ) {
       yield put({
         type: 'saveWork',
         payload: false
       })
-      window.sessionStorage.setItem('driverWork', 'noWork')
+      // window.sessionStorage.setItem('driverWork', 'noWork')
+      store.remove('driverWork')
     }
   },
   reducers: {
@@ -137,9 +142,11 @@ export default {
       }
     },
     saveLogin ( state, {payload} ) {
+      console.log('执行了')
+      console.log(payload.driver_id)
       return {
         ...state,
-        dirver_id: payload.driver_id,
+        driver_id: payload.driver_id,
         driver_name: payload.driver_name,
         driver_status: payload.driver_status
       }

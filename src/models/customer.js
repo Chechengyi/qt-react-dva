@@ -4,7 +4,8 @@ export default {
   namespace: 'customer',
   state: {
     data: [],
-    loading: false
+    loading: false,
+    total: 0
   },
   effects: {
     *getData({payload}, {call,put}){
@@ -17,6 +18,10 @@ export default {
         yield put({
           type: 'saveData',
           payload: res.data.content
+        })
+        yield put({
+          type: 'saveTotal',
+          payload: res.data.totalElements
         })
       } else {
         yield put({
@@ -37,10 +42,16 @@ export default {
         data: payload
       }
     },
-    changeLoading(state, {paylaod}){
+    changeLoading(state, {payload}){
       return {
         ...state,
-        loading: paylaod
+        loading: payload
+      }
+    },
+    saveTotal(state, {payload}){
+      return {
+        ...state,
+        total: payload
       }
     }
   }

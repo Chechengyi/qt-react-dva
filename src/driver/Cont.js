@@ -6,11 +6,22 @@ import styles from './Cont.less'
 import DrawCont from './DrawCont'
 import { getRoutes } from '../utils/utils'
 import Iscroll from 'iscroll/build/iscroll'
+import loginHoc from '../Hoc/LoginHoc'
+import {Toast} from "antd-mobile/lib/index";
 
 @connect( state=>({
+  driver_status: state.driver_login.driver_status,
   driver_id: state.driver_login.driver_id,
   count: state.courierNoAccept.count
-}) )
+}))
+@loginHoc({
+  redirectPath: '/#/driverLogin',
+  propsSelector: props=>props.driver_status == 'OK',
+  redirectBefore: ()=> {
+    Toast.fail('需要登录才能进行此操作，请先登录', 1.5)
+  },
+  // redirectBeforeTime: 1000
+})
 export default class Cont extends PureComponent {
 
   constructor(props){
@@ -29,7 +40,20 @@ export default class Cont extends PureComponent {
     })
   }
 
+  componentWillMount(){
+    // 登录验证， 没有登录的话进入登录页面重新登录
+    if (!this.props.driver_id) {
+      this.props.history.replace('/driverLogin')
+    }
+  }
+
   componentDidMount(){
+
+    // 登录验证， 没有登录的话进入登录页面重新登录
+    // if (!this.props.driver_id) {
+    //   this.props.history.replace('/driverLogin')
+    // }
+
     // this.refs.driverRoot.addEventListener('touchmove',function (e) {
     //   e.preventDefault()
     //   // e.stopPropagation()
@@ -82,7 +106,7 @@ export default class Cont extends PureComponent {
 
   render () {
     const sidebar = (
-      <DrawCont />
+      <DrawCont history={this.props.history} />
     )
     const {routerData, match} = this.props
     return <div ref='driverRoot' >

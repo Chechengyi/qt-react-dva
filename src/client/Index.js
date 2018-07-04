@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { Drawer, Flex, ActivityIndicator, Modal } from 'antd-mobile'
 import DrawCont from './DrawCont'
 import { connect } from 'dva'
@@ -16,7 +16,7 @@ let mapObj = null
   count: state.CusNoPay.count,
   client_id: state.client_login.client_id
 }))
-export default class Index extends PureComponent {
+export default class Index extends Component {
 
   constructor(props){
     super(props)
@@ -28,6 +28,8 @@ export default class Index extends PureComponent {
       selectOrderTypeId: 1
     }
   }
+
+
 
   componentDidMount () {
     this.props.selectedTab('index')
@@ -175,7 +177,10 @@ export default class Index extends PureComponent {
         ) }
         // rightContent={()=>(<img onClick={ ()=>{ this.props.history.push('/clientChat/1') } } style={{width: 20, height: 20}} src="/wechat1.png" alt=""/>
         // )}
-        rightContent={()=>(<img onClick={ ()=>{ this.props.history.push('/cont/ChatObjList') } } style={{width: 20, height: 20}} src="/wechat1.png" alt=""/>
+        rightContent={()=>(
+          <img
+            onClick={ ()=>{ this.props.history.push('/cont/ChatObjList') } }
+               style={{width: 20, height: 20}} src="/wechat1.png" alt=""/>
         )}
         navBarStyle={{
           height: 35,
@@ -206,7 +211,8 @@ export default class Index extends PureComponent {
             position: 'absolute', backgroundColor: '#fff',
             width: 300, left: document.documentElement.clientWidth/2-150,
             top: 60, padding: '0 20px', lineHeight: '80px',
-            height: 80, zIndex: 1, borderRadius: 4
+            height: 80, zIndex: 1, borderRadius: 4,
+            fontSize: '1.2em'
           }} onTouchMove={ e=>e.preventDefault() } >
             {this.props.orderData.map( (item,i)=>(
               <div key={i} onClick={ ()=>this.handleRadio(item.id)}  >
@@ -240,3 +246,5 @@ export default class Index extends PureComponent {
     </div>
   }
 }
+
+

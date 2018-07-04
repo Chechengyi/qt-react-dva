@@ -13,6 +13,7 @@ import styles from './Chat.less'
 export default class Index extends Component {
 
   componentDidMount(){
+
     if (Object.keys(this.props.userList).length===0) {
       this.props.dispatch({
         type: 'socketMsg/setUserList',

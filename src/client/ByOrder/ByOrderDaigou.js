@@ -74,7 +74,7 @@ export default class ByOrderDaigou extends Component {
     // 首先判断 物品距离，重量等信息是否为空 不为空才能发送请求
     const {weight} = this.props.form.getFieldsValue()
     // 如果已经估过价， 返回， 不在继续估价
-    if (this.state.expectedFee) return
+    // if (this.state.expectedFee) return
 
     if ( !weight||!this.distance ) return
     console.log('执行了估价操作')
@@ -97,13 +97,17 @@ export default class ByOrderDaigou extends Component {
   }
 
   /*
-  * 代购订单与物流订单不同， 客户填写的终点位置即使购买商品的位置，
-  * 客户填写的起始位置即是 快递员送货位置即客户所在的位置
-  * @this.props.startPoint 客户下单位置， 用作数据库中的endPos类字段
-  * @this.props.startMsg 下单人的信息， 用作数据库中的 收件人信息字段
-  * @this.props.endPoint 购买商品的位置， 用作数据库中取货位置的信息
+  * 代购订单与物流订单不同， 客户填写的终点位置即使购买商品的位置
   * */
-  submit= e=> {
+  submit= async e=> {
+    if (!this.props.client_id) {
+      Modal.alert('下单请先登录！','',[{
+        text: '确定', onPress: ()=>{
+          this.props.history.replace('/clientUser/login')
+        }
+      }])
+      return
+    }
     if (this.state.loading) return
     this.setState({
       loading: true
@@ -124,7 +128,7 @@ export default class ByOrderDaigou extends Component {
       return
       }
 
-    Modal.alert(`订单预算费用为 ${this.state.expectedFee}元`,'确认提交订单？', [{
+    Modal.alert(`订单预算费用为 ${this.state.expectedFee.toFixed(2)}元`,'确认提交订单？', [{
       text: '取消', onPress: ()=>{}
     }, {
       text: '确认', onPress: ()=> {
@@ -136,10 +140,13 @@ export default class ByOrderDaigou extends Component {
           weight: parseFloat(weight),
           comment,   //客户填写的订单备注
           distance: this.distance,
-          receiverName: startMsg.receiverName,
-          receiverTel: this.props.client_tel,
+          senderName: startMsg.receiverName,
+          // senderTel: this.props.client_tel,
+          senderTel: startMsg.tel,
           endLongitude: startPoint.lnt,
           endLatitude: startPoint.lat,
+          receiverName: startMsg.receiverName,
+          receiverTel: startMsg.receiverTel,
           cusLongitude: endPoint.lnt,
           cusLatitude: endPoint.lat,
           receiverAddr: startAddress,
@@ -256,7 +263,7 @@ export default class ByOrderDaigou extends Component {
             <div>
               <div style={{color: '#888', marginTop: 13}} >订单预算费用</div>
               <div style={{textAlign: 'center', padding: '5px'}} >
-                <span>{this.state.expectedFee} 元</span>
+                <span>{this.state.expectedFee.toFixed(2)} 元</span>
               </div>
             </div>
           }

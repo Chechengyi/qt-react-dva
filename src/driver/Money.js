@@ -214,7 +214,7 @@ export default class Money extends PureComponent {
            <ListItem
              arrow="horizontal"
              onClick={ ()=>this.props.history.push('/driverElseCont/moneyCount') }
-           >我的收益</ListItem>
+           >统计</ListItem>
          </List>
       </div>
     </div>

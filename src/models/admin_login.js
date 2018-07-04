@@ -7,7 +7,7 @@ export default {
   state: {
     // 管理员的角色id
     roleId: window.sessionStorage.getItem('roleId')||null,
-    admin_id: window.sessionStorage.getItem('admin_id')||null,
+    admin_id: window.sessionStorage.getItem('admin_id')||'ccc',
     admin_name: window.sessionStorage.getItem('admin_name')||null,
     admin_status: window.sessionStorage.getItem('admin_status')||null,
     loading: false

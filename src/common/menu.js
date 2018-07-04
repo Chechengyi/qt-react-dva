@@ -29,6 +29,10 @@ const menuData = [
       {
         name: '快递员管理',
         path: 'courier'
+      },
+      {
+        name: '查看快递员位置',
+        path: 'couPos'
       }
     ]
   },

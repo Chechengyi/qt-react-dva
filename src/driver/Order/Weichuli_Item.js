@@ -84,8 +84,17 @@ export default class Weichuli_Item extends Component {
     const {data} = this.props
     return <ListItem style={{display: this.state.isCancel?'none':''}} >
       <div>订单类型：{this.renderOrderType(data.typeId)}</div>
+      {/*<div>*/}
+        {/*<span style={{color: '#888', fontSize: '15px', lineHeight: 1.5}} ></span>*/}
+      {/*</div>*/}
       <div>
-        <span style={{color: '#888', fontSize: '15px', lineHeight: 1.5}} ></span>
+        客户姓名：{data.senderName}
+      </div>
+      <div>
+        联系电话：
+        <a href={`tel:${data.senderTel}`}><img
+          style={{width: 25, height: 25}}
+          src="/tel.png" alt=""/>{data.senderTel}</a>
       </div>
       <div style={{fontSize: 15, marginTop: 5, textAlign: 'right'}} >
         <a onClick={ ()=>{ this.handleChoose(data.id) } } style={{marginRight: 10}} >确认处理</a>

@@ -90,15 +90,26 @@ export default class Peisongzhong_Item extends Component {
       padding: '10px 7px', margin: '8px 10px', borderRadius: 3,
       backgroundColor: '#fff'
     }}>
-      <Flex warp='wrap' style={{marginBottom: 3}}>
-        <FlexItem style={{flex: 8}}>
-          <span style={{fontSize: '1.1em', fontWeight: 500}}>订单编号: {data.ono}</span>
-        </FlexItem>
-        <FlexItem style={{flex: 5, textAlign: 'right'}}>
-          <span style={{fontSize: '1.1em', fontWeight: 500}}>{this.renderOrderType(data.typeId)}</span>
-        </FlexItem>
+      <Flex>
+        订单编号：{data.ono}
       </Flex>
-      {this.renderPlace(data.typeId, data)}
+      <Flex>
+        订单类型：{this.renderOrderType(data.typeId)}
+      </Flex>
+      <Flex>
+        <FlexItem>收件人姓名：{data.senderName}</FlexItem>
+        <FlexItem>电话: {data.senderTel}</FlexItem>
+        {/*<FlexItem>收件地址:{data.receiverAddr}</FlexItem>*/}
+      </Flex>
+      <Flex>
+        收件地址：{data.receiverAddr}
+      </Flex>
+      <Flex justify='center' >
+        <a href={`http://uri.amap.com/marker?position=${data.cusLongitude},${data.cusLatitude}`}>
+          <img src="/1.png"/>
+          导航到客户处
+        </a>
+      </Flex>
       <Flex justify='center'>
         <button onClick={ ()=>this.done(data.id) } style={buttonStyle} >确认送达订单</button>
       </Flex>

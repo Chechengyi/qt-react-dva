@@ -23,7 +23,7 @@ export default class UpdateMsg extends Component {
 
   componentDidMount(){
     getDealer({
-      id: this.props.admin_id,
+      adminId: this.props.admin_id,
       roleId: 0,
       pageNo: 1,
       pageSize: 10

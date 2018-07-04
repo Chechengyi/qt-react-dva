@@ -160,26 +160,13 @@ export default class FrontDesk_table extends  PureComponent {
       },
       {
         title: '客户姓名',
-        dataIndex: 'username',
+        dataIndex: 'senderName',
         width: 100,
-        render: (val, text, index)=>(
-          <div>
-            {text.typeId==2?text.receiverName:text.senderName}
-          </div>
-        )
       },
       {
         title: '联系电话 ',
-        dataIndex: 'tel',
+        dataIndex: 'senderTel',
         width: 150,
-        render: (val, text, index) => {
-          return <div>
-            {text.typeId==2?
-              text.receiverTel:
-              text.senderTel
-            }
-          </div>
-        }
       },
       {
         title: '预计金额',
@@ -199,27 +186,25 @@ export default class FrontDesk_table extends  PureComponent {
         )
       },
       {
-        title: '寄件地址',
+        title: '寄件(购货)地址',
         dataIndex: 'address',
         width: 300,
         render: (val, text, index)=>(
           <div>
             {
-              text.typeId==3||text.typeId==1?text.senderAddress:'商品代购'
+              text.typeId==2?'商品代购':text.senderAddress
             }
           </div>
         )
       },
       {
+        // 快递物流订单下订单的时候只有省code， 考虑联表查出省的名字
         title: '收件地址',
         dataIndex: 'shou',
         width: 300,
         render: (val, text, index)=>(
           <div>
-            {text.typeId==2?
-              text.senderAddress:
-              text.receiverAddr
-            }
+            {text.receiverAddr}
           </div>
         )
       },

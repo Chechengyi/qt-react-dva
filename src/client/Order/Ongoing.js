@@ -3,6 +3,8 @@ import { connect } from 'dva'
 import { NavBar, ListView, PullToRefresh, ActivityIndicator } from 'antd-mobile'
 import RowItem from './NoConfirmItem'
 import { cusGetOngoing } from '../../services/api'
+import loginHoc from '../../Hoc/LoginHoc'
+import {Toast} from "antd-mobile/lib/index";
 
 function MyBody(props) {
   return (
@@ -13,11 +15,20 @@ function MyBody(props) {
 }
 
 @connect( state=>({
+  client_status: state.client_login.client_status,
   client_id: state.client_login.client_id,
   loading: state.clientOngoing.loading,
   data: state.clientOngoing.data,
   orderType: state.orderType.data
-}) )
+}))
+@loginHoc({
+  redirectPath: '/#/clientUser/login',
+  propsSelector: props=>props.client_status == 'OK',
+  redirectBefore: ()=> {
+    Toast.fail('需要登录才能进行此操作，请先登录', 1.5)
+  },
+  // redirectBeforeTime: 1000
+})
 export default class Ongoing extends Component {
 
   constructor(props){

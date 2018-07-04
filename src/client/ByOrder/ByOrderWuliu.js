@@ -35,6 +35,7 @@ export default class ByOrderTongcheng extends Component {
     }
   }
   componentDidMount(){
+    console.log(this.props.client_id)
     let {orderType} = this.props
     // 保存当前订单的提成比例， 供后续订单下单请求时发送给后端
     if ( orderType.length!==0 ) {
@@ -46,7 +47,8 @@ export default class ByOrderTongcheng extends Component {
     }
     window.sessionStorage.setItem('typeId', this.typeId)
     // 每次进入此页面，调用算距离功能函数
-    this.getDistance()
+    // this.getDistance()
+    this.sendGetExpectedFee()
   }
   /*
   *  下单之前验证参数
@@ -64,10 +66,21 @@ export default class ByOrderTongcheng extends Component {
   *  goodsType(寄货商品的类型)
   * */
   submit=()=> {
+    if (!this.props.client_id) {
+      Modal.alert('下单请先登录！','',[{
+        text: '确定', onPress: ()=>{
+           this.props.history.replace('/clientUser/login')
+        }
+      }])
+      return
+    }
     // 从sessionStorage里取出当前订单的提价比例
     const feeRate = window.sessionStorage.getItem('feeRate')
     let {weight, goodsType, comment} = this.props.form.getFieldsValue()
     const {startPoint, endPoint, startMsg, endMsg, client_id, adminId, endAddress, provinceCode, startAddress} = this.props
+
+    // 如果订单预算费用还没有返回 直接return
+    if (!this.state.expectedFee) return
 
     // 检验商品信息是否完善
     if ( !weight || !goodsType ) {
@@ -79,7 +92,7 @@ export default class ByOrderTongcheng extends Component {
 
     //  检验信息是否完善
     if (objIsNull.call(startPoint) ||  // 起点经纬度是否为空
-      objIsNull.call(endPoint) || // 终点经纬度是否为空
+      // objIsNull.call(endPoint) || // 终点经纬度是否为空
       objIsNull.call(startMsg) ||  // 起点寄件人信息是否为空
       objIsNull.call(endMsg)   // 终点收件人信息是否为空
       || !provinceCode
@@ -89,7 +102,9 @@ export default class ByOrderTongcheng extends Component {
       }])
     }
 
-    Modal.alert(`订单预算费用为 ${this.state.expectedFee}元`,'确认提交订单？', [{
+
+
+    Modal.alert(`订单预算费用为 ${this.state.expectedFee.toFixed(2)}元`,'确认提交订单？', [{
       text: '取消', onPress: ()=>{}
     }, {
       text: '确认', onPress: ()=>{
@@ -99,7 +114,7 @@ export default class ByOrderTongcheng extends Component {
           typeId: this.typeId,
           feeRate: parseFloat(feeRate),
           weight: parseFloat(weight),
-          // distance: this.distance,  // 具体以后估算的为准
+          //distance: this.distance,  // 具体以后估算的为准
           receiverName: endMsg.receiverName,
           receiverTel: endMsg.tel,
           receiverAddr: endAddress,
@@ -136,35 +151,21 @@ export default class ByOrderTongcheng extends Component {
     }])
 
   }
-  // 获取起点与终点之间的距离，用于核算运费
-  getDistance= e=> {
-    // 首先判断起点和终点经纬度是否为空
-    if (objIsNull.call(this.props.startPoint) || objIsNull.call(this.props.endPoint) ){
-      return
-    }
-    const {startPoint, endPoint} = this.props
-    let start = new this.AMap.LngLat(startPoint.lnt, startPoint.lat)
-    let end = new this.AMap.LngLat(endPoint.lnt, endPoint.lat)
-    let distance = this.AMap.GeometryUtil.distance(start,end)
-    this.distance = parseFloat((distance/1000).toFixed(2))
-    this.sendGetExpectedFee()
-  }
+
   // 发送获取估算运费请求
   sendGetExpectedFee = e=> {
     // 首先判断 物品距离，重量等信息是否为空 不为空才能发送请求
     const {weight} = this.props.form.getFieldsValue()
-    // 如果已经估过价， 返回， 不在继续估价
-    if (this.state.expectedFee) return
-
-    if ( !weight||!this.distance ) return
+    // 如果省code和重量其中有一个不存在，则返回
+    if (!this.props.provinceCode || !weight ) return
     this.setState({
       feeLoading: true
     })
     getExpectedPrice({
       orderTypeId: this.typeId,
-      distance: this.distance,
       weight,
-      proCode: this.props.provinceCode
+      proCode: this.props.provinceCode,
+      // distance: 0
     })
       .then( res=> {
         this.setState({
@@ -201,7 +202,7 @@ export default class ByOrderTongcheng extends Component {
             thumb={<img style={{width: 30, height: 30}} src="/zhongdian.png" alt=""/>}
             arrow="horizontal"
             onClick={ e=>this.props.history.push('/cont/endAddress') }
-          >收货地址
+          >收件地址
             <Brief>
               { Object.keys(this.props.endMsg).length!==0&&
                 this.props.endAddress && this.props.provinceCode ?
@@ -245,7 +246,7 @@ export default class ByOrderTongcheng extends Component {
             <div>
               <div style={{color: '#888', marginTop: 13}} >订单预算费用</div>
               <div style={{textAlign: 'center', padding: '5px'}} >
-                <span>{this.state.expectedFee} 元</span>
+                <span>{this.state.expectedFee.toFixed(2)} 元</span>
               </div>
             </div>
           }

@@ -1,6 +1,13 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
+
+// 查询经销上的派单总数， 不传adminId的时候查询的是总数
+export async function getDealerOrderCount(params) {
+  return request(`/order/getOrderCount?${stringify(params)}`)
+}
+
+
 // 退出登录  传入参数：singel
 export async function logout(params) {
   return request(`/loginOut?${stringify(params)}`)
@@ -48,7 +55,6 @@ export async function courierIsRepeat(parmas) {
 }
 // 获取订单类型列表
 export async function getOrderType(params) {
-  // return request(`/ceshi/order/getOrderTypes`)
   return request(`/order/getOrderTypes`)
 }
 // 获取省级列表
@@ -230,10 +236,6 @@ export async function adminAccpetCouMoney(params) {
     body: params
   })
 }
-// 管理员获取快递员提款历史请求个数
-export async function adminGetCouMoneyDisCount(params) {
-  return request(`/ceshi/admin/getCouMoneyDisCount?${stringify(params)}`)
-}
 // 管理员获取快递员提款请求历史记录
 export async function adminGetCouMoneyDis(params) {
   return request(`/admin/getCouMoneyDis?${stringify(params)}`)
@@ -390,13 +392,6 @@ export async function cusGetOngoing(params) {
 // 客户获取已经完成的订单
 export async function cusGetDone(params) {
   return request(`/order/getCusDone?${stringify(params)}`)
-}
-// 客户取消订单（只有在管理员分配之前才能取消）
-export async function cusCancelOrder(params) {
-  return request('/ceshi/order/cusCancelOrder', {
-    method: 'POST',
-    body: params
-  })
 }
 // 客户评价订单
 export async function cusRate(params) {

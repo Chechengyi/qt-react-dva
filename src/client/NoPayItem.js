@@ -31,11 +31,14 @@ export default class NoPayItem extends Component {
   }
 
   pay =ono=> {
-    fetch('/wxpay')
+    // console.log(ono)
+    // return
+    fetch(`/weixin/pay?ono=${ono}&openid=${this.props.openid}`)
       .then( res=>{
         return res.json()
       })
       .then( d=>{
+        // alert(d.appId)
         WeixinJSBridge.invoke(
           'getBrandWCPayRequest', {
             "appId":d.appId,     //公众号名称，由商户传入
@@ -54,6 +57,7 @@ export default class NoPayItem extends Component {
                 .then( res=>{
                   if (res.status=='OK') {
                     Toast.success('付款成功', 1)
+                    this.props.history.replace('/cont/ongoing')
                   } else {
                     Toast.fail('付款失败！', 1)
                   }

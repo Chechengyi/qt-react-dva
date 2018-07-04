@@ -1,149 +1,122 @@
 import React, { Component } from 'react'
-import echarts from 'echarts/lib/echarts'
-import 'echarts/lib/chart/pie'
-import 'echarts/lib/component/tooltip'
-import 'echarts/lib/component/toolbox'
-import 'echarts/lib/component/title'
-import 'echarts/lib/component/legend'
-import { Modal, Form, Input, Select, Button } from 'antd'
+import { connect } from 'dva'
+import { Modal, Form, Input, Select, Button, Spin } from 'antd'
+import TimePicker from '../../components/TimePicker/TimePicker'
+import Pie from '../../components/Chart/Pie'
 
 const FormItem = Form.Item
 const Option = Select.Option
 
 @Form.create()
+@connect( state=>({
+  couId: state.couOrderNum.couId,
+  username: state.couOrderNum.couUsername,
+  isModal: state.couOrderNum.isModal,
+  loading: state.couOrderNum.loading,
+  data: state.couOrderNum.data,
+}))
 export default class ModalCouOrderCount extends Component{
 
-  config = {
-
-  }
-
   state = {
-    day: 0,
-    isRunYear: false,
-    year: null
+    couId: 1
   }
 
-  renderOptionMouth =()=> {
-    let Opntios = []
-    for ( var i=0; i<12; i++ ) {
-      Opntios.push(
-        <Option key={i} value={i+1} >{i+1}月</Option>
-      )
+  componentWillReceiveProps(nextProps){
+    // 检测当快递员id
+    if (this.props.couId!==nextProps.couId && nextProps.couId ) {
+      this.loadingData(nextProps.couId)
+      this.setState({
+        couId: nextProps.couId
+      })
     }
-    return Opntios
   }
 
-  // 年份选择改变
-  changeYear =value=> {
-    // 判断年份平年还是闰年
-    var a1=value%4==0
-    var a2=value%100!=0
-    var a3=value%400==0
-    this.setState({
-      isRunYear: (a1&&a2)||a3?true:false, //三目运算符
-      year: value
+  loadingData = couId=> {
+    this.props.dispatch({
+      type: 'couOrderNum/getData',
+      payload: {
+        couId
+      }
     })
   }
-  renderOptionDay =()=> {
-    let Options = []
-    for ( var i=0; i<this.state.day; i++ ) {
-      Options.push(
-        <Option key={i} value={i} >{i+1}号</Option>
-      )
-    }
-    return Options
+
+  reset =()=> {
+    this.props.dispatch({
+      type: 'couOrderNum/getData',
+      payload: {
+        couId: this.props.couId
+      }
+    })
   }
 
-  mouthChange =value=> {
-    console.log(value)
-    // 传入月份后判断天数显示多少天，1～7月 奇数31天 8～12月偶数31天
-    if ( value <= 7 ) {
-      if ( value%2===0 ) { //偶数
-        this.setState({
-          day: 30
-        })
-      } else {
-        this.setState({
-          day: 31
-        })
+  onCancel =()=> {
+    this.props.dispatch({
+      type: 'couOrderNum/changeModal',
+      payload: false
+    })
+    this.props.dispatch({
+      type: 'couOrderNum/changeCouId',
+      payload: {
+        id: null,
+        username: null
       }
-    } else if (value==2) {
-      // 平年2月份只有28天， 闰年有29天
-      this.setState({
-        day: this.state.isRunYear?29:28
-      })
-    } else {
-      if ( value%2===0 ) { //偶数
-        this.setState({
-          day: 31
-        })
-      } else {
-        this.setState({
-          day: 30
-        })
-      }
-    }
+    })
+    this.refs.time.resetTime()
   }
 
-  search =()=>{
-    const {year, month, day} = this.props.form.getFieldsValue(['year', 'month', 'day'])
-    console.log(year, month, day)
+  search =arr=>{
+    this.props.dispatch({
+      type: 'couOrderNum/getData',
+      payload: {
+        couId: this.state.couId,
+        startTime: new Date(arr[0]),
+        endTime: new Date(arr[1])
+      }
+    })
+  }
+
+  // 算出总计多少单
+  sum =()=> {
+    // return this.props.data.reduce( (prev, next)=>(prev[0]+next[0]))
+    let numArr = []
+    numArr = this.props.data.map( item=>item[0])
+    if (numArr.length===0) return 0
+    return numArr.reduce( (prev, next)=>prev+next)
   }
 
   render(){
-    const { getFieldDecorator } = this.props.form
     return (
       <Modal
         width={700}
-        title='快递员送单统计  '
-        visible={true}
+        title={`${this.props.username}  送单统计`}
+        visible={this.props.isModal}
+        onCancel={ this.onCancel }
+        onOk={ this.onCancel }
       >
-        <div>dsad</div>
-        <Form layout="inline">
-          <FormItem label='年' >
-            {getFieldDecorator('year', {})(
-              //<Input style={{width: 100}} />
-              <Select
-                allowClear
-                style={{width: 100}}
-                onChange={this.changeYear}
-              >
-                <Option key={2018} value={2018} >2018年</Option>
-                <Option key={2019} value={2019} >2019年</Option>
-                <Option key={2020} value={2020} >2020年</Option>
-                <Option key={2021} value={2021} >2021年</Option>
-                <Option key={2022} value={2022} >2022年</Option>
-              </Select>
-            )}
-          </FormItem>
-          <FormItem label='月' >
-            {getFieldDecorator('month', {})(
-              <Select
-                disabled={this.state.year?false:true}
-                onChange={this.mouthChange}
-                allowClear
-                style={{width: 100}} >
-                {this.renderOptionMouth()}
-              </Select>
-            )}
-          </FormItem>
-          <FormItem label='日' >
-            {getFieldDecorator('day', {})(
-              <Select
-                disabled={this.state.year?false:true}
-                // onChange={this.renderOptionMouth}
-                allowClear
-                style={{width: 100}} >
-                {this.renderOptionDay()}
-              </Select>
-            )}
-          </FormItem>
-          <FormItem>
-            <Button
-              onClick={ this.search }
-              type='primary' >查询</Button>
-          </FormItem>
-        </Form>
+        <Spin
+          size='large'
+          tip='加载中...'
+          spinning={this.props.loading}
+        >
+          <div>
+            <h3>总计送单: {this.sum()}</h3>
+          </div>
+          <div style={{display: 'flex', justifyContent: 'center'}} >
+            <Pie
+              pieStyle={{
+                width: 400,
+                height: 350
+              }}
+              data={this.props.data} />
+          </div>
+          <div style={{marginTop: 20, display: 'flex', justifyContent: 'center'}} >
+            <TimePicker
+              ref='time'
+              search={this.search}
+              reset={this.reset}
+            />
+          </div>
+        </Spin>
       </Modal>
     )
   }

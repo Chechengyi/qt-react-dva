@@ -16,13 +16,11 @@ export default class Daifukuan_Item extends Component {
   render () {
     const {data} = this.props
     return <div style={{padding: '10px 7px', marginBottom: 8, backgroundColor: '#fff'}} >
-      <Flex warp='wrap' >
-        <FlexItem style={{flex: 6}} >
-          订单编号: {data.ono}
-        </FlexItem>
-        <FlexItem style={{flex: 5}} >
-          订单类型：{this.renderOrderType(data.typeId)}
-        </FlexItem>
+      <Flex>
+        订单编号: {data.ono}
+      </Flex>
+      <Flex>
+        订单类型：{this.renderOrderType(data.typeId)}
       </Flex>
       <Flex>
         <FlexItem >客户姓名：{data.senderName}</FlexItem>
@@ -30,11 +28,14 @@ export default class Daifukuan_Item extends Component {
       </Flex>
       <Flex>
         <FlexItem>客户下单地址：
-          {data.typeId==2?data.receiverAddr:data.senderAddress}</FlexItem>
+          {data.senderAddress}</FlexItem>
       </Flex>
       <Flex>
         <FlexItem>商品类型：{data.goodsType}</FlexItem>
         <FlexItem>实际重量：{data.weight} 公斤</FlexItem>
+      </Flex>
+      <Flex>
+        订单预算价格：{data.fee.toFixed(2)}元
       </Flex>
       <Flex>
         <FlexItem>
@@ -42,7 +43,7 @@ export default class Daifukuan_Item extends Component {
         </FlexItem>
       </Flex>
       <Flex justify='center' style={{marginTop: 5}} >
-        订单实际价格：<span style={{fontSize: '1.1em', color: '#ff6700'}} >{data.actualFee} 元</span>
+        订单实际价格：<span style={{fontSize: '1.1em', color: '#ff6700'}} >{data.actualFee.toFixed(2)} 元</span>
       </Flex>
     </div>
   }

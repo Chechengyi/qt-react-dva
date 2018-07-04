@@ -6,13 +6,13 @@ import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/toolbox'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/legend'
-// import 'echarts/map/js/china'
 import Pie from './Pie'
+import LineCharts from './LineCharts'
 
 export default class OrderStatistical extends Component{
 
   componentDidMount(){
-    this.myChart = echarts.init(this.refs.main);
+    // this.myChart = echarts.init(this.refs.main);
     // 绘制图表
     this.option = {
       title: {
@@ -58,7 +58,7 @@ export default class OrderStatistical extends Component{
         data: [23, 25, 30, 33, 10, 4, 40]
       }]
     }
-    this.myChart.setOption(this.option);
+    // this.myChart.setOption(this.option);
   }
 
   handleClick =()=> {
@@ -69,10 +69,14 @@ export default class OrderStatistical extends Component{
   }
 
   render(){
-    return <div style={{backgroundColor: '#fff', padding: 5}} >
-      <Pie />
-      <div ref='main' style={{width: 550, height: 400}} ></div>
-      <Button type='primary' onClick={this.handleClick} >改变数据</Button>
+    return <div>
+      {/*<Pie />*/}
+      {/*<div ref='main' style={{width: 550, height: 400}} ></div>*/}
+      {/*<Button type='primary' onClick={this.handleClick} >改变数据</Button>*/}
+      <div
+        style={{backgroundColor: '#fff', padding: 20, borderRadius: 10}} >
+        <LineCharts />
+      </div>
     </div>
   }
 }

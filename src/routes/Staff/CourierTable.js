@@ -147,6 +147,20 @@ export default class FrontDesk_table extends  PureComponent {
         })
   }
 
+  seeCouOrderCount =(id, username)=> {
+    this.props.dispatch({
+      type: 'couOrderNum/changeCouId',
+      payload: {
+        id,
+        username
+      }
+    })
+    this.props.dispatch({
+      type: 'couOrderNum/changeModal',
+      payload: true
+    })
+  }
+
   render () {
     const { getFieldDecorator } = this.props.form
     const columns = [
@@ -209,7 +223,9 @@ export default class FrontDesk_table extends  PureComponent {
                 <Popconfirm title="确定重置密码？" onConfirm={ ()=>{ this.resetPsw(val.id) } } >
                   <a style={{marginLeft: '5px'}} >重置密码</a>
                 </Popconfirm>
-                <a style={{marginLeft: 5, color: 'green'}} >送单统计</a>
+                <a
+                  onClick={ ()=>this.seeCouOrderCount(text.id, text.username) }
+                  style={{marginLeft: 5, color: 'green'}} >送单统计</a>
               </div>
             }
           </div>
@@ -231,7 +247,7 @@ export default class FrontDesk_table extends  PureComponent {
     };
 
     return <div>
-      <ModalCount />
+      <ModalCount  />
       <Table
         columns={columns}
         dataSource={this.state.data}

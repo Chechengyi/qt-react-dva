@@ -51,6 +51,7 @@ export default {
       } else {
         res = yield call( cusGetChatObj, {cusId: payload.cusId} )
       }
+      console.log(res.data)
       if (res.data) {
         // 把后台返回的数据转换为期望的数据结构
         let listData = {}

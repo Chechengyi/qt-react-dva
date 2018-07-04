@@ -147,7 +147,7 @@ export default class EndAddress extends PureComponent {
       }
       {
         this.typeId==2?null:
-          <List renderHeader={ ()=>'第二步，完善收货人基本信息' } >
+          <List renderHeader={ ()=>'完善收货人基本信息' } >
             <InputItem
               {...getFieldProps('tel', {
                 initialValue: this.props.endMsg.tel

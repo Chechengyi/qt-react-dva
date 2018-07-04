@@ -55,57 +55,41 @@ export default class Daiqueren_Item extends Component {
 
   render(){
     const {data} = this.props
-    if ( data.typeId==2 ) { //代购服务
-      return <div style={{padding: '10px 7px', marginBottom: 8, backgroundColor: '#fff7f4'}} >
-        <Flex>订单编号：{data.ono}</Flex>
-        <Flex>订单类型：{this.renderOrderType(data.typeId)}</Flex>
-        <Flex>
-          <FlexItem>
-            客户姓名：{data.receiverName}
-          </FlexItem>
-          <FlexItem>
-            电话: {data.receiverTel}
-          </FlexItem>
-        </Flex>
-        <Flex>
-          {data.createTime}
-          {/*下单时间：{new Date(data.createTime).toLocaleString()}*/}
-        </Flex>
-        {this.renderOrderPlace(data.typeId, data)}
-        <Flex style={{justifyContent: 'center', marginTop: 10}} >
+    return (
+      <div style={{backgroundColor: '#fff', padding: 5, marginBottom: 5}} >
+        <div>
+          订单编号：{data.ono}
+        </div>
+        <div>
+          订单类型：{this.renderOrderType(data.typeId)}
+        </div>
+        <div>
+          客户姓名：{data.senderName}
+        </div>
+        <div>
+          联系电话：
+          <a href={`tel:${data.senderTel}`}><img
+            style={{width: 25, height: 25}}
+            src="/tel.png" alt=""/>{data.senderTel}</a>
+        </div>
+        <div>
+          {data.typeId!=2&&
+            <span>客户下单地点: {data.senderAddress}</span>
+          }
+        </div>
+        <div style={{textAlign: 'center'}} >
+          <a href={`http://uri.amap.com/marker?position=${data.cusLongitude},${data.cusLatitude}`}>
+            <img style={{width: 25, height: 25}} src="/1.png" alt=""/>
+            {data.typeId==2?'导航到购物处':
+              '导航到客户处(上门取件)'
+            }
+          </a>
+        </div>
+        <div style={{textAlign: 'center', padding: 5}} >
           <span onClick={ ()=>this.linkConfirm(data) } style={{color: 'green', textDecoration: 'underline'}} >
-            到达购物处，开始核对信息</span>
-        </Flex>
+            到达{this.typeId==2?'购物':'客户'}处，开始核对信息</span>
+        </div>
       </div>
-    } else { // 物流类订单
-      return <div style={{padding: '10px 7px', marginBottom: 8, backgroundColor: '#fff7f4'}} >
-        <Flex warp='wrap' >
-          <FlexItem style={{fontSize: '1.1em', fontWeight: 500, flex: 7}} >
-            订单编号: {data.ono}
-          </FlexItem>
-          <FlexItem style={{fontSize: '1.1em',
-            fontWeight: 500, textAlign: 'right', flex: 4, paddingRight: 15}} >
-            {this.renderOrderType(data.typeId)}
-          </FlexItem>
-        </Flex>
-        <Flex>
-          <FlexItem>
-            客户姓名：{data.senderName}
-          </FlexItem>
-          <FlexItem>
-            电话: {data.senderTel}
-          </FlexItem>
-        </Flex>
-        <Flex>
-          {/*{data.createTime}*/}
-          下单时间：{ new Date(data.createTime.substring(0, data.createTime.lastIndexOf('.'))).toLocaleString() }
-        </Flex>
-        {this.renderOrderPlace(data.typeId, data)}
-        <Flex style={{justifyContent: 'center', marginTop: 10}} >
-          <span onClick={ ()=>this.linkConfirm(data) } style={{color: 'green', textDecoration: 'underline'}} >
-            到达客户处，开始核对信息</span>
-        </Flex>
-      </div>
-    }
+    )
   }
 }

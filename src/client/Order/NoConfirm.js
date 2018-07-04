@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { NavBar, Icon, ListView, PullToRefresh, ActivityIndicator } from 'antd-mobile'
 import { connect } from 'dva'
 import NoConfirmItem from './NoConfirmItem'
+import loginHoc from '../../Hoc/LoginHoc'
+import {Toast} from "antd-mobile/lib/index";
 
 function MyBody(props) {
   return (
@@ -12,11 +14,20 @@ function MyBody(props) {
 }
 
 @connect( state=>({
+  client_status: state.client_login.client_status,
   client_id: state.client_login.client_id,
   orderType: state.orderType.data,
   loading: state.clientNoConfirm.loading,
   data: state.clientNoConfirm.data
 }))
+@loginHoc({
+  redirectPath: '/#/clientUser/login',
+  propsSelector: props=>props.client_status == 'OK',
+  redirectBefore: ()=> {
+    Toast.fail('需要登录才能进行此操作，请先登录', 1.5)
+  },
+  // redirectBeforeTime: 1000
+})
 export default class NoConfirm extends Component {
 
   constructor(props){

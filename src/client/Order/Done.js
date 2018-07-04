@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { NavBar, Icon, ListView, PullToRefresh, ActivityIndicator } from 'antd-mobile'
 import { connect } from 'dva'
 import DoneItem from './Done_item'
+import loginHoc from '../../Hoc/LoginHoc'
+import {Toast} from "antd-mobile/lib/index";
 
 function MyBody(props) {
   return (
@@ -12,11 +14,20 @@ function MyBody(props) {
 }
 
 @connect( state=>({
+  client_status: state.client_login.client_status,
   client_id: state.client_login.client_id,
   orderType: state.orderType.data,
   loading: state.clientDone.loading,
   data: state.clientDone.data
-}) )
+}))
+@loginHoc({
+  redirectPath: '/#/clientUser/login',
+  propsSelector: props=>props.client_status == 'OK',
+  redirectBefore: ()=> {
+    Toast.fail('需要登录才能进行此操作，请先登录', 1.5)
+  },
+  // redirectBeforeTime: 1000
+})
 export default class Done extends Component {
 
   constructor(props){
@@ -37,6 +48,7 @@ export default class Done extends Component {
   }
 
   componentDidMount(){
+    console.log(this)
     if ( this.props.orderType.length===0 ) {
       this.props.dispatch({
         type: 'orderType/getData'

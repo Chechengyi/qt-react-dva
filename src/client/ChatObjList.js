@@ -1,13 +1,25 @@
 import React, { Component } from 'react'
 import { connect } from 'dva'
-import { NavBar, Icon, List } from 'antd-mobile'
+import { NavBar, Icon, List, Toast } from 'antd-mobile'
+import loginHoc from '../Hoc/LoginHoc'
 
 const ListItem = List.Item
 
+
 @connect(state=>({
   client_id: state.client_login.client_id,
-  userList: state.socketMsg.userList
+  userList: state.socketMsg.userList,
+  client_status: state.client_login.client_status
 }))
+@loginHoc({
+  redirectPath: '/#/clientUser/login',
+  propsSelector: props=>props.client_status == 'OK',
+  redirectBefore: ()=> {
+    Toast.fail('需要登录才能进行此操作，请先登录', 1.5)
+  },
+  // redirectBeforeTime: 1000
+})
+
 export default class ChatObjList extends Component {
 
   componentDidMount(){
@@ -58,3 +70,8 @@ export default class ChatObjList extends Component {
     </div>
   }
 }
+
+// export default loginHoc(ChatObjList)({
+//   redirectPath: '/#/clientUser/login',
+//   authenticatedSelector: state=>state.client_status == 'OK'
+// })

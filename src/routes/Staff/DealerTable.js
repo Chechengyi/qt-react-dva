@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Table, Input, Select, Popconfirm, message, Form, Modal} from 'antd';
 import { updateDealer, resetDealerPsw } from '../../services/api'
+import ModalDeaOrderCount from './ModalDeaOrderCount'
 
 const Option = Select.Option
 const WriteInput = ({getFieldDecorator, value, text}) => (
@@ -80,6 +81,20 @@ export default class FrontDesk_table extends  PureComponent {
       }
     }
     return name
+  }
+
+  handleModal =(id, username)=> {
+    this.props.dispatch({
+      type: 'dealerOrderCount/setDealerInfo',
+      payload: {
+        dealerId: id,
+        dealerName: username
+      }
+    })
+    this.props.dispatch({
+      type: 'dealerOrderCount/setModal',
+      payload: true
+    })
   }
 
   handleSave = (val, index) => {
@@ -191,7 +206,7 @@ export default class FrontDesk_table extends  PureComponent {
     if (this.props.roleId==0) {
       columns.push({
         title: '操作',
-        width: 120,
+        width: 180,
         render: (val, text, index) => (
           <div>
             {this.state.selectWriteKey===index?
@@ -203,6 +218,7 @@ export default class FrontDesk_table extends  PureComponent {
                 <Popconfirm title='确定重置密码？' onConfirm={ () => { this.resetPsw(val.id) } } >
                   <a style={{marginLeft: '5px'}} >重置密码</a>
                 </Popconfirm>
+                <a onClick={ ()=>this.handleModal(text.id, text.username) } style={{marginLeft: 5}} >订单总计</a>
               </div>
             }
           </div>
@@ -224,6 +240,7 @@ export default class FrontDesk_table extends  PureComponent {
     };
 
     return <div>
+      <ModalDeaOrderCount />
       <Table
         columns={columns}
         dataSource={this.state.data}

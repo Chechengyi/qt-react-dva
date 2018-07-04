@@ -215,26 +215,13 @@ export default class FrontDesk_table extends  PureComponent {
       },
       {
         title: '客户姓名',
-        dataIndex: 'cusUsername',
+        dataIndex: 'senderName',
         width: 100,
-        render: (val, text, index)=>(
-          <div>
-            {text.typeId==2?text.receiverName:text.senderName}
-          </div>
-        )
       },
       {
-        title: '客户电话 ',
-        dataIndex: 'cusTel',
+        title: '联系电话 ',
+        dataIndex: 'senderTel',
         width: 150,
-        render: (val, text, index) => {
-          return <div>
-            {text.typeId==2?
-              text.receiverTel:
-              text.senderTel
-            }
-          </div>
-        }
       },
       {
         title: '快递员姓名',
@@ -250,15 +237,6 @@ export default class FrontDesk_table extends  PureComponent {
         render: (val, text, index)=>(
           <div>
             <span style={{color: '#ff6700'}} >{text.fee}</span> 元
-          </div>
-        )
-      },
-      {
-        title: '实际金额',
-        dataIndex: 'actualFee',
-        render: (val, text, index)=>(
-          <div>
-            <span style={{color: '#ff6700'}} >{text.actualFee}</span> 元
           </div>
         )
       },

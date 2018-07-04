@@ -12,7 +12,8 @@ export default class UserItem extends Component {
       payload: {
         type: 'admin',
         cusId: data.id,
-        roomName: data.room
+        roomName: data.room,
+        adminId: this.props.adminId
       }
     })
     this.props.history.replace(`/admin/cont/chat/content/${data.id}/${data.username}`)

@@ -37,7 +37,7 @@
                               "pathRewrite": { "^/" : "" }
                           },
               "/": {
-                  "target": "http://192.168.1.101:8080/",
+                  "target": "http://www.laikexin.cc/",
                   "changeOrigin": true,
                   "pathRewrite": { "^/" : "" }
               }
