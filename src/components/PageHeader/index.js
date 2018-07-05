@@ -25,7 +25,13 @@ function getBreadcrumb(breadcrumbNameMap, url) {
   return breadcrumb;
 }
 
-export default class PageHeader extends PureComponent {
+export default class Else extends PureComponent{
+  render(){
+    return <div></div>
+  }
+}
+
+class PageHeader extends PureComponent {
   static contextTypes = {
     routes: PropTypes.array,
     params: PropTypes.object,

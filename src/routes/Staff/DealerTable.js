@@ -38,6 +38,7 @@ const SelectInput = ({getFieldDecorator, value, text, selectArr, width}) => (
   // total: state.courier.total,
   admin_id: state.admin_login.admin_id,
   roleId: state.admin_login.roleId,
+  total:state.dealer.total
 }))
 export default class FrontDesk_table extends  PureComponent {
 
@@ -248,7 +249,7 @@ export default class FrontDesk_table extends  PureComponent {
         pagination={
           {
             // total: this.props.total,
-            total: 200,
+            total: this.props.total,
             defaultCurrent: 1,
             showQuickJumper: true,
             current: this.props.pageNo,

@@ -140,7 +140,7 @@ export default class ModalDeaOrderCount extends Component{
         >
           <div>
             <div>
-              <h3 style={{textAlign: 'center'}} >总计派出{this.sum()}单---总营业额为{this.moneySum().toFixed()}  元</h3>
+              <h3 style={{textAlign: 'center'}} >总计派出{this.sum()}单---总营业额为{this.moneySum().toFixed(2)}  元</h3>
             </div>
             <div style={{width: 250, margin: '0 auto'}} >
               <table style={{width: '100%'}} >

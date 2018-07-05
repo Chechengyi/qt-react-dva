@@ -6,17 +6,16 @@ import { connect } from 'dva'
 export default class UserItem extends Component {
 
   handleClick =data=> {
-    console.log(data.room)
-    this.props.dispatch({
-      type: 'socketMsg/getAjaxMsg',
-      payload: {
-        type: 'admin',
-        cusId: data.id,
-        roomName: data.room,
-        adminId: this.props.adminId
-      }
-    })
-    this.props.history.replace(`/admin/cont/chat/content/${data.id}/${data.username}`)
+    // this.props.dispatch({
+    //   type: 'socketMsg/getAjaxMsg',
+    //   payload: {
+    //     type: 'admin',
+    //     cusId: data.id,
+    //     roomName: data.room,
+    //     adminId: this.props.adminId
+    //   }
+    // })
+    this.props.history.replace(`/admin/cont/chat/content/${data.id}/${data.username}/${data.room}`)
   }
 
   render(){

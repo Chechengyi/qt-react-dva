@@ -11,12 +11,6 @@ import { NavBar, Icon } from 'antd-mobile'
 export default class MoneyCount extends Component{
 
   componentDidMount(){
-    // driverGetMoneyCash({
-    //   couId: this.props.driver_id
-    // })
-    //   .then( res=>{
-    //     console.log(res)
-    //   })
     this.props.dispatch({
       type: 'couOrderNum/getData',
       payload: {
@@ -55,7 +49,7 @@ export default class MoneyCount extends Component{
         <NavBar
           icon={ <Icon type='left' ></Icon> }
           onLeftClick={ ()=>this.props.history.goBack() }
-        >我的收益</NavBar>
+        >订单统计</NavBar>
         <div style={{marginTop: 10, textAlign: 'center'}} >
           您已为平台派出 <span
           style={{color: '#ff6700', fontSize: '1.2em'}}

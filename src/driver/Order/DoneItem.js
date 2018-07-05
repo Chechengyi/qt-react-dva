@@ -21,11 +21,13 @@ export default class DoneItem extends Component {
     const {data} = this.props
     return <div style={{
       padding: '10px 7px', margin: '8px 10px', borderRadius: 3,
-      backgroundColor: '#fff', height: 1000
+      backgroundColor: '#fff'
     }} >
       <Flex wrap='wrap'>
         <FlexItem style={{flex: 'auto'}} >订单编号：{data.ono}</FlexItem>
-        <FlexItem style={{flex: 'auto'}} >{this.renderOrderType(data.typeId)}</FlexItem>
+      </Flex>
+      <Flex>
+        订单类型： {this.renderOrderType(data.typeId)}
       </Flex>
       <Flex>
         订单成交金额：{data.actualFee} 元

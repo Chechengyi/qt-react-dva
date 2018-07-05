@@ -13,10 +13,21 @@ export default {
         payload: true
       })
       const res = yield call(getCourier, payload)
-      yield put({
-        type: 'saveData',
-        payload: res.data.content
-      })
+      if (res.status==='OK') {
+        yield put({
+          type: 'saveData',
+          payload: res.data.content
+        })
+        yield put({
+          type: 'saveTotal',
+          payload: res.data.totalElements
+        })
+      } else {
+        yield put({
+          type: 'saveData',
+          payload: []
+        })
+      }
       yield put({
         type: 'changeLoading',
         payload: false
@@ -34,6 +45,12 @@ export default {
       return {
         ...state,
         loading: payload
+      }
+    },
+    saveTotal( state, {payload} ){
+      return {
+        ...state,
+        total: payload
       }
     }
   }

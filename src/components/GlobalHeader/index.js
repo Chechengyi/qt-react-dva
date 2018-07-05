@@ -80,17 +80,18 @@ export default class GlobalHeader extends PureComponent {
     //     count: nextProps.orderCount
     //   })
     // }
-    if (nextProps.orderCount!==this.props.orderCount &&
-        nextProps.orderCount-this.props.orderCount>0
-    ) {
+    if (nextProps.orderCount!==this.props.orderCount) {
       this.setState({
         count: nextProps.orderCount
       })
-      this.AudioPlay()
+      if (nextProps.orderCount-this.props.orderCount>0) {
+        this.AudioPlay()
+      }
     }
   }
   componentWillUnmount() {
     this.triggerResizeEvent.cancel();
+    notification.destroy()
   }
   toggle = () => {
     const { collapsed } = this.props;
@@ -168,8 +169,9 @@ export default class GlobalHeader extends PureComponent {
     const { getFieldDecorator } = this.props.form;
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]}>
-        {this.props.roleId!==0&&<Menu.Item >
-          <a style={{color: 'rgba(0, 0, 0, 0.65)'}} href='/#/admin/else/updateMsg' ><Icon type="edit" />修改信息</a>
+        {this.props.admin_id!=1&&<Menu.Item >
+          <a style={{color: 'rgba(0, 0, 0, 0.65)'}} href='/#/admin/else/updateMsg' >
+            <Icon type="edit" />修改信息</a>
         </Menu.Item>}
         <Menu.Item style={{display: this.props.admin_id==1?'none':''}} >
           <a onClick={ ()=>this.handleModal(true) } style={{color: 'rgba(0, 0, 0, 0.65)'}} >

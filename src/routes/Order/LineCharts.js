@@ -7,7 +7,6 @@ import 'echarts/lib/component/tooltip'
 import 'echarts/lib/component/toolbox'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/legend'
-import TimePicker from '../../components/TimePicker/TimePicker'
 
 const FormItem = Form.Item
 const Option = Select.Option

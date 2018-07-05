@@ -18,11 +18,12 @@ export default class Login extends Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    // clearInterval(this.interval);
   }
 
   componentDidMount () {
-
+    clearInterval(window.msg)
+    clearInterval(window.timer)
   }
 
   handleSubmit = (e) => {

@@ -92,11 +92,11 @@ export default class Done extends Component {
   }
 
   onRefresh=e=> {
-    this.data = []
     this.setState({
       refreshing: true,
       pageNo: 0,
-      pageSize: 20
+      pageSize: 20,
+      data: []
     })
     this.props.dispatch({
       type: 'courierDone/refresh',

@@ -14,15 +14,23 @@ export default class Index extends Component {
 
   componentDidMount(){
 
-    if (Object.keys(this.props.userList).length===0) {
-      this.props.dispatch({
-        type: 'socketMsg/setUserList',
-        payload: {
-          adminId: this.props.admin_id,
-          type: 'admin'
-        }
-      })
-    }
+    // if (Object.keys(this.props.userList).length===0) {
+    //   console.log(sdasd)
+    //   this.props.dispatch({
+    //     type: 'socketMsg/setUserList',
+    //     payload: {
+    //       adminId: this.props.admin_id,
+    //       type: 'admin'
+    //     }
+    //   })
+    // }
+    this.props.dispatch({
+      type: 'socketMsg/setUserList',
+      payload: {
+        adminId: this.props.admin_id,
+        type: 'admin'
+      }
+    })
   }
 
   render(){

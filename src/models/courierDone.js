@@ -24,6 +24,7 @@ export default {
         payload: true
       })
       const res = yield call( courierGetDone, payload )
+      console.log(res.data.content)
       yield put({
         type: 'saveData',
         payload: res.data.content

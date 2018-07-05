@@ -2,7 +2,29 @@ import { stringify } from 'qs';
 import request from '../utils/request';
 
 
-// 查询经销上的派单总数， 不传adminId的时候查询的是总数
+
+// ajax轮询聊天api
+
+// 查看消息
+export async function AC_getMsg(params) {
+  return request(`/message/getMsg?${stringify(params)}`)
+}
+
+// 发送消息
+export async function AC_sendMsg(params) {
+  return request('/message/sendMsg', {
+    method: 'POST',
+    body: params
+  })
+}
+
+// 收消息
+export async function AC_receiveMsg(params) {
+  return request(`/message/receiveMsg?${stringify(params)}`)
+}
+
+
+// 查询经销商的派单总数， 不传adminId的时候查询的是总数
 export async function getDealerOrderCount(params) {
   return request(`/order/getOrderCount?${stringify(params)}`)
 }

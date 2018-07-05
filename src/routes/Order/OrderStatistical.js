@@ -8,6 +8,7 @@ import 'echarts/lib/component/title'
 import 'echarts/lib/component/legend'
 import Pie from './Pie'
 import LineCharts from './LineCharts'
+import PieCharts from './PieCharts'
 
 export default class OrderStatistical extends Component{
 
@@ -76,6 +77,10 @@ export default class OrderStatistical extends Component{
       <div
         style={{backgroundColor: '#fff', padding: 20, borderRadius: 10}} >
         <LineCharts />
+      </div>
+      <div
+        style={{backgroundColor: '#fff', padding: 20, borderRadius: 10, marginTop: 20}} >
+        <PieCharts />
       </div>
     </div>
   }

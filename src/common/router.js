@@ -49,7 +49,7 @@ export const getRouterData = (app) => {
       // exact: true,
       component: dynamicWrapper(app, ['admin_login', 'socketMsg'], () => import('../routes/Chat/Index')),
     },
-    '/admin/cont/chat/content/:cusId/:username': {
+    '/admin/cont/chat/content/:cusId/:username/:roomName': {
       exact: false,
       component: dynamicWrapper(app, ['admin_login', 'socketMsg'], () => import('../routes/Chat/Content')),
     },
@@ -84,7 +84,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['admin_login', 'cancelOrder', 'orderType'], () => import('../routes/Order/CancelOrder'))
     },
     '/admin/cont/order/orderStatistical': {
-      component: dynamicWrapper(app, ['admin_login', 'orderCount'], () => import('../routes/Order/OrderStatistical'))
+      component: dynamicWrapper(app, ['admin_login', 'orderCount', 'dealerOrderCount'], () => import('../routes/Order/OrderStatistical'))
     },
     '/admin/cont/orderSetting/jisong': {
       component: dynamicWrapper(app, ['admin_login'], () => import('../routes/OrderSetting/Tongcheng'))
@@ -158,6 +158,9 @@ export const getRouterData = (app) => {
     },
     '/cont': {
       component: dynamicWrapper(app, ['client_login', 'socketMsg','CusNoPay'], () => import('../client/Cont')),
+    },
+    '/cont/tiaoyue': {
+      component: dynamicWrapper(app, [], () => import('../client/ByOrder/Tiaoyue')),
     },
     '/cont/noConfirm': {
       component: dynamicWrapper(app, ['client_login', 'socketMsg','clientNoConfirm', 'orderType'], () => import('../client/Order/NoConfirm')),

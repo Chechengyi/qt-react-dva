@@ -11,7 +11,7 @@
 * */
 
 import { cusGetChatObj, adminGetChatObj,
-  adminGetChatMsg, cusGetChatMsg
+  adminGetChatMsg, cusGetChatMsg, AC_getMsg
 } from '../services/api'
 import {routerRedux} from 'dva/router'
 
@@ -22,6 +22,10 @@ export default {
     userList: {}  // 聊天对象列表
   },
   effects: {
+    // 添加聊天对象到聊天列表
+    // *addUser({payload}, {call, put}){
+    //
+    // },
     *setMsg({payload}, {call, put}){
       yield put({
         type: 'saveMsg',
@@ -30,12 +34,13 @@ export default {
     },
     *getAjaxMsg({payload}, {call, put}){
       // 判断是管理员还是客户
-      let res
-      if ( payload.type==='cus' ) {
-        res = yield call(cusGetChatMsg, payload)
-      } else {
-        res = yield call(adminGetChatMsg, payload)
-      }
+      // let res
+      // if ( payload.type==='cus' ) {
+      //   res = yield call(cusGetChatMsg, payload)
+      // } else {
+      //   res = yield call(adminGetChatMsg, payload)
+      // }
+      const res = yield call(AC_getMsg, payload)
       yield put({
         type: 'saveAjaxMsg',
         payload: {
@@ -51,7 +56,6 @@ export default {
       } else {
         res = yield call( cusGetChatObj, {cusId: payload.cusId} )
       }
-      console.log(res.data)
       if (res.data) {
         // 把后台返回的数据转换为期望的数据结构
         let listData = {}
@@ -117,6 +121,15 @@ export default {
     saveMsg( state, {payload} ){
       let toUserId = payload.toUserId
       let obj = {...state.userList}
+      // 判断一下聊天对象是存在， 不存在的话先添加
+      // if (!obj[toUserId]) {
+      //   obj[toUserId] = {
+      //     id: toUserId,
+      //     room: payload.roomName,
+      //     // username:,
+      //     msg: []
+      //   }
+      // }
       obj[toUserId]['msg'].push(payload.msg)
       return {
         ...state,

@@ -234,7 +234,9 @@ export default class Index extends Component {
             <span style={{color: '#fff'}}>下单</span>
           </div>
           {/*<ActivityIndicator text='正在确定您的位置' animating={this.state.loadMap} />*/}
-          <div style={{
+          <div
+            onClick={ ()=>this.props.history.push('/cont/tiaoyue') }
+            style={{
             position: 'absolute', width: '100%', height: 30,
             bottom: 0, left: 0, zIndex: 199, lineHeight: '30px',
             backgroundColor: '#108ee9', textAlign: 'center', color: '#fff'

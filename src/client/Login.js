@@ -10,6 +10,10 @@ import { createForm } from 'rc-form';
 }) )
 export default class Login extends PureComponent {
 
+  componentDidMount(){
+    clearInterval(window.msg)
+  }
+
   renderMessage = (message) => {
     return (
       <Alert

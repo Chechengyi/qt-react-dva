@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Chat from '../components/Chat/ScrollChat'
 import { NavBar } from 'antd-mobile'
 import { connect } from 'dva'
+import { AC_sendMsg } from '../services/api'
 
 @connect(state=>({
   client_id: state.client_login.client_id,
@@ -50,13 +51,15 @@ export default class ChatView extends Component {
       toId: this.adminId,
       fromId: parseInt(this.props.client_id),
       adminId: this.adminId,
-      cusId: parseInt(this.props.client_id)
+      cusId: parseInt(this.props.client_id),
+      type: 'cus'
     }
-    console.log(sendObj)
-    if ( window.cusWS ) {
-      console.log('发送')
-      window.cusWS.send(JSON.stringify(sendObj))
-    }
+    AC_sendMsg(sendObj)
+    // console.log(sendObj)
+    // if ( window.cusWS ) {
+    //   console.log('发送')
+    //   window.cusWS.send(JSON.stringify(sendObj))
+    // }
     this.props.dispatch({
       type: 'socketMsg/setMsg',
       payload: {

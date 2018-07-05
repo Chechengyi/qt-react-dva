@@ -7,6 +7,7 @@ import { createForm } from 'rc-form'
 import orderType from "../../models/orderType";
 import { objIsNull } from '../../services/utils'
 import { getExpectedPrice, addOrder } from '../../services/api'
+import Logo from './Logo'
 
 const ListItem = List.Item
 const Brief = List.Item.Brief
@@ -165,7 +166,7 @@ export default class ByOrderTongcheng extends Component {
       orderTypeId: this.typeId,
       weight,
       proCode: this.props.provinceCode,
-      // distance: 0
+      distance: 0
     })
       .then( res=> {
         this.setState({
@@ -187,7 +188,7 @@ export default class ByOrderTongcheng extends Component {
       <div>
         <List renderHeader={ ()=>'位置信息(必填)' } >
           <ListItem
-            thumb={<img style={{width: 30, height: 30}} src="/qidian.png" alt=""/>}
+            thumb={<Logo bgColor='#67a1f4' title='寄' />}
             arrow="horizontal"
             onClick={ e=>this.props.history.push('/cont/startAddress') }
           >寄件地址
@@ -199,7 +200,7 @@ export default class ByOrderTongcheng extends Component {
             </Brief>
           </ListItem>
           <ListItem
-            thumb={<img style={{width: 30, height: 30}} src="/zhongdian.png" alt=""/>}
+            thumb={<Logo bgColor='#eb6487' title='收' />}
             arrow="horizontal"
             onClick={ e=>this.props.history.push('/cont/endAddress') }
           >收件地址

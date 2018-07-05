@@ -4,6 +4,7 @@ import { getRoutes } from '../utils/utils'
 import { TabBar } from 'antd-mobile'
 import { connect } from 'dva'
 import { openSocket } from '../services/socket'
+import { AC_receiveMsg } from '../services/api'
 
 @connect(state=>({
   client_status: state.client_login.client_status,
@@ -21,59 +22,33 @@ export default class Cont extends PureComponent {
   }
 
   componentDidMount(){
-    // if (this.props.client_status!=='OK') {
-    //   this.props.history.push('/clientUser/login')
-    // }
-    // 如果用户登录了就发送websocket连接请求
-    if ( this.props.client_status=='OK' ) {
-      this.props.dispatch({
-        type: 'socketMsg/setUserList',
-        payload: {
-          cusId: this.props.client_id,
-          type: 'cus'
-        }
-      })
-      this.getSocket()
+
+    if (this.props.client_status=='OK') {
+      this.getMsg()
+      if (!window.msg) {
+        window.msg = setInterval( this.getMsg.bind(this), 1000*10 )
+      }
     }
+
   }
 
-  // componentWillMount(){
-  //   if (window.cusWS) {
-  //     window.cusWS.onclose = function () {
-  //       console.log('断开websocket连接')
-  //     }
-  //   }
-  // }
-
-  // 连接socket
-  getSocket = async ()=> {
-    let self = this
-    if ( !window.cusWS ) {
-      setTimeout( async ()=>{
-        try {
-          window.cusWS = await openSocket('ws://localhost:8080/wschat')
-          setTimeout( ()=>{
-            window.cusWS.onmessage = e=> {
-              console.log('接收')
-              let obj = JSON.parse(e.data)
-              console.log(obj)
-              if (!obj.fromId||obj.toId!==this.props.login.admin_id ) return
-              this.props.dispatch({
-                type: 'socketMsg/setMsg',
-                payload: {
-                  toUserId: obj.fromId,
-                  msg: obj
-                }
-              })
+  // ajax轮询接受消息
+  getMsg =()=> {
+    AC_receiveMsg({
+      cusId: this.props.client_id,
+      type: 'cus'
+    })
+      .then( res=>{
+        res.data.forEach( item=>{
+          this.props.dispatch({
+            type: 'socketMsg/setMsg',
+            payload: {
+              toUserId: item.fromId,
+              msg: item
             }
-          }, 1000)
-        } catch (e) {
-          return
-        }
-      }, 2000)
-    } else {
-      return
-    }
+          })
+        })
+      })
   }
 
   link = (url) => {

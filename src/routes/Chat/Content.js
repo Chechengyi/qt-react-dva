@@ -5,22 +5,40 @@ import { Button, message } from 'antd'
 import MsgItem from './MsgItem'
 import Iscroll from 'iscroll/build/iscroll-probe'
 import { objIsNull } from '../../services/utils'
+//  发送消息请求
+import { AC_sendMsg } from '../../services/api'
 
 @connect( state=>({
   userList: state.socketMsg.userList,
   msgList: state.socketMsg.msgList,
   adminId: state.admin_login.admin_id,
   admin_name: state.admin_login.admin_name
-}) )
+}))
 export default class Content extends Component {
 
   constructor(props){
     super(props)
-    this.cusId = this.props.match.params.cusId
+    this.cusId = parseInt(this.props.match.params.cusId)
     this.username = this.props.match.params.username
+    this.roomName = this.props.match.params.roomName
   }
 
   componentDidMount(){
+    // console.log(this.roomName)
+    console.log('去加载吧')
+    this.props.dispatch({
+      type: 'socketMsg/getAjaxMsg',
+      payload: {
+        type: 'admin',
+        adminId: this.props.adminId,
+        roomName: this.roomName,
+        cusId: this.cusId
+      }
+    })
+    // 查看userList里是否有这个聊天对象
+    if ( !this.props.userList[this.cusId] ) {
+      console.log('没有这个聊天对象，添加')
+    }
     this.Scroll = new Iscroll(this.refs.scrollWarp, {
       scrollbars: true,
       preventDefault: false,
@@ -37,6 +55,10 @@ export default class Content extends Component {
         this.refs.scrollWarp.clientHeight-this.refs.scroll.offsetHeight,
       )
     }
+  }
+
+  componentWillReceiveProps(nextProps){
+    // console.log(nextProps[parseInt(this.cusId)].msg.length)
   }
 
   enterDown =e=> {
@@ -68,13 +90,14 @@ export default class Content extends Component {
       fromId: parseInt(this.props.adminId),
       toId: parseInt(this.cusId),
       text: this.refs.input.value,
-      roomName: `c${this.cusId}a${this.props.adminId}`,
-      sendTime: new Date()
+      roomName: this.roomName,
+      sendTime: new Date(),
+      type: 'admin'
     }
-    if ( window.cusWS ) {
-      console.log('发送')
-      window.cusWS.send(JSON.stringify(msgObj))
-    }
+    AC_sendMsg(msgObj)
+      .then( res=>{
+
+      })
     this.props.dispatch({
       type: 'socketMsg/setMsg',
       payload: {
@@ -114,7 +137,7 @@ export default class Content extends Component {
       </div>
       <div ref='scrollWarp' className={styles.content} >
         <div ref='scroll' style={{padding: '10px 0'}} >
-          {Object.keys(this.props.userList).length!==0&&
+          {Object.keys(this.props.userList).length!==0&&this.props.userList[parseInt(this.cusId)].msg&&
             this.props.userList[parseInt(this.cusId)].msg.map( (item,i)=>(
               <MsgItem
                 adminId={this.props.adminId}

@@ -15,7 +15,7 @@ import { getRoutes } from '../utils/utils';
 import { getMenuData } from '../common/menu';
 import Header from '../components/Header'
 import {openSocket} from "../services/socket";
-
+import { AC_receiveMsg } from '../services/api'
 
 /**
  * 根据菜单取得重定向地址.
@@ -85,8 +85,6 @@ class BasicLayout extends React.PureComponent {
     };
   }
   componentDidMount() {
-    // 连接websocket
-    this.getSokcet()
     if ( this.props.login.admin_status !== 'OK' ) {
       this.props.history.push('/admin/user/login')
       return
@@ -96,6 +94,11 @@ class BasicLayout extends React.PureComponent {
     if (!window.timer) {
       window.timer = setInterval( this.getOrderCount.bind(this), 1000*30 ) //  三分钟 180，000
     }
+    // 轮询获取聊天信息
+    this.getMsg()
+    if (!window.msg) {
+      window.msg = setInterval( this.getMsg.bind(this), 1000*10 )
+    }
     enquireScreen((b) => {
       this.setState({
         isMobile: !!b,
@@ -103,37 +106,24 @@ class BasicLayout extends React.PureComponent {
     });
   }
 
-
-
-  getSokcet= async ()=> {
-
-    if ( !window.cusWS ) {
-      setTimeout( async ()=>{
-        try {
-          window.cusWS = await openSocket('ws://localhost:8080/wschat')
-          setTimeout( ()=>{
-            window.cusWS.onmessage = e=> {
-              console.log('接收')
-              let obj = JSON.parse(e.data)
-              console.log(obj)
-              if (!obj.fromId||obj.toId!==this.props.login.admin_id ) return
-              console.log('渲染啊')
-              this.props.dispatch({
-                type: 'socketMsg/setMsg',
-                payload: {
-                  toUserId: obj.fromId,
-                  msg: obj
-                }
-              })
+  getMsg =()=> {
+    AC_receiveMsg({
+      adminId: this.props.adminId,
+      type: 'admin'
+    })
+      .then( res=>{
+        console.log(res.data.length)
+        res.data.forEach( item=>{
+          console.log(item)
+          this.props.dispatch({
+            type: 'socketMsg/setMsg',
+            payload: {
+              toUserId: item.fromId,
+              msg: item
             }
-          }, 1000)
-        } catch (e) {
-          return
-        }
-      }, 2000)
-    } else {
-      return
-    }
+          })
+        })
+      })
   }
 
   // 发送获取未分配订单个数的请求
