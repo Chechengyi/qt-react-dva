@@ -149,21 +149,20 @@ export default class Index extends Component {
   }
 
   handleOrderLink = ()=> {
-    if ( this.state.selectOrderTypeId==1 ) { //去往同城急送下单页面
-      this.props.history.push('/cont/byOrder/tongcheng')
-    } else if ( this.state.selectOrderTypeId==2 ) { // 代购服务下单页面
-      this.props.history.push('/cont/byOrder/daigou')
-    } else if (this.state.selectOrderTypeId==3) { // 物流服务下单页面
-      this.props.history.push('/cont/byOrder/wuliu')
-    }
-    return
     if(this.props.client_status==='OK'){
-      this.props.history.push(`/cont/byOrder/${this.state.selectOrderTypeId}`)
+      // this.props.history.push(`/cont/byOrder/${this.state.selectOrderTypeId}`)
+      if ( this.state.selectOrderTypeId==1 ) { //去往同城急送下单页面
+        this.props.history.push('/cont/byOrder/tongcheng')
+      } else if ( this.state.selectOrderTypeId==2 ) { // 代购服务下单页面
+        this.props.history.push('/cont/byOrder/daigou')
+      } else if (this.state.selectOrderTypeId==3) { // 物流服务下单页面
+        this.props.history.push('/cont/byOrder/wuliu')
+      }
     }else{
       Modal.alert('还没有登录','去登录了在下单', [{
         text: '取消', onPress: ()=>{}
       }, {
-        text: '确认', onPress: ()=>this.props.history.push('/clientUser/login')
+        text: '确认', onPress: ()=>this.props.history.replace('/clientUser/login')
       }])
     }
   }
@@ -212,7 +211,7 @@ export default class Index extends Component {
             width: 300, left: document.documentElement.clientWidth/2-150,
             top: 60, padding: '0 20px', lineHeight: '80px',
             height: 80, zIndex: 1, borderRadius: 4,
-            fontSize: '1.2em'
+            fontSize: '1.1em'
           }} onTouchMove={ e=>e.preventDefault() } >
             {this.props.orderData.map( (item,i)=>(
               <div key={i} onClick={ ()=>this.handleRadio(item.id)}  >
