@@ -261,7 +261,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Order/ConfirmOrder')),
     },
     '/driverElseCont': {
-      component: dynamicWrapper(app, ['driver_login'], () => import('../driver/ElesCont')),
+      component: dynamicWrapper(app, ['driver_login', 'courierNoAccept'], () => import('../driver/ElesCont')),
     },
     '/driverElseCont/money': {
       component: dynamicWrapper(app, ['driver_login'], () => import('../driver/Money')),

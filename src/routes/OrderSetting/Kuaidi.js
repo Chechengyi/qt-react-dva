@@ -95,7 +95,7 @@ export default class Cai extends PureComponent {
               {getFieldDecorator('name', {
 
               })(
-                <Input placeholder="输入快递员电话查询" />
+                <Input placeholder="输入省名称查询" />
               )}
             </FormItem>
           </Col>

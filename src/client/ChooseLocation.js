@@ -16,21 +16,37 @@ export default class ChooseLocation extends PureComponent {
     }
   }
 
+  ceshi =()=> {
+    console.log(111)
+    var ifDom = document.getElementById('start')
+    ifDom.onclick = function (e) {
+      console.log(e)
+    }
+  }
+
   componentDidMount(){
+    console.log(window)
+    console.log(window.parent)
     let self = this
     this.getPos()
+    this.ceshi()
     // this.drawMap()
-    Toast.loading('正在定位您的位置...', 20)
+    Toast.loading('正在定位您的位置...', 5)
     // 因是单页web结构，所以判断是否监听过选址事件，如果监听过就不在重复监听
     if ( !window.isStartLs ) {
       window.isStartLs = true
-      window.addEventListener("message", function(e){
+      window.top.addEventListener("message", function(e){
+        console.log(e)
         // 判断这个message事件是否是当前页面触发的，如果是其他页面触发则不执行函数
         if (e.target.location.hash==='#/cont/chooseLocation/start') {
           self.sendPos(e.data)
         }
       }, false);
     }
+  }
+
+  componentWillUnmount(){
+    Toast.hide()
   }
 
   handleBack=e=>{

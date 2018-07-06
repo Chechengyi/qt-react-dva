@@ -7,7 +7,7 @@ import DrawCont from './DrawCont'
 import { getRoutes } from '../utils/utils'
 import Iscroll from 'iscroll/build/iscroll'
 import loginHoc from '../Hoc/LoginHoc'
-import {Toast} from "antd-mobile/lib/index";
+import {Toast, Modal} from "antd-mobile/lib/index";
 
 @connect( state=>({
   driver_status: state.driver_login.driver_status,
@@ -40,41 +40,48 @@ export default class Cont extends PureComponent {
     })
   }
 
-  componentWillMount(){
-    // 登录验证， 没有登录的话进入登录页面重新登录
-    if (!this.props.driver_id) {
-      this.props.history.replace('/driverLogin')
+  componentDidMount(){
+    this.refs.audio.play()
+    if (this.props.driver_status!='OK') {
+      return
+    }
+    this.getCount()
+    if (!window.timer) {
+      window.timer = setInterval(this.getCount, 1000*20)
     }
   }
-
-  componentDidMount(){
-
-    // 登录验证， 没有登录的话进入登录页面重新登录
-    // if (!this.props.driver_id) {
-    //   this.props.history.replace('/driverLogin')
-    // }
-
-    // this.refs.driverRoot.addEventListener('touchmove',function (e) {
-    //   e.preventDefault()
-    //   // e.stopPropagation()
-    // })
-    // 获取快递员未处理订单条数
-    // 判断是ios系统还是andior系统
-    var u = navigator.userAgent;
-    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
-    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-    if (isAndroid) {
-      this.xitong = 'and'
-    }
-    if (isiOS) {
-      this.xitong = 'ios'
-    }
+  // 获取为处理订单个数action
+  getCount =()=> {
+    console.log('获取个数')
     this.props.dispatch({
       type: 'courierNoAccept/getCount',
       payload: {
         id: this.props.driver_id
       }
     })
+    // this.AudioPlay()
+  }
+
+  // 播放音频且弹出提示框
+  AudioPlay =()=> {
+    // if (window.location.hash=='#/driverCont/weichuli') return
+    if (this.refs.audio) {
+      this.refs.audio.play()
+    }
+    Modal.alert('您有新的订单', '', [{
+      text: '等会再去', onPress: ()=>{}
+    }, {
+      text: '去处理', onPress: ()=>{
+        this.props.history.push('/driverCont/weichuli')
+      }
+    }])
+  }
+
+
+  componentWillReceiveProps(nextProps){
+    if ( this.props.count < nextProps.count ) {
+      this.AudioPlay()
+    }
   }
 
   changeSelect = (select, title) => {
@@ -115,6 +122,7 @@ export default class Cont extends PureComponent {
         icon={this.state.writePsw?<Icon type="left" />:<Icon type="ellipsis" />} onLeftClick={ ()=>{ this.onOpenChange('click') }}>
         {this.state.writePsw?'修改密码':this.state.title}
       </NavBar>
+      <audio ref='audio' src="http://data.huiyi8.com/2014/lxy/05/14/10.mp3"></audio>
       <Drawer
         className={styles.myDrawer}
         style={{ minHeight: document.documentElement.clientHeight-45}}

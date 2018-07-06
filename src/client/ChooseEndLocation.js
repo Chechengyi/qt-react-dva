@@ -20,6 +20,10 @@ export default class ChooseEndLocation extends PureComponent {
     }
   }
 
+  componentWillUnmount(){
+    Toast.hide()
+  }
+
   // 绘制选址组件
   drawMap=()=>{
     let self = this;
@@ -56,7 +60,8 @@ export default class ChooseEndLocation extends PureComponent {
       </NavBar>
       <iframe
         id='test'
-        src={`https://m.amap.com/picker/?keywords=写字楼,小区,学校&radius=1000&total=20&key=b807bced59e4c8d89a323ae23159e562`}
+        // src={`https://m.amap.com/picker/?keywords=写字楼,小区,学校&radius=1000&total=20&key=b807bced59e4c8d89a323ae23159e562`}
+        src={`https://m.amap.com/picker/?radius=1000&total=20&key=b807bced59e4c8d89a323ae23159e562`}
         style={{width: '100%',
           height: document.documentElement.clientHeight-44
         }} frameBorder="0">

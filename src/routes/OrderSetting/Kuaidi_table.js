@@ -206,9 +206,9 @@ export default class FrontDesk_table extends  PureComponent {
                 <a style={{marginLeft: '5px'}} onClick={ () => { this.setState({ selectWriteKey: null }) } } >取消</a></div>:
               <div>
                 <a onClick={ () => {this.handleWrite(index)} } >修改</a>
-                <Popconfirm title="确定重置密码？" onConfirm={ ()=>{ this.resetPsw(val.id) } } >
-                  <a style={{marginLeft: '5px'}} >重置密码</a>
-                </Popconfirm>
+                {/*<Popconfirm title="确定重置密码？" onConfirm={ ()=>{ this.resetPsw(val.id) } } >*/}
+                  {/*<a style={{marginLeft: '5px'}} >重置密码</a>*/}
+                {/*</Popconfirm>*/}
               </div>
             }
           </div>

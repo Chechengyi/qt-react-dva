@@ -121,7 +121,7 @@ export default class PieCharts extends Component{
       orderNum: 0,
       money: 0
     }, {
-      name: '代购服务',
+      name: '快递物流',
       orderNum: 0,
       money: 0
     }]

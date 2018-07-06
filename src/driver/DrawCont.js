@@ -98,9 +98,25 @@ export default class DrawCont extends Component{
       mapObj.addControl(geolocation);
       geolocation.getCurrentPosition()
       AMap.event.addListener(geolocation, 'complete', throttle(self.senPos,60000, self))
-      AMap.event.addListener(geolocation, 'error', (err) => {console.log(err)});      //返回定位出错信息
+      AMap.event.addListener(geolocation, 'error', (err) => {
+        console.log(err)
+        self.posErr()
+      });      //返回定位出错信息
     });
   }
+
+  // 定位位置出错
+  posErr =()=> {
+    // this.props.dispatch({
+    //   type: 'driver_login/saveWork',
+    //   payload: false
+    // })
+    this.noWork()
+    Modal.alert('上班失败，定位位置出错', '请打开设置查看是否允许定位', [{
+      text: '确认', onPress: ()=>{}
+    }])
+  }
+
   //  获取位置
   getPost = (e) => {
     if (this.props.isWork){

@@ -110,7 +110,7 @@ export default class Ongoing extends Component {
           justifyContent: 'center', paddingTop: 10}} >
           <ActivityIndicator animating={this.props.loading} ></ActivityIndicator>
         </div> }
-        renderFooter={ (e)=><div style={{textAlign: 'center'}} >
+        renderFooter={ (e)=><div style={{textAlign: 'center', height: 30}} >
           {this.state.isOver&&<span style={{}} >没有订单了...</span>}
         </div> }
         pullToRefresh={

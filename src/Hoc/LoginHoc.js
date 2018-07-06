@@ -16,8 +16,6 @@ const loginHoc = ({redirectPath, stateSelector, redirectBeforeTime=300,
 
     componentWillMount(){
       // 检验组件是否加载成功
-      console.log(this)
-      console.log(this.inspectionStatus())
       if ( !(this.inspectionStatus()) ) {
         if (redirectBefore) {
           redirectBefore()

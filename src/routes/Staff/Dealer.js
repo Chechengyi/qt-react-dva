@@ -123,14 +123,14 @@ export default class Cai extends PureComponent {
                   return v;
                 },
               })(
-                <Input placeholder="输入快递员电话查询" />
+                <Input placeholder="输入经销商电话查询" />
               )}
             </FormItem>
           </Col>
           <Col md={6} sm={10} >
             <FormItem label="姓名">
               {getFieldDecorator('username')(
-                <Input placeholder="输入快递员姓名查询" />
+                <Input placeholder="输入经销商姓名查询" />
               )}
             </FormItem>
           </Col>
