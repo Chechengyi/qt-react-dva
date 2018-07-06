@@ -68,7 +68,10 @@ export default class Cont extends PureComponent {
     if (this.refs.audio) {
       this.refs.audio.play()
     }
-    Modal.alert('您有新的订单', '', [{
+    if (this.modal) {
+      this.modal.close()
+    }
+    this.modal = Modal.alert('您有新的订单', '', [{
       text: '等会再去', onPress: ()=>{}
     }, {
       text: '去处理', onPress: ()=>{
