@@ -123,7 +123,10 @@ export default class Done extends Component {
 
   render(){
     const row = (item)=>(
-      <DoneItem dispatch={this.props.dispatch} data={item} orderType={this.props.orderType} />
+      <DoneItem
+        history={this.props.history}
+        dispatch={this.props.dispatch} data={item}
+        orderType={this.props.orderType} />
     )
     return <div>
       <NavBar

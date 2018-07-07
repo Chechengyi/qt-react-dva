@@ -150,14 +150,35 @@ export default class Index extends Component {
 
   handleOrderLink = ()=> {
     if(this.props.client_status==='OK'){
+      var road
       // this.props.history.push(`/cont/byOrder/${this.state.selectOrderTypeId}`)
       if ( this.state.selectOrderTypeId==1 ) { //去往同城急送下单页面
-        this.props.history.push('/cont/byOrder/tongcheng')
+        // this.props.history.push('/cont/byOrder/tongcheng')
+        // road = '/#/cont/byOrder/tongcheng'
+        road = 'tc'
       } else if ( this.state.selectOrderTypeId==2 ) { // 代购服务下单页面
-        this.props.history.push('/cont/byOrder/daigou')
+        // this.props.history.push('/cont/byOrder/daigou')
+        // road = '/#/cont/byOrder/daigou'
+        road = 'dg'
       } else if (this.state.selectOrderTypeId==3) { // 物流服务下单页面
-        this.props.history.push('/cont/byOrder/wuliu')
+        // this.props.history.push('/cont/byOrder/wuliu')
+        // road = '/#/cont/byOrder/wuliu'
+        road = 'wl'
       }
+      // window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe75752031ce1c286&redirect_uri=http://www.laikexin.cc/weixin/getWxMp?road=${road}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`
+      var href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe75752031ce1c286&redirect_uri=http://www.laikexin.cc/weixin/getWxMp&response_type=code&scope=snsapi_userinfo&state=${road}${this.props.client_id}#wechat_redirect`
+
+      var aDom = this.refs.a
+
+      aDom.setAttribute("href", href);
+      // aDom.style.display = "none";
+
+      // var ev = document.createEvent('HTMLEvents');
+      //
+      // ev.initEvent('click', false, true);
+      // aDom.dispatchEvent(ev);
+      // console.log('dd')
+
     }else{
       Modal.alert('还没有登录','去登录了在下单', [{
         text: '取消', onPress: ()=>{}
@@ -176,11 +197,11 @@ export default class Index extends Component {
         ) }
         // rightContent={()=>(<img onClick={ ()=>{ this.props.history.push('/clientChat/1') } } style={{width: 20, height: 20}} src="/wechat1.png" alt=""/>
         // )}
-        rightContent={()=>(
-          <img
-            onClick={ ()=>{ this.props.history.push('/cont/ChatObjList') } }
-               style={{width: 20, height: 20}} src="/wechat1.png" alt=""/>
-        )}
+        // rightContent={()=>(
+        //   <img
+        //     onClick={ ()=>{ this.props.history.push('/cont/ChatObjList') } }
+        //        style={{width: 20, height: 20}} src="/wechat1.png" alt=""/>
+        // )}
         navBarStyle={{
           height: 35,
           backgroundColor: 'rgba(255,255,255,0.5)', zIndex: 5,
@@ -207,31 +228,35 @@ export default class Index extends Component {
           <div style={{
             display: 'flex', flexDirection: 'row',
             justifyContent: 'space-between', alignItems: 'center',
-            position: 'absolute', backgroundColor: '#fff',
-            width: 300, left: document.documentElement.clientWidth/2-150,
+            position: 'absolute', backgroundColor: '#108ee9',
+            width: 290, left: document.documentElement.clientWidth/2-145,
             top: 60, padding: '0 20px', lineHeight: '80px',
-            height: 80, zIndex: 1, borderRadius: 4,
+            height: 80, zIndex: 1, borderRadius: 4, color: '#fff',
             fontSize: '1.1em'
           }} onTouchMove={ e=>e.preventDefault() } >
             {this.props.orderData.map( (item,i)=>(
               <div key={i} onClick={ ()=>this.handleRadio(item.id)}  >
                 <input type="radio"
+                       style={{verticalAlign: 'center'}}
                        onChange={ e=>this.handleRadio(e.target.value) }
                        checked={this.state.selectOrderTypeId==item.id}
                        name='orderType' value={item.id} /> {item.type}
               </div>
             ) )}
           </div>
-          <div
-            onClick={ this.handleOrderLink }
-            style={{
-            position: 'absolute', textAlign: 'center', lineHeight: '30px',
-            width: 80, height: 30, backgroundColor: '#108ee9',
-            top: '50%', left: '50%', marginLeft: -40, borderRadius: '20px'
-          }} onTouchMove={ e=>e.preventDefault() } >
-            <div className={styles.xuanzhuan}></div>
-            <span style={{color: '#fff'}}>下单</span>
-          </div>
+          <a ref='a'>
+            <div
+              onClick={ this.handleOrderLink }
+              style={{
+                position: 'absolute', textAlign: 'center', lineHeight: '30px',
+                width: 80, height: 30, backgroundColor: '#108ee9',
+                top: '50%', left: '50%', marginLeft: -40, borderRadius: '20px'
+              }} onTouchMove={ e=>e.preventDefault() } >
+              <div className={styles.xuanzhuan}></div>
+              <span style={{color: '#fff'}}>下单</span>
+            </div>
+          </a>
+          {/*<a ref='a' href='#' style={{display: 'hidden'}} ></a>*/}
           {/*<ActivityIndicator text='正在确定您的位置' animating={this.state.loadMap} />*/}
           <div
             onClick={ ()=>this.props.history.push('/cont/tiaoyue') }

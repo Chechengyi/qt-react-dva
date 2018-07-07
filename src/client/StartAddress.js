@@ -185,6 +185,7 @@ export default class StartAddress extends Component {
           data={this.props.provinceData}
           onPickerChange={ this.onPickerChange }
           onChange={ this.onChange }
+
           value={this.props.value}
         >
           <List.Item>选择区域</List.Item>

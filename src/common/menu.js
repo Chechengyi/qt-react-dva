@@ -99,11 +99,11 @@ const menuData = [
   //   icon: 'user',
   //   path: 'orderMap/2'
   // },
-  {
-    name: '聊天信息',
-    icon: 'wechat',
-    path: '/admin/cont/chat'
-  },
+  // {
+  //   name: '聊天信息',
+  //   icon: 'wechat',
+  //   path: '/admin/cont/chat'
+  // },
   {
     role: ['admin', 'clerk'],
     name: '快递员提款',

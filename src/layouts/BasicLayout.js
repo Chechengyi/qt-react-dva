@@ -95,10 +95,10 @@ class BasicLayout extends React.PureComponent {
       window.timer = setInterval( this.getOrderCount.bind(this), 1000*30 ) //  三分钟 180，000
     }
     // 轮询获取聊天信息
-    this.getMsg()
-    if (!window.msg) {
-      window.msg = setInterval( this.getMsg.bind(this), 1000*10 )
-    }
+    // this.getMsg()
+    // if (!window.msg) {
+    //   window.msg = setInterval( this.getMsg.bind(this), 1000*10 )
+    // }
     enquireScreen((b) => {
       this.setState({
         isMobile: !!b,

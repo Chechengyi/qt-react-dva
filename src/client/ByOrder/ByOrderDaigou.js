@@ -226,7 +226,7 @@ export default class ByOrderDaigou extends Component {
           >商品重量</InputItem>
           <InputItem
             extra='元'
-            placeholder='输入要购买商品的价格'
+            placeholder='输入要商品的预算价格'
             {...getFieldProps('couPay', {  // 垫付商品的价格
               normalize: (v, prev) => {  //验证金额(再次验证重量)
                 if (v && !/^(([1-9]\d*)|0)(\.\d{0,2}?)?$/.test(v)) {
@@ -239,13 +239,13 @@ export default class ByOrderDaigou extends Component {
               },
             })}
             onBlur={ this.sendGetExpectedFee }
-          >商品价格</InputItem>
-          <InputItem
-            {...getFieldProps('goodsType')}
-          >商品类型</InputItem>
+          >预算价格</InputItem>
+          {/*<InputItem*/}
+            {/*{...getFieldProps('goodsType')}*/}
+          {/*>商品类型</InputItem>*/}
           <TextareaItem
-            {...getFieldProps('comment')}
-            title='备注'  placeholder='可选填'
+            {...getFieldProps('goodsType')}
+            title='物品清单'  placeholder='需要购买的商品'
             rows={3}
             count={100}
           />

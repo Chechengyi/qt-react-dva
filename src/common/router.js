@@ -165,7 +165,7 @@ export const getRouterData = (app) => {
     '/cont/noConfirm': {
       component: dynamicWrapper(app, ['client_login', 'socketMsg','clientNoConfirm', 'orderType'], () => import('../client/Order/NoConfirm')),
     },
-    '/cont/nopay/:openid': {
+    '/cont/nopay': {
       component: dynamicWrapper(app, ['client_login','CusNoPay', 'orderType', 'socketMsg'], () => import('../client/NoPay')),
     },
     '/cont/ongoing': {

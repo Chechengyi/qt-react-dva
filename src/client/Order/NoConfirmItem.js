@@ -121,11 +121,11 @@ export default class NoConfirmItem extends Component {
       }}
     >
       {this.renderOrderItem(data.typeId, data)}
-      <div>
-        <a onClick={ e=>this.gotoMsg(data.adminId, data.adminUsername) } >
-          <img style={{width: 25, height: 25}} src="/wechat.png" alt=""/> 与管理员聊天
-        </a>
-      </div>
+      {/*<div>*/}
+        {/*<a onClick={ e=>this.gotoMsg(data.adminId, data.adminUsername) } >*/}
+          {/*<img style={{width: 25, height: 25}} src="/wechat.png" alt=""/> 与管理员聊天*/}
+        {/*</a>*/}
+      {/*</div>*/}
       <Flex>
         订单预算费用：{data.fee} 元
       </Flex>

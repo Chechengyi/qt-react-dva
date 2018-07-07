@@ -12,7 +12,6 @@ const FlexItem = Flex.Item
 let AMap = Object.AMap
 let geolocation = null
 let mapObj = null
-let timer = null
 
 @connect( state=>({
   driver_id: state.driver_login.driver_id,
@@ -29,9 +28,6 @@ export default class DrawCont extends Component{
   }
 
   componentDidMount(){
-    console.log('...')
-    console.log(this.props.driver_id)
-    // this.noWork()
     if ( this.props.driver_id ) {
       if ( this.props.isWork ) {
         this.work()
@@ -39,13 +35,6 @@ export default class DrawCont extends Component{
         this.noWork()
       }
     }
-  }
-
-  componentWillUnmount(){
-    // if ( timer ) {
-    //   this.noWork()
-    // }
-    // this.noWork()
   }
 
   handle_work = (e) => {
@@ -67,10 +56,6 @@ export default class DrawCont extends Component{
       id: this.props.driver_id
     })
       .then( res => {
-        if (timer) {
-          clearInterval(timer)
-          // 发送下班请求
-        }
         this.props.dispatch({
           type: 'driver_login/noWork',
         })
@@ -78,7 +63,6 @@ export default class DrawCont extends Component{
   }
   //  上班
   work = async () => {
-
     let self = this
     mapObj = new AMap.Map('iCenter');
     mapObj.plugin('AMap.Geolocation', function () {

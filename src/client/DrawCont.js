@@ -27,13 +27,13 @@ export default class DrawCont extends PureComponent {
 
   handleToNoPay =e=> {
     if (this.props.client_status !='OK') {
-      e.stopPropagation()
-      e.preventDefault()
       Modal.alert('还没有登录','先去登录',[{
         text: '取消', onPress: ()=>{}
       }, {
         text: '确定', onPress: ()=>this.props.history.push('/clientUser/login')
       }])
+    } else {
+      this.props.history.push('/cont/nopay')
     }
   }
 
@@ -74,14 +74,14 @@ export default class DrawCont extends PureComponent {
           >待确认订单</ListItem>
         </a>
         <a
-          href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe75752031ce1c286&redirect_uri=http://www.laikexin.cc/weixin/auth&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+          // href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe75752031ce1c286&redirect_uri=http://www.laikexin.cc/weixin/auth&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
           >
           <ListItem
             arrow='horizontal'
             onClick={this.handleToNoPay}
             extra={<Badge text={this.props.count} ></Badge>}
           >
-            待付款订单
+            未付款订单
           </ListItem>
         </a>
         <a>

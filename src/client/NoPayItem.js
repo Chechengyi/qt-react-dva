@@ -31,14 +31,11 @@ export default class NoPayItem extends Component {
   }
 
   pay =ono=> {
-    // console.log(ono)
-    // return
-    fetch(`/weixin/pay?ono=${ono}&openid=${this.props.openid}`)
+    fetch(`/weixin/pay?ono=${ono}`)
       .then( res=>{
         return res.json()
       })
       .then( d=>{
-        // alert(d.appId)
         WeixinJSBridge.invoke(
           'getBrandWCPayRequest', {
             "appId":d.appId,     //公众号名称，由商户传入
@@ -97,11 +94,11 @@ export default class NoPayItem extends Component {
             {data.couTel}</a>
         </div>
       </div>
-      <div>
-        <a onClick={ e=>this.gotoMsg(data.adminId, data.adminUsername) } >
-          <img style={{width: 25, height: 25}} src="/wechat.png" alt=""/> 与管理员聊天
-        </a>
-      </div>
+      {/*<div>*/}
+        {/*<a onClick={ e=>this.gotoMsg(data.adminId, data.adminUsername) } >*/}
+          {/*<img style={{width: 25, height: 25}} src="/wechat.png" alt=""/> 与管理员聊天*/}
+        {/*</a>*/}
+      {/*</div>*/}
       <div>
         订单预算费用：{data.fee} 元
       </div>

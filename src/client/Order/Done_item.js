@@ -74,19 +74,19 @@ export default class Done_item extends Component{
     return (
       <div style={{backgroundColor: '#fff', padding: 5, marginBottom: 10 }} >
         {this.renderOrderItem(data.typeId, data)}
-        <div>
-          <a onClick={ e=>this.gotoMsg(data.adminId, data.adminUsername) } >
-            <img style={{width: 25, height: 25}} src="/wechat.png" alt=""/> 与管理员聊天
-          </a>
-        </div>
+        {/*<div>*/}
+          {/*<a onClick={ e=>this.gotoMsg(data.adminId, data.adminUsername) } >*/}
+            {/*<img style={{width: 25, height: 25}} src="/wechat.png" alt=""/> 与管理员聊天*/}
+          {/*</a>*/}
+        {/*</div>*/}
         <Flex>
           <FlexItem>
             订单费用：{data.actualFee} 元
           </FlexItem>
         </Flex>
-        <Flex>
+        <Flex justify='center' >
           {!data.isRate&&
-          <a onClick={ ()=>this.props.history.replace(`/cont/star/${data.id}`) }>
+          <a onClick={ ()=>this.props.history.push(`/cont/star/${data.id}`) }>
             评价订单
           </a>
           }

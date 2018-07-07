@@ -24,10 +24,10 @@ export default class Cont extends PureComponent {
   componentDidMount(){
 
     if (this.props.client_status=='OK') {
-      this.getMsg()
-      if (!window.msg) {
-        window.msg = setInterval( this.getMsg.bind(this), 1000*10 )
-      }
+      // this.getMsg()
+      // if (!window.msg) {
+      //   window.msg = setInterval( this.getMsg.bind(this), 1000*10 )
+      // }
     }
 
   }

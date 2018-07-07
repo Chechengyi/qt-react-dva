@@ -10,6 +10,7 @@ export default {
     *refresh( {payload}, {call, put} ){
       const res = yield call( cusGetDone, payload )
       if (res.data) {
+        console.log(res.data)
         let listData = []
         res.data.forEach( item=>{
           listData.push({

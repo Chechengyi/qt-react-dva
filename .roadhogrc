@@ -37,7 +37,7 @@
                               "pathRewrite": { "^/" : "" }
                           },
               "/": {
-                  "target": "http://localhost:8080/",
+                  "target": "http://www.laikexin.cc/",
                   "changeOrigin": true,
                   "pathRewrite": { "^/" : "" }
               }

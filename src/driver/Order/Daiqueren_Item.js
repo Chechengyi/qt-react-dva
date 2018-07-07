@@ -76,6 +76,10 @@ export default class Daiqueren_Item extends Component {
           {data.typeId!=2&&
             <span>客户下单地点: {data.senderAddress}</span>
           }
+          {
+            data.typeId==2&&
+              <span>收件地点：{data.receiverAddr}</span>
+          }
         </div>
         <div style={{textAlign: 'center'}} >
           <a href={`http://uri.amap.com/marker?position=${data.cusLongitude},${data.cusLatitude}`}>
