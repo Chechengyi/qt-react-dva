@@ -102,16 +102,18 @@ export default class ModalDeaOrderCount extends Component{
     }]
 
     this.props.data.forEach( item=>{
-      if (item[1]==1) {
-        arr[0].orderNum = item[0]
-        arr[0].money = item[3]
-      } else if (item[1]==2) {
-        arr[1].orderNum = item[0]
-        arr[1].money = item[3]
-      } else {
-        arr[2].orderNum = item[0]
-        arr[3].money = item[3]
-      }
+      // if (item[1]==1) {
+      //   arr[0].orderNum = item[0]
+      //   arr[0].money = item[3]
+      // } else if (item[1]==2) {
+      //   arr[1].orderNum = item[0]
+      //   arr[1].money = item[3]
+      // } else {
+      //   arr[2].orderNum = item[0]
+      //   arr[3].money = item[3]
+      // }
+      arr[item[1]-1].orderNum = item[0]
+      arr[item[1]-1].money = item[3]
     })
 
     domArr = arr.map( (item, i)=>(

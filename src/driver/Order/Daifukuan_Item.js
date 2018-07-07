@@ -24,7 +24,11 @@ export default class Daifukuan_Item extends Component {
       </Flex>
       <Flex>
         <FlexItem >客户姓名：{data.senderName}</FlexItem>
-        <FlexItem >电话：{data.senderTel}</FlexItem>
+        <FlexItem >
+          <a href={`tel:${data.senderTel}`}>
+            <img style={{width: 20, height: 20}} src="/tel.png" alt=""/>
+            {data.senderTel}</a>
+        </FlexItem>
       </Flex>
       <Flex>
         <FlexItem>客户下单地址：

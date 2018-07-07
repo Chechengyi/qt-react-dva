@@ -39,13 +39,13 @@ export default class PieCharts extends Component{
       type: 'pie',
       data: [{
         name: '同城急送',
-        value: 233
+        value: 0
       }, {
         name: '代购服务',
-        value: 300
+        value: 0
       }, {
         name: '快递物流',
-        value: 333
+        value: 0
       }]
     }]
   }
@@ -127,16 +127,18 @@ export default class PieCharts extends Component{
     }]
 
     this.props.data.forEach( item=>{
-      if (item[1]==1) {
-        arr[0].orderNum = item[0]
-        arr[0].money = item[3]
-      } else if (item[1]==2) {
-        arr[1].orderNum = item[0]
-        arr[1].money = item[3]
-      } else {
-        arr[2].orderNum = item[0]
-        arr[3].money = item[3]
-      }
+      // if (item[1]==1) {
+      //   arr[0].orderNum = item[0]
+      //   arr[0].money = item[3]
+      // } else if (item[1]==2) {
+      //   arr[1].orderNum = item[0]
+      //   arr[1].money = item[3]
+      // } else {
+      //   arr[2].orderNum = item[0]
+      //   arr[3].money = item[3]
+      // }
+      arr[item[1]-1].orderNum = item[0]
+      arr[item[1]-1].money = item[3]
     })
 
     domArr = arr.map( (item, i)=>(

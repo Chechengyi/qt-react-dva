@@ -68,13 +68,15 @@ export default class Pie extends Component{
       value: 0
     }]
     data.forEach( item=>{
-      if (item[1]==1) {
-        echarsData[0].value = item[0]
-      } else if (item[1]==2) {
-        echarsData[1].value = item[0]
-      } else {
-        echarsData[2].value = item[0]
-      }
+      // if (item[1]==1) {
+      //   echarsData[0].value = item[0]
+      // } else if (item[1]==2) {
+      //   echarsData[1].value = item[0]
+      // } else {
+      //   echarsData[2].value = item[0]
+      // }
+      echarsData[item[1]-1].value = item[0]
+      // arr[item[1]-1].money = item[3]
     })
     return echarsData
   }
