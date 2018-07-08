@@ -37,7 +37,7 @@
                               "pathRewrite": { "^/" : "" }
                           },
               "/": {
-                  "target": "http://www.laikexin.cc/",
+                  "target": "https://www.zyqtsd.com/",
                   "changeOrigin": true,
                   "pathRewrite": { "^/" : "" }
               }

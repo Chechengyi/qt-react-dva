@@ -32,7 +32,7 @@ export default class ByOrderTongcheng extends Component {
     this.AMap = Object.AMap
     this.state = {
       ExpectedFee: null,
-      feeLoading: false
+      loading: false
     }
   }
   componentDidMount(){
@@ -66,7 +66,8 @@ export default class ByOrderTongcheng extends Component {
   *  endLatitude(收货人纬度)(this.props.endPoint.lat)
   *  goodsType(寄货商品的类型)
   * */
-  submit=()=> {
+  submit= async ()=> {
+    if (this.state.loading) return
     if (!this.props.client_id) {
       Modal.alert('下单请先登录！','',[{
         text: '确定', onPress: ()=>{
@@ -79,9 +80,6 @@ export default class ByOrderTongcheng extends Component {
     const feeRate = window.sessionStorage.getItem('feeRate')
     let {weight, goodsType, comment} = this.props.form.getFieldsValue()
     const {startPoint, endPoint, startMsg, endMsg, client_id, adminId, endAddress, provinceCode, startAddress} = this.props
-
-    // 如果订单预算费用还没有返回 直接return
-    if (!this.state.expectedFee) return
 
     // 检验商品信息是否完善
     if ( !weight || !goodsType ) {
@@ -103,9 +101,9 @@ export default class ByOrderTongcheng extends Component {
       }])
     }
 
+    const fee = await this.sendGetExpectedFee()
 
-
-    Modal.alert(`订单预算费用为 ${this.state.expectedFee.toFixed(2)}元`,'确认提交订单？', [{
+    Modal.alert(`订单预算费用为 ${fee.toFixed(2)}元`,'确认提交订单？', [{
       text: '取消', onPress: ()=>{}
     }, {
       text: '确认', onPress: ()=>{
@@ -127,7 +125,7 @@ export default class ByOrderTongcheng extends Component {
           comment,
           goodsType,
           proCode: provinceCode,
-          fee: this.state.expectedFee
+          fee: fee
         }
         console.log(posData)
         addOrder({...posData})
@@ -154,15 +152,15 @@ export default class ByOrderTongcheng extends Component {
   }
 
   // 发送获取估算运费请求
-  sendGetExpectedFee = e=> {
+  sendGetExpectedFee = async e=> {
     // 首先判断 物品距离，重量等信息是否为空 不为空才能发送请求
     const {weight} = this.props.form.getFieldsValue()
     // 如果省code和重量其中有一个不存在，则返回
     if (!this.props.provinceCode || !weight ) return
     this.setState({
-      feeLoading: true
+      loading: true
     })
-    getExpectedPrice({
+    const fee = await getExpectedPrice({
       orderTypeId: this.typeId,
       weight,
       proCode: this.props.provinceCode,
@@ -170,12 +168,14 @@ export default class ByOrderTongcheng extends Component {
     })
       .then( res=> {
         this.setState({
-          feeLoading: false
+          loading: false
         })
         this.setState({
           expectedFee: res.data.fee
         })
+        return res.data.fee
       })
+    return fee
   }
 
   render () {
@@ -224,7 +224,7 @@ export default class ByOrderTongcheng extends Component {
                 return v;
               },
             })}
-            onBlur={ this.sendGetExpectedFee }
+            // onBlur={ this.sendGetExpectedFee }
             extra='公斤'
             placeholder='输入物品的大概重量'
           >物品重量</InputItem>
@@ -238,24 +238,24 @@ export default class ByOrderTongcheng extends Component {
             placeholder='可选'
             title='备注' />
         </List>
-        { this.state.expectedFee&&
-        <WingBlank>
-          {this.state.feeLoading?
-            <Flex justify='center' style={{marginTop: 15}} >
-              <ActivityIndicator animating={this.state.feeLoading} />
-            </Flex>:
-            <div>
-              <div style={{color: '#888', marginTop: 13}} >订单预算费用</div>
-              <div style={{textAlign: 'center', padding: '5px'}} >
-                <span>{this.state.expectedFee.toFixed(2)} 元</span>
-              </div>
-            </div>
-          }
-        </WingBlank>
-        }
+        {/*{ this.state.expectedFee&&*/}
+        {/*<WingBlank>*/}
+          {/*{this.state.feeLoading?*/}
+            {/*<Flex justify='center' style={{marginTop: 15}} >*/}
+              {/*<ActivityIndicator animating={this.state.feeLoading} />*/}
+            {/*</Flex>:*/}
+            {/*<div>*/}
+              {/*<div style={{color: '#888', marginTop: 13}} >订单预算费用</div>*/}
+              {/*<div style={{textAlign: 'center', padding: '5px'}} >*/}
+                {/*<span>{this.state.expectedFee.toFixed(2)} 元</span>*/}
+              {/*</div>*/}
+            {/*</div>*/}
+          {/*}*/}
+        {/*</WingBlank>*/}
+        {/*}*/}
         <WhiteSpace />
         <WingBlank>
-          <Button onClick={ this.submit } type='primary' >提交订单</Button>
+          <Button loading={this.state.loading} onClick={ this.submit } type='primary' >提交订单</Button>
         </WingBlank>
       </div>
     </div>

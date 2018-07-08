@@ -67,40 +67,40 @@ export default class ByOrderDaigou extends Component {
     let end = new this.AMap.LngLat(endPoint.lnt, endPoint.lat)
     let distance = this.AMap.GeometryUtil.distance(start,end)
     this.distance = parseFloat((distance/1000).toFixed(2))
-    console.log(this.distance)
-    // this.sendGetExpectedFee()
   }
   //
-  sendGetExpectedFee= e=> {
+  sendGetExpectedFee= async e=> {
     // 首先判断 物品距离，重量等信息是否为空 不为空才能发送请求
     const {weight} = this.props.form.getFieldsValue()
     // 如果已经估过价， 返回， 不在继续估价
     // if (this.state.expectedFee) return
 
     if ( !weight||!this.distance ) return
-    console.log('执行了估价操作')
     this.setState({
-      feeLoading: true
+      loading: true
     })
-    getExpectedPrice({
+    const fee = await getExpectedPrice({
       orderTypeId: this.typeId,
       distance: this.distance,
       weight
     })
       .then( res=> {
         this.setState({
-          feeLoading: false
+          loading: false
         })
         this.setState({
           expectedFee: res.data.fee
         })
-      } )
+        return res.data.fee
+      })
+    return fee
   }
 
   /*
   * 代购订单与物流订单不同， 客户填写的终点位置即使购买商品的位置
   * */
   submit= async e=> {
+    if (this.state.loading) return
     if (!this.props.client_id) {
       Modal.alert('下单请先登录！','',[{
         text: '确定', onPress: ()=>{
@@ -109,10 +109,6 @@ export default class ByOrderDaigou extends Component {
       }])
       return
     }
-    if (this.state.loading) return
-    this.setState({
-      loading: true
-    })
     const { weight, goodsType, comment, couPay } = this.props.form.getFieldsValue()
     const {startPoint, endPoint, startMsg, client_id, adminId, startAddress} = this.props
     //验证商品基本信息是否为空
@@ -128,6 +124,8 @@ export default class ByOrderDaigou extends Component {
       this.renderModal('订单的位置信息还未完善不能下单')
       return
       }
+
+    const fee = await this.sendGetExpectedFee()
 
     Modal.alert(`订单预算费用为 ${this.state.expectedFee.toFixed(2)}元`,'确认提交订单？', [{
       text: '取消', onPress: ()=>{}
@@ -152,7 +150,7 @@ export default class ByOrderDaigou extends Component {
           cusLatitude: endPoint.lat,
           receiverAddr: startAddress,
           goodsType,
-          fee: this.state.expectedFee,
+          fee: fee,
           couPay: parseFloat(couPay)
         }
         addOrder({ ...posData })
@@ -220,7 +218,7 @@ export default class ByOrderDaigou extends Component {
                 return v;
               },
             })}
-            onBlur={ this.sendGetExpectedFee }
+            // onBlur={ this.sendGetExpectedFee }
             extra='公斤'
             placeholder='输入物品的大概重量'
           >商品重量</InputItem>
@@ -238,7 +236,7 @@ export default class ByOrderDaigou extends Component {
                 return v;
               },
             })}
-            onBlur={ this.sendGetExpectedFee }
+            // onBlur={ this.sendGetExpectedFee }
           >预算价格</InputItem>
           {/*<InputItem*/}
             {/*{...getFieldProps('goodsType')}*/}
@@ -255,24 +253,24 @@ export default class ByOrderDaigou extends Component {
             {/*备注*/}
           {/*</InputItem>*/}
         </List>
-        { this.state.expectedFee&&
-        <WingBlank>
-          {this.state.feeLoading?
-            <Flex justify='center' style={{marginTop: 15}} >
-              <ActivityIndicator animating={this.state.feeLoading} />
-            </Flex>:
-            <div>
-              <div style={{color: '#888', marginTop: 13}} >订单预算费用</div>
-              <div style={{textAlign: 'center', padding: '5px'}} >
-                <span>{this.state.expectedFee.toFixed(2)} 元</span>
-              </div>
-            </div>
-          }
-        </WingBlank>
-        }
+        {/*{ this.state.expectedFee&&*/}
+        {/*<WingBlank>*/}
+          {/*{this.state.feeLoading?*/}
+            {/*<Flex justify='center' style={{marginTop: 15}} >*/}
+              {/*<ActivityIndicator animating={this.state.feeLoading} />*/}
+            {/*</Flex>:*/}
+            {/*<div>*/}
+              {/*<div style={{color: '#888', marginTop: 13}} >订单预算费用</div>*/}
+              {/*<div style={{textAlign: 'center', padding: '5px'}} >*/}
+                {/*<span>{this.state.expectedFee.toFixed(2)} 元</span>*/}
+              {/*</div>*/}
+            {/*</div>*/}
+          {/*}*/}
+        {/*</WingBlank>*/}
+        {/*}*/}
         <WhiteSpace />
         <WingBlank>
-          <Button onClick={ this.submit } type='primary' >提交订单</Button>
+          <Button loading={this.state.loading} onClick={ this.submit } type='primary' >提交订单</Button>
         </WingBlank>
       </div>
     </div>
