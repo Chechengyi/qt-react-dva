@@ -166,7 +166,7 @@ export default class Index extends Component {
         road = 'wl'
       }
       // window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe75752031ce1c286&redirect_uri=http://www.laikexin.cc/weixin/getWxMp?road=${road}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`
-      var href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe75752031ce1c286&redirect_uri=http://www.laikexin.cc/weixin/getWxMp&response_type=code&scope=snsapi_userinfo&state=${road}${this.props.client_id}#wechat_redirect`
+      var href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe75752031ce1c286&redirect_uri=https://www.zyqtsd.com/weixin/getWxMp&response_type=code&scope=snsapi_userinfo&state=${road}${this.props.client_id}#wechat_redirect`
 
       var aDom = this.refs.a
 
