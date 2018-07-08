@@ -80,6 +80,7 @@ export default class Peisongzhong extends PureComponent {
   render () {
     const row = (item)=> (
       <Peisongzhong_Item
+        driver_id={this.props.driver_id}
         history={this.props.history} xitong={this.props.xitong}
         orderType={this.props.orderType} data={item} ></Peisongzhong_Item>
     )

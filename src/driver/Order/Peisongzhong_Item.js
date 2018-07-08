@@ -61,7 +61,8 @@ export default class Peisongzhong_Item extends Component {
     }, {
       text: '确定', onPress: ()=> {
         courierAddDone({
-          id
+          id,
+          couId: this.props.driver_id
         })
           .then( res=>{
             if (res.status==='OK') {
