@@ -21,40 +21,6 @@ export default class Peisongzhong_Item extends Component {
     }
   }
 
-  // 根据订单类型的不同， 渲染不同的地址信息
-  renderPlace= (typeId, data)=> {
-    if (typeId!=2) {
-      return <div>
-        <Flex>
-          <FlexItem>收货人姓名：{data.receiverName}</FlexItem>
-          <FlexItem>电话: {data.receiverTel}</FlexItem>
-        </Flex>
-        <Flex style={{padding: 3}} >
-          收货地址:
-          <a href={`http://uri.amap.com/marker?position=${data.endLongitude},${data.endLatitude}`}>
-            <img src="/1.png"/>
-            {data.receiverAddr}
-          </a>
-        </Flex>
-      </div>
-    } else {
-      return <Flex>
-        <Flex>
-          <FlexItem>购货人姓名：{data.senderName}</FlexItem>
-          <FlexItem>电话: {data.senderTel}</FlexItem>
-        </Flex>
-        <Flex style={{padding: 3}} >
-          <a href={`http://uri.amap.com/marker?position=${data.cusLongitude},${data.cusLatitude}`}>
-            <img src="/1.png"/>
-            {/*{data.receiverAddr}*/}
-            导航到客户处
-          </a>
-        </Flex>
-      </Flex>
-    }
-
-  }
-
   done= id=> {
     Modal.alert('确认送达订单？', '', [{
       text: '取消', onPress: ()=> {}

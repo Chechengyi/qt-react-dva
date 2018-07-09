@@ -8,6 +8,7 @@ import { getRoutes } from '../utils/utils'
 import Iscroll from 'iscroll/build/iscroll'
 import loginHoc from '../Hoc/LoginHoc'
 import {Toast, Modal} from "antd-mobile/lib/index";
+import { throttle } from '../services/utils'
 
 @connect( state=>({
   driver_status: state.driver_login.driver_status,
@@ -47,19 +48,18 @@ export default class Cont extends PureComponent {
     }
     this.getCount()
     if (!window.timer) {
-      window.timer = setInterval(this.getCount, 1000*20)
+      // window.timer = setInterval(this.getCount, 1000*20)
+      window.timer = setInterval(throttle(this.getCount, 300, this), 1000*20)
     }
   }
   // 获取为处理订单个数action
   getCount =()=> {
-    console.log('获取个数')
     this.props.dispatch({
       type: 'courierNoAccept/getCount',
       payload: {
         id: this.props.driver_id
       }
     })
-    // this.AudioPlay()
   }
 
   // 播放音频且弹出提示框

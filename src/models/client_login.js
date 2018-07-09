@@ -76,10 +76,10 @@ export default {
         client_tel: payload.client_tel
       }
     },
-    changeLoading ( state, {paylaod} ) {
+    changeLoading ( state, {payload} ) {
       return {
         ...state,
-        loading: paylaod
+        loading: payload
       }
     }
   }

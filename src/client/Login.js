@@ -26,6 +26,7 @@ export default class Login extends PureComponent {
   }
 
   submit = () => {
+    if (this.props.loading) return
     const { username, password } = this.props.form.getFieldsValue()
     if ( !username || !password ) {
       Toast.fail('用户名或密码不能为空', 1)

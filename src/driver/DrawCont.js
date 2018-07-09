@@ -40,11 +40,11 @@ export default class DrawCont extends Component{
   handle_work = (e) => {
     if (e) {
       //  上班
-      this.work()
       this.props.dispatch({
         type: 'driver_login/goWork',
         payload: e
       })
+      this.work()
     } else {
       this.noWork()
     }
@@ -81,7 +81,16 @@ export default class DrawCont extends Component{
       });
       mapObj.addControl(geolocation);
       geolocation.getCurrentPosition()
-      AMap.event.addListener(geolocation, 'complete', throttle(self.senPos,60000, self))
+
+      // 没有定时器就添加定时器执行定位操作
+      if (!window.posTimer) {
+        window.posTimer = setInterval( ()=>{
+          geolocation.getCurrentPosition()
+        }, 30000 )
+      }
+
+      AMap.event.addListener(geolocation, 'complete', throttle(self.senPos,500, self))
+
       AMap.event.addListener(geolocation, 'error', (err) => {
         console.log(err)
         self.posErr()
@@ -91,30 +100,19 @@ export default class DrawCont extends Component{
 
   // 定位位置出错
   posErr =()=> {
-    // this.props.dispatch({
-    //   type: 'driver_login/saveWork',
-    //   payload: false
-    // })
+    // 定位出错清除定时
+    clearInterval(window.posTimer)
     this.noWork()
     Modal.alert('上班失败，定位位置出错', '请打开设置查看是否允许定位', [{
       text: '确认', onPress: ()=>{}
     }])
   }
-
-  //  获取位置
-  getPost = (e) => {
-    if (this.props.isWork){
-      geolocation.getCurrentPosition()
-    }
-    console.log(e)
-  }
   // 发送位置给后台
   senPos = (e) => {
-    console.log('...')
-    console.log(this.props.driver_id)
+    // 由于定时器原因，所以在这需要做一个是否上班状态验证。才能达到快递员点击下班时立即不在发送定位信息
     if (this.props.isWork){
-      geolocation.getCurrentPosition()
-      console.log(e.position.lng)
+      alert('ok')
+      console.log(e.position.lat,e.position.lng)
       sendPos({
         id: this.props.driver_id,
         createTime: new Date(),

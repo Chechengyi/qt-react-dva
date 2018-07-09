@@ -32,13 +32,6 @@ export default class ElesCont extends PureComponent {
     if (this.refs.audio) {
       this.refs.audio.play()
     }
-    // Modal.alert('您有新的订单', '', [{
-    //   text: '等会再去', onPress: ()=>{}
-    // }, {
-    //   text: '去处理', onPress: ()=>{
-    //     this.props.history.push('/driverCont/weichuli')
-    //   }
-    // }])
   }
   render () {
     const {routerData, match} = this.props

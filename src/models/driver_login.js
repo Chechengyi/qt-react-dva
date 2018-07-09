@@ -115,7 +115,7 @@ export default {
         payload: true
       })
       // window.sessionStorage.setItem('driverWork', 'work')
-      // store.set('driverWork', 'work')
+      store.set('driverWork', 'work')
     },
     *noWork ( {payload}, {call, put} ) {
       yield put({
@@ -123,7 +123,7 @@ export default {
         payload: false
       })
       // window.sessionStorage.setItem('driverWork', 'noWork')
-      // store.remove('driverWork')
+      store.remove('driverWork')
     }
   },
   reducers: {
