@@ -8,6 +8,7 @@ import orderType from "../../models/orderType";
 import { objIsNull } from '../../services/utils'
 import { getExpectedPrice, addOrder } from '../../services/api'
 import Logo from './Logo'
+import Radio from '../../components/Radio/Index'
 
 const ListItem = List.Item
 const Brief = List.Item.Brief
@@ -32,7 +33,8 @@ export default class ByOrderTongcheng extends Component {
     this.state = {
       ExpectedFee: null,
       feeLoading: false,
-      loading: false
+      loading: false,
+      radio: true
     }
   }
 
@@ -68,6 +70,15 @@ export default class ByOrderTongcheng extends Component {
 
   submit=async ()=> {
     if (this.state.loading) return
+
+    // 验证是否同意快递运单条约
+    if ( !this.state.radio ) {
+      Modal.alert('您不同意快递运单条约无法下单', '', [{
+        text: '确认', onPress: ()=> {}
+      }])
+      return
+    }
+
     if (!this.props.client_id) {
       Modal.alert('下单请先登录！','',[{
         text: '确定', onPress: ()=>{
@@ -192,6 +203,12 @@ export default class ByOrderTongcheng extends Component {
     return fee
   }
 
+  handleChange =(e)=> {
+    this.setState({
+      radio: e
+    })
+  }
+
   render () {
     const { getFieldProps } = this.props.form
     return <div>
@@ -253,6 +270,13 @@ export default class ByOrderTongcheng extends Component {
             placeholder=' 选填'
           />
         </List>
+        <Flex style={{padding: 10}} justify='center' >
+          <Radio
+            onChange={this.handleChange}
+            checked={this.state.radio}
+            title={ ()=><div>同意 <a href="/#/cont/tiaoyue">《快递运单契约条款》</a></div> }
+          />
+        </Flex>
         {/*{ this.state.expectedFee&&*/}
           {/*<WingBlank>*/}
             {/*{this.state.feeLoading?*/}
@@ -275,4 +299,11 @@ export default class ByOrderTongcheng extends Component {
       </div>
     </div>
   }
+}
+
+const radio = {
+  padding: '2.5px',
+  border: '1px solid #ccc',
+  borderRadius: '50%',
+  marginRight: '5px',
 }

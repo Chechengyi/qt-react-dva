@@ -122,7 +122,11 @@ export default class NoConfirm extends Component {
 
   render(){
     const row = (item)=>(
-      <NoConfirmItem dispatch={this.props.dispatch} data={item} orderType={this.props.orderType} />
+      <NoConfirmItem
+        history={this.props.history}
+        dispatch={this.props.dispatch}
+        cusId={this.props.client_id}
+        data={item} orderType={this.props.orderType} />
     )
     return <div>
       <NavBar

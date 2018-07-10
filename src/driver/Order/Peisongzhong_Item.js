@@ -64,10 +64,23 @@ export default class Peisongzhong_Item extends Component {
         订单类型：{this.renderOrderType(data.typeId)}
       </Flex>
       <Flex>
-        <FlexItem>收件人姓名：{data.senderName}</FlexItem>
-        <FlexItem>电话: {data.senderTel}</FlexItem>
-        {/*<FlexItem>收件地址:{data.receiverAddr}</FlexItem>*/}
+        <FlexItem >客户姓名：{data.senderName}</FlexItem>
+        <FlexItem >
+          <a href={`tel:${data.senderTel}`}>
+            <img style={{width: 20, height: 20}} src="/tel.png" alt=""/>
+            {data.senderTel}</a>
+        </FlexItem>
       </Flex>
+      {data.typeId!=2&&
+      <Flex>
+        <FlexItem>收件人姓名：{data.receiverName}</FlexItem>
+        <FlexItem>
+          <a href={`tel:${data.receiverTel}`}>
+            <img style={{width: 20, height: 20}} src="/tel.png" alt=""/>
+            {data.receiverTel}</a>
+        </FlexItem>
+      </Flex>
+      }
       <Flex>
         收件地址：{data.receiverAddr}
       </Flex>

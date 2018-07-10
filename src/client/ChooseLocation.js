@@ -114,8 +114,10 @@ export default class ChooseLocation extends PureComponent {
 
   render(){
     return <div onTouchMove={e=>e.preventDefault()} >
-      <NavBar>
-        <div onClick={ this.handleBack } >返回地址填写页面</div>
+      <NavBar
+        leftContent={<div onClick={ this.handleBack } >返回</div>}
+      >
+        选择您附近的建筑物
       </NavBar>
       <iframe
         id='start'

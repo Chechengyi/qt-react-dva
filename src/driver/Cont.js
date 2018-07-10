@@ -123,7 +123,7 @@ export default class Cont extends PureComponent {
         icon={this.state.writePsw?<Icon type="left" />:<Icon type="ellipsis" />} onLeftClick={ ()=>{ this.onOpenChange('click') }}>
         {this.state.writePsw?'修改密码':this.state.title}
       </NavBar>
-      <audio ref='audio' preload src="http://data.huiyi8.com/2014/lxy/05/14/10.mp3"></audio>
+      <audio ref='audio' src="http://data.huiyi8.com/2014/lxy/05/14/10.mp3"></audio>
       <Drawer
         className={styles.myDrawer}
         style={{ minHeight: document.documentElement.clientHeight-45}}

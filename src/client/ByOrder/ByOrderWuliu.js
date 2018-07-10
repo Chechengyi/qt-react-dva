@@ -8,6 +8,7 @@ import orderType from "../../models/orderType";
 import { objIsNull } from '../../services/utils'
 import { getExpectedPrice, addOrder } from '../../services/api'
 import Logo from './Logo'
+import Radio from '../../components/Radio/Index'
 
 const ListItem = List.Item
 const Brief = List.Item.Brief
@@ -32,7 +33,8 @@ export default class ByOrderTongcheng extends Component {
     this.AMap = Object.AMap
     this.state = {
       ExpectedFee: null,
-      loading: false
+      loading: false,
+      radio: true
     }
   }
   componentDidMount(){
@@ -68,6 +70,7 @@ export default class ByOrderTongcheng extends Component {
   * */
   submit= async ()=> {
     if (this.state.loading) return
+
     if (!this.props.client_id) {
       Modal.alert('下单请先登录！','',[{
         text: '确定', onPress: ()=>{
@@ -76,6 +79,15 @@ export default class ByOrderTongcheng extends Component {
       }])
       return
     }
+
+    // 验证是否同意快递运单条约
+    if ( !this.state.radio ) {
+      Modal.alert('您不同意快递运单条约无法下单', '', [{
+        text: '确认', onPress: ()=> {}
+      }])
+      return
+    }
+
     // 从sessionStorage里取出当前订单的提价比例
     const feeRate = window.sessionStorage.getItem('feeRate')
     let {weight, goodsType, comment} = this.props.form.getFieldsValue()
@@ -83,7 +95,7 @@ export default class ByOrderTongcheng extends Component {
 
     // 检验商品信息是否完善
     if ( !weight || !goodsType ) {
-      Modal.alert('请先完善要寄物品嘻嘻', '订单信息不完善不能提交订单！',[{
+      Modal.alert('请先完善要寄物品', '订单信息不完善不能提交订单！',[{
         text: '确定', onPress: ()=>{}
       }])
        return
@@ -178,6 +190,12 @@ export default class ByOrderTongcheng extends Component {
     return fee
   }
 
+  handleChange =(e)=> {
+    this.setState({
+      radio: e
+    })
+  }
+
   render () {
     const { getFieldProps } = this.props.form
     return <div>
@@ -238,6 +256,13 @@ export default class ByOrderTongcheng extends Component {
             placeholder='可选'
             title='备注' />
         </List>
+        <Flex style={{padding: 10}} justify='center' >
+          <Radio
+            onChange={this.handleChange}
+            checked={this.state.radio}
+            title={ ()=><div>同意 <a href="/#/cont/tiaoyue">《快递运单契约条款》</a></div> }
+          />
+        </Flex>
         {/*{ this.state.expectedFee&&*/}
         {/*<WingBlank>*/}
           {/*{this.state.feeLoading?*/}

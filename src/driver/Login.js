@@ -58,7 +58,7 @@ export default class Login extends PureComponent {
           <List>
             <InputItem
               {...getFieldProps('username')}
-            >用户名</InputItem>
+            >手机号码</InputItem>
           </List>
           <List>
             <InputItem

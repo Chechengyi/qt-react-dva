@@ -28,7 +28,8 @@ export default class NoConfirmItem extends Component {
       text: '确认', onPress: ()=>{
         cancelOrder({
           id,
-          cancelStatus: 2
+          cancelStatus: 2,
+          cusId: parseInt(this.props.cusId)
         })
           .then( res=>{
             console.log(res.status)
@@ -43,7 +44,7 @@ export default class NoConfirmItem extends Component {
             } else {
               Modal.alert('快递员已经在来的路上来', '暂不能取消订单', [{
                 text: '确认', onPress: ()=>{
-                  this.props.history.replace('/cont/ongoing')
+                  this.props.history.push('/cont/ongoing')
                 }
               }])
             }

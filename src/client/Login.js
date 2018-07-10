@@ -53,7 +53,7 @@ export default class Login extends PureComponent {
           <InputItem
             // type='phone'
             {...getFieldProps('username')}
-          >用户名</InputItem>
+          >手机号码</InputItem>
           <InputItem
             type='password'
             {...getFieldProps('password')}

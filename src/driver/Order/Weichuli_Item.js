@@ -22,7 +22,7 @@ export default class Weichuli_Item extends Component {
     }
   }
 
-  handleCancel= id=> {
+  handleCancel= (id, cusId)=> {
     // Modal.platform('确定取消订单？)
     Modal.prompt('确定取消订单？', '取消原因', [{
       text: '取消', onPress: ()=> {}
@@ -32,7 +32,8 @@ export default class Weichuli_Item extends Component {
         cancelOrder({
           id: id,
           cancelReason: value,
-          cancelStatus: 3
+          cancelStatus: 3,
+          cusId
         })
           .then( res=> {
             if (res.status==='OK') {
@@ -98,7 +99,7 @@ export default class Weichuli_Item extends Component {
       </div>
       <div style={{fontSize: 15, marginTop: 5, textAlign: 'right'}} >
         <a onClick={ ()=>{ this.handleChoose(data.id) } } style={{marginRight: 10}} >确认处理</a>
-        <a onClick={ ()=>{this.handleCancel(data.id)} } >取消订单</a>
+        <a onClick={ ()=>{this.handleCancel(data.id, data.cusId)} } >取消订单</a>
       </div>
     </ListItem>
   }

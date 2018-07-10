@@ -55,8 +55,10 @@ export default class ChooseEndLocation extends PureComponent {
 
   render(){
     return <div>
-      <NavBar>
-        <div onClick={ this.handleBack } >返回地址填写页面</div>
+      <NavBar
+        leftContent={<div onClick={ this.handleBack } >返回</div>}
+      >
+        选择附近的建筑物
       </NavBar>
       <iframe
         id='test'

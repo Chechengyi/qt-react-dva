@@ -38,6 +38,10 @@ export default {
           type: 'saveMoneyAccount',
           payload: {}
         })
+        yield put({
+          type: 'saveCash',
+          payload: 0
+        })
       }
       yield put({
         type: 'changeLoading',

@@ -54,7 +54,8 @@ export default class FrontDesk_table extends  PureComponent {
       orderId: null,
       orderIndex: null,
       modalLoading: false,
-      hiddenRowsId: []
+      hiddenRowsId: [],
+      cusId: null
     }
   }
 
@@ -99,10 +100,11 @@ export default class FrontDesk_table extends  PureComponent {
     }
   }
 
-  handleModal = (id, index) => {
+  handleModal = (val, index) => {
     this.setState({
       modalVisible: true,
-      orderId: id,
+      orderId: val.id,
+      cusId: val.cusId,
       orderIndex: index
     })
   }
@@ -118,6 +120,7 @@ export default class FrontDesk_table extends  PureComponent {
       })
       cancelOrder({
         id: this.state.orderId, // 订单id
+        cusId: this.state.cusId,  // 订单客户id
         cancelReason: value.cancelReason,
         cancelStatus: 1,  // 管理员取消为1
         cancelId: this.props.admin_id  // 管理员的id
@@ -248,7 +251,7 @@ export default class FrontDesk_table extends  PureComponent {
           <div>
             <a href={`/#/orderMap/${val.id}/${val.cusLongitude},${val.cusLatitude}`} >查看周边快递员</a>
             <a style={{color: 'red', marginLeft: 5}}
-                onClick={ ()=>{ this.handleModal(val.id, index) } }
+                  onClick={ ()=>{ this.handleModal(val, index) } }
             >取消订单</a>
           </div>
         )

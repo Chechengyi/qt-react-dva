@@ -6,6 +6,7 @@ import { createForm } from 'rc-form'
 import { objIsNull } from '../../services/utils'
 import { getExpectedPrice, addOrder } from "../../services/api";
 import Logo from './Logo'
+import Radio from '../../components/Radio/Index'
 
 const ListItem = List.Item
 const Brief = List.Item.Brief
@@ -33,7 +34,8 @@ export default class ByOrderDaigou extends Component {
     this.state = {
       feeLoading: false,
       expectedFee: null,
-      loading: false
+      loading: false,
+      radio: true
     }
   }
 
@@ -101,6 +103,15 @@ export default class ByOrderDaigou extends Component {
   * */
   submit= async e=> {
     if (this.state.loading) return
+
+    // 验证是否同意快递运单条约
+    if ( !this.state.radio ) {
+      Modal.alert('您不同意快递运单条约无法下单', '', [{
+        text: '确认', onPress: ()=> {}
+      }])
+      return
+    }
+
     if (!this.props.client_id) {
       Modal.alert('下单请先登录！','',[{
         text: '确定', onPress: ()=>{
@@ -174,6 +185,12 @@ export default class ByOrderDaigou extends Component {
       }
     }])
 
+  }
+
+  handleChange =(e)=> {
+    this.setState({
+      radio: e
+    })
   }
 
   render () {
@@ -253,6 +270,13 @@ export default class ByOrderDaigou extends Component {
             {/*备注*/}
           {/*</InputItem>*/}
         </List>
+        <Flex style={{padding: 10}} justify='center' >
+          <Radio
+            onChange={this.handleChange}
+            checked={this.state.radio}
+            title={ ()=><div>同意 <a href="/#/cont/tiaoyue">《快递运单契约条款》</a></div> }
+          />
+        </Flex>
         {/*{ this.state.expectedFee&&*/}
         {/*<WingBlank>*/}
           {/*{this.state.feeLoading?*/}

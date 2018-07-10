@@ -30,6 +30,16 @@ export default class Daifukuan_Item extends Component {
             {data.senderTel}</a>
         </FlexItem>
       </Flex>
+      {data.typeId!=2&&
+      <Flex>
+        <FlexItem>收件人姓名：{data.receiverName}</FlexItem>
+        <FlexItem>
+          <a href={`tel:${data.receiverTel}`}>
+            <img style={{width: 20, height: 20}} src="/tel.png" alt=""/>
+            {data.receiverTel}</a>
+        </FlexItem>
+      </Flex>
+      }
       <Flex>
         <FlexItem>客户下单地址：
           {data.senderAddress}</FlexItem>
@@ -40,6 +50,9 @@ export default class Daifukuan_Item extends Component {
       </Flex>
       <Flex>
         订单预算价格：{data.fee.toFixed(2)}元
+      </Flex>
+      <Flex>
+        订单备注：{data.comment}
       </Flex>
       <Flex>
         <FlexItem>

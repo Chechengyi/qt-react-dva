@@ -192,7 +192,7 @@ export default class Money extends PureComponent {
       }} >
         <div style={{width: 129, height: 63, display: 'flex', justifyContent: 'center',alignItems:'center'}} >
           {this.props.loading?<ActivityIndicator animating={this.props.loading} />:
-            <span style={{fontSize: '3em', color: '#fff'}} >{this.props.cash}</span>}
+            <span style={{fontSize: '3em', color: '#fff'}} >{this.props.cash.toFixed(2)}</span>}
         </div>
         <div style={{
           width: 100, borderRadius: 3,

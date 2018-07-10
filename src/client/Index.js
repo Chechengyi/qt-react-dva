@@ -157,7 +157,7 @@ export default class Index extends Component {
     //   this.props.history.push('/cont/byOrder/wuliu')
     // }
     // return
-    if(this.props.client_status==='OK'){
+    if (this.props.client_status==='OK') {
       var road
       // this.props.history.push(`/cont/byOrder/${this.state.selectOrderTypeId}`)
       if ( this.state.selectOrderTypeId==1 ) { //去往同城急送下单页面
@@ -174,7 +174,7 @@ export default class Index extends Component {
         road = 'wl'
       }
       // window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe75752031ce1c286&redirect_uri=http://www.laikexin.cc/weixin/getWxMp?road=${road}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`
-      var href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe75752031ce1c286&redirect_uri=http://www.zyqtsd.com/weixin/getWxMp&response_type=code&scope=snsapi_userinfo&state=${road}${this.props.client_id}#wechat_redirect`
+      var href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe75752031ce1c286&redirect_uri=http://www.laikexin.cc/getWxMp&response_type=code&scope=snsapi_userinfo&state=${road}${this.props.client_id}#wechat_redirect`
 
       var aDom = this.refs.a
 
@@ -187,7 +187,7 @@ export default class Index extends Component {
       // aDom.dispatchEvent(ev);
       // console.log('dd')
 
-    }else{
+    } else {
       Modal.alert('还没有登录','去登录了在下单', [{
         text: '取消', onPress: ()=>{}
       }, {
@@ -201,7 +201,7 @@ export default class Index extends Component {
     return <div>
       <NavBar
         title='快递员上门服务'
-        leftContent={ ()=>(<img onClick={(e)=>{this.handleDrawOpen('revers')}} src="/Category.png" style={{width: 20, height: 20}} alt=""/>
+        leftContent={ ()=>(<img onClick={(e)=>{this.handleDrawOpen('revers')}} src="/menu.png" style={{width: 20, height: 20}} alt=""/>
         ) }
         // rightContent={()=>(<img onClick={ ()=>{ this.props.history.push('/clientChat/1') } } style={{width: 20, height: 20}} src="/wechat1.png" alt=""/>
         // )}
@@ -212,7 +212,7 @@ export default class Index extends Component {
         // )}
         navBarStyle={{
           height: 35,
-          backgroundColor: 'rgba(255,255,255,0.5)', zIndex: 5,
+          backgroundColor: '#108ee9', zIndex: 5, color: '#fff',
           position: 'fixed', top: 0, width: '100%', padding: '0 16px'
         }}
       />
@@ -239,7 +239,7 @@ export default class Index extends Component {
             position: 'absolute', backgroundColor: '#108ee9',
             width: 290, left: document.documentElement.clientWidth/2-145,
             top: 60, padding: '0 20px', lineHeight: '80px',
-            height: 80, zIndex: 1, borderRadius: 4, color: '#fff',
+            height: 60, zIndex: 1, borderRadius: 4, color: '#fff',
             fontSize: '1.1em'
           }} onTouchMove={ e=>e.preventDefault() } >
             {this.props.orderData.map( (item,i)=>(
