@@ -13,10 +13,11 @@ import store from 'store'
 export default class Login extends PureComponent {
 
   componentDidMount(){
-    // console.log(store.get('driverData'))
-    // 在登录页面验证一下
-    console.log(this.props.driver_status)
-    clearInterval(window.timer)
+    // 进入登录页面之后， 判断如果没有登录的话， 就删除掉页面的定时器s
+    if ( this.props.driver_status!= 'OK' ) {
+      clearInterval(window.timer)
+      clearInterval(window.posTimer)
+    }
   }
 
   submit = () => {

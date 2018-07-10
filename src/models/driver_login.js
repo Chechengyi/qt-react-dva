@@ -6,7 +6,6 @@ export default {
   namespace: 'driver_login',
   state: {
     driver_id: store.get('driverData')?store.get('driverData').driver_id:null,
-    // isWork: false,   //是否上班,
     // isWork: window.sessionStorage.getItem('driverWork')=='work'?true:false,
     isWork: store.get('driverWork'),
     // workLoading: false

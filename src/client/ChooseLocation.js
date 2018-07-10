@@ -11,16 +11,8 @@ export default class ChooseLocation extends PureComponent {
     this.state = {
       lat: 27.70846,
       lnt: 107.05683,
-      zoom: 13,
+      zoom: 15,
       loading: true
-    }
-  }
-
-  ceshi =()=> {
-    console.log(111)
-    var ifDom = document.getElementById('start')
-    ifDom.onclick = function (e) {
-      console.log(e)
     }
   }
 
@@ -28,10 +20,8 @@ export default class ChooseLocation extends PureComponent {
     console.log(window)
     console.log(window.parent)
     let self = this
-    this.getPos()
-    this.ceshi()
-    // this.drawMap()
-    Toast.loading('正在定位您的位置...', 5)
+    // this.getPos()
+    // Toast.loading('正在定位您的位置...', 5)
     // 因是单页web结构，所以判断是否监听过选址事件，如果监听过就不在重复监听
     if ( !window.isStartLs ) {
       window.isStartLs = true
@@ -42,7 +32,9 @@ export default class ChooseLocation extends PureComponent {
           self.sendPos(e.data)
         }
       }, false);
+      //  绘制选址组件
     }
+    this.drawMap()
   }
 
   componentWillUnmount(){
@@ -127,7 +119,8 @@ export default class ChooseLocation extends PureComponent {
       </NavBar>
       <iframe
         id='start'
-        src={`https://m.amap.com/picker/?keywords=写字楼,小区,学校&zoom=${this.state.zoom}&center=${this.state.lnt},${this.state.lat}&radius=1000&total=20&key=b807bced59e4c8d89a323ae23159e562`}
+        //src={`https://m.amap.com/picker/?keywords=写字楼,小区,学校&zoom=${this.state.zoom}&center=${this.state.lnt},${this.state.lat}&radius=1000&total=20&key=b807bced59e4c8d89a323ae23159e562`}
+        src={`https://m.amap.com/picker/?keywords=写字楼,小区,学校&zoom=${this.state.zoom}&radius=1000&total=20&key=b807bced59e4c8d89a323ae23159e562`}
         style={{width: '100%',
                 height: document.documentElement.clientHeight-44
         }} frameBorder="0">

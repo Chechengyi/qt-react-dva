@@ -5,7 +5,6 @@ import { connect } from 'dva'
 import styles from './Cont.less'
 import DrawCont from './DrawCont'
 import { getRoutes } from '../utils/utils'
-import Iscroll from 'iscroll/build/iscroll'
 import loginHoc from '../Hoc/LoginHoc'
 import {Toast, Modal} from "antd-mobile/lib/index";
 import { throttle } from '../services/utils'
@@ -48,7 +47,6 @@ export default class Cont extends PureComponent {
     }
     this.getCount()
     if (!window.timer) {
-      // window.timer = setInterval(this.getCount, 1000*20)
       window.timer = setInterval(throttle(this.getCount, 300, this), 1000*20)
     }
   }
@@ -125,7 +123,7 @@ export default class Cont extends PureComponent {
         icon={this.state.writePsw?<Icon type="left" />:<Icon type="ellipsis" />} onLeftClick={ ()=>{ this.onOpenChange('click') }}>
         {this.state.writePsw?'修改密码':this.state.title}
       </NavBar>
-      <audio ref='audio' src="http://data.huiyi8.com/2014/lxy/05/14/10.mp3"></audio>
+      <audio ref='audio' preload src="http://data.huiyi8.com/2014/lxy/05/14/10.mp3"></audio>
       <Drawer
         className={styles.myDrawer}
         style={{ minHeight: document.documentElement.clientHeight-45}}

@@ -86,7 +86,7 @@ export default class DrawCont extends Component{
       if (!window.posTimer) {
         window.posTimer = setInterval( ()=>{
           geolocation.getCurrentPosition()
-        }, 30000 )
+        }, 30000 )  // 30s
       }
 
       AMap.event.addListener(geolocation, 'complete', throttle(self.senPos,500, self))
@@ -111,7 +111,6 @@ export default class DrawCont extends Component{
   senPos = (e) => {
     // 由于定时器原因，所以在这需要做一个是否上班状态验证。才能达到快递员点击下班时立即不在发送定位信息
     if (this.props.isWork){
-      alert('ok')
       console.log(e.position.lat,e.position.lng)
       sendPos({
         id: this.props.driver_id,

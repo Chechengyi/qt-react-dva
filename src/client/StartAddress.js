@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import { NavBar, Icon, List, Button, InputItem,
   WhiteSpace, WingBlank, Modal, Picker, TextareaItem } from 'antd-mobile'
-import AddressPicker from './AddressPicker'
-import { getProvince } from '../services/api'
-import { promise_ } from '../services/utils'
 import { connect } from 'dva'
 import { createForm } from 'rc-form'
 
