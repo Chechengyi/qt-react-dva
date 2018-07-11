@@ -56,6 +56,8 @@ export default class Weichuli_Item extends Component {
 
   handleChoose= id=> {
     Modal.alert('确认处理', '', [{
+      text: '取消', onPress: ()=> {}
+    }, {
       text: '确定', onPress: ()=> {
         courierAddAccpet({
           id
@@ -74,8 +76,6 @@ export default class Weichuli_Item extends Component {
             Toast.fail('服务器错误，请重新尝试', 1)
           } )
       }
-    }, {
-      text: '取消', onPress: ()=> {}
     }])
 
   }

@@ -132,7 +132,7 @@ export default class NoConfirm extends Component {
       <NavBar
         icon={ <Icon type='left' ></Icon> }
         onLeftClick={ ()=>this.props.history.goBack() }
-      >送单统计</NavBar>
+      >待确认订单</NavBar>
       <ListView
         initialListSize={20}
         style={{height: document.documentElement.clientHeight-45,

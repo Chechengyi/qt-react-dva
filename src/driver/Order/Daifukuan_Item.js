@@ -30,6 +30,21 @@ export default class Daifukuan_Item extends Component {
             {data.senderTel}</a>
         </FlexItem>
       </Flex>
+      <Flex>
+        <FlexItem>客户下单地址：
+          {/*{data.typeId==2?data.receiverAddr:data.senderAddress}*/}
+          {data.typeId==2?
+            <a href={`http://uri.amap.com/marker?position=${data.endLongitude},${data.endLatitude}`}>
+              <img style={{width: 25, height: 25}} src="/1.png" alt=""/>
+              {data.receiverAddr}
+            </a>:
+            <a href={`http://uri.amap.com/marker?position=${data.cusLongitude},${data.cusLatitude}`}>
+              <img style={{width: 25, height: 25}} src="/1.png" alt=""/>
+              {data.senderAddress}
+            </a>
+          }
+          </FlexItem>
+      </Flex>
       {data.typeId!=2&&
       <Flex>
         <FlexItem>收件人姓名：{data.receiverName}</FlexItem>
@@ -40,10 +55,32 @@ export default class Daifukuan_Item extends Component {
         </FlexItem>
       </Flex>
       }
-      <Flex>
-        <FlexItem>客户下单地址：
-          {data.senderAddress}</FlexItem>
-      </Flex>
+      {
+        data.typeId==3?null:data.typeId==2?
+        <Flex>
+          购货地址：
+          <a href={`http://uri.amap.com/marker?position=${data.endLongitude},${data.endLatitude}`}>
+            <img style={{width: 25, height: 25}} src="/1.png" alt=""/>
+            {data.senderAddress}
+          </a>
+        </Flex>:
+        <Flex>
+          收货地址：
+          <a href={`http://uri.amap.com/marker?position=${data.endLongitude},${data.endLatitude}`}>
+            <img style={{width: 25, height: 25}} src="/1.png" alt=""/>
+            {data.receiverAddr}
+          </a>
+          {/*<FlexItem>*/}
+            {/*收货地址：{data.receiverAddr}*/}
+            {/*</FlexItem>*/}
+        </Flex>
+      }
+      {
+        data.typeId==3&&
+        <Flex>
+          收货地址：{data.receiverAddr}
+        </Flex>
+      }
       <Flex>
         <FlexItem>商品类型：{data.goodsType}</FlexItem>
         <FlexItem>实际重量：{data.weight} 公斤</FlexItem>

@@ -132,7 +132,7 @@ export default class Done extends Component {
       <NavBar
         icon={ <Icon type='left' ></Icon> }
         onLeftClick={ ()=>this.props.history.goBack() }
-      >送单统计</NavBar>
+      >已完成订单</NavBar>
       <ListView
         initialListSize={20}
         style={{height: document.documentElement.clientHeight-45,

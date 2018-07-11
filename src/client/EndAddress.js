@@ -77,11 +77,20 @@ export default class EndAddress extends PureComponent {
       })
     }
     if(this.typeId==2){
+      // 代购地点的详细地址也不能为空
+      if (!address) {
+        this.renderModal('请填写代购商品的详细地址')
+        return
+      }
       // 代购服务的提交终点信息
       if (Object.keys(this.props.endPoint).length==0) {
         this.renderModal('请选择代购的地点后在提交')
         return
       }
+      this.props.dispatch({
+        type: 'orderAddress/endAddress',
+        payload: address
+      })
     }
     this.handleBack()
   }
@@ -143,6 +152,18 @@ export default class EndAddress extends PureComponent {
               <a onClick={ ()=>this.props.history.push('/cont/chooseEndLocation') } >重新选择</a>
             </div>
           </div>
+        </List>
+      }
+      {
+        this.typeId==2&&
+        <List renderHeader={ ()=>'购货详细地址'} >
+          <TextareaItem
+            {...getFieldProps('address', {
+              initialValue: this.props.endAddress
+            })}
+            rows={3}
+            count={50}
+            title='详细地址' />
         </List>
       }
       {

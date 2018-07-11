@@ -91,7 +91,7 @@ export default class Daiqueren_Item extends Component {
         </div>
         <div style={{textAlign: 'center', padding: 5}} >
           <span onClick={ ()=>this.linkConfirm(data) } style={{color: 'green', textDecoration: 'underline'}} >
-            到达{this.typeId==2?'购物':'客户'}处，开始核对信息</span>
+            到达{data.typeId==2?'购物':'客户'}处，开始核对信息</span>
         </div>
       </div>
     )
