@@ -121,8 +121,8 @@ export default class ChooseLocation extends PureComponent {
       </NavBar>
       <iframe
         id='start'
-        //src={`https://m.amap.com/picker/?keywords=写字楼,小区,学校&zoom=${this.state.zoom}&center=${this.state.lnt},${this.state.lat}&radius=1000&total=20&key=b807bced59e4c8d89a323ae23159e562`}
-        src={`https://m.amap.com/picker/?keywords=写字楼,小区,学校&zoom=${this.state.zoom}&radius=1000&total=20&key=b807bced59e4c8d89a323ae23159e562`}
+        //src={`http://m.amap.com/picker/?keywords=省&zoom=${this.state.zoom}&center=${this.state.lnt},${this.state.lat}&radius=1000&total=20&key=b807bced59e4c8d89a323ae23159e562`}
+        src={`https://m.amap.com/picker/?keywords=市 ，区， 街道&zoom=15&total=20&key=b807bced59e4c8d89a323ae23159e562`}
         style={{width: '100%',
                 height: document.documentElement.clientHeight-44
         }} frameBorder="0">

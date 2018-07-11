@@ -93,6 +93,7 @@ export default class StartAddress extends Component {
     this.setState({
       value: e
     })
+    console.log(e)
     this.props.dispatch({
       type: 'pickerAddress/setValue',
       payload: e

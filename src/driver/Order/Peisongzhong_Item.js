@@ -120,7 +120,9 @@ export default class Peisongzhong_Item extends Component {
         </Flex>
       }
       <Flex>
-        <FlexItem>商品类型：{data.goodsType}</FlexItem>
+        <FlexItem>{data.typeId==2?'代购清单':'物品类型'}：{data.goodsType}</FlexItem>
+      </Flex>
+      <Flex>
         <FlexItem>实际重量：{data.weight} 公斤</FlexItem>
       </Flex>
       <Flex>

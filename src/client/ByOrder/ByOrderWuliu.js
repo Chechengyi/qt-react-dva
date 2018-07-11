@@ -94,7 +94,7 @@ export default class ByOrderTongcheng extends Component {
     const {startPoint, endPoint, startMsg, endMsg, client_id, adminId, endAddress, provinceCode, startAddress} = this.props
 
     // 检验商品信息是否完善
-    if ( !weight || !goodsType ) {
+    if ( !weight ) {
       Modal.alert('请先完善要寄物品', '订单信息不完善不能提交订单！',[{
         text: '确定', onPress: ()=>{}
       }])
@@ -135,11 +135,10 @@ export default class ByOrderTongcheng extends Component {
           cusLongitude: startPoint.lnt,
           cusLatitude: startPoint.lat,
           comment,
-          goodsType,
+          goodsType: goodsType?goodsType:'空',
           proCode: provinceCode,
           fee: fee
         }
-        console.log(posData)
         addOrder({...posData})
           .then( res=> {
             this.setState({
@@ -248,12 +247,12 @@ export default class ByOrderTongcheng extends Component {
           >物品重量</InputItem>
           <InputItem
             {...getFieldProps('goodsType')}
-            placeholder='电子设备/文件/...'
+            placeholder='选填'
           >商品类型
           </InputItem>
           <TextareaItem
             {...getFieldProps('comment')}
-            placeholder='可选'
+            placeholder='选填'
             title='备注' />
         </List>
         <Flex style={{padding: 10}} justify='center' >

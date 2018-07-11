@@ -123,7 +123,7 @@ export default class ByOrderDaigou extends Component {
     const { weight, goodsType, comment, couPay } = this.props.form.getFieldsValue()
     const {startPoint, endPoint, startMsg, client_id, adminId, startAddress, endAddress} = this.props
     //验证商品基本信息是否为空
-    if ( !weight || !goodsType || !couPay ) {
+    if ( !weight || !couPay ) {
       this.renderModal('请先将商品信息完善')
       return
     }
@@ -161,7 +161,7 @@ export default class ByOrderDaigou extends Component {
           cusLatitude: endPoint.lat,
           receiverAddr: startAddress,
           senderAddress: endAddress,
-          goodsType,
+          goodsType: goodsType?goodsType:'空',
           fee: fee,
           couPay: parseFloat(couPay)
         }
@@ -263,7 +263,7 @@ export default class ByOrderDaigou extends Component {
           {/*>商品类型</InputItem>*/}
           <TextareaItem
             {...getFieldProps('goodsType')}
-            title='物品清单'  placeholder='需要购买的商品'
+            title='物品清单'  placeholder='需要购买的商品(选填)'
             rows={3}
             count={100}
           />
