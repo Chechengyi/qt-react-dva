@@ -13,7 +13,7 @@ export default {
     driver_name: store.get('driverData')?store.get('driverData').driver_name:null,
     loading: false,
     moneyAccount: {},
-    cash: null
+    cash: 0
   },
   effects: {
     // 获取快递员已有的提现账户
