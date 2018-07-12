@@ -128,7 +128,8 @@ export default class NoConfirmItem extends Component {
         {/*</a>*/}
       {/*</div>*/}
       <Flex>
-        订单预算费用：{data.fee} 元
+        {/*订单预算费用：{data.fee} 元*/}
+        {data.typeId==2?'订单代购费用':'订单预算费用'}：{data.fee}  元
       </Flex>
       {!data.couId&&
       <Flex justify='center' style={{margin: '5px 0'}} >

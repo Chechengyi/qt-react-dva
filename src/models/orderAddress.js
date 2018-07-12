@@ -6,6 +6,7 @@ export default {
     startPoint: {},  // lat,lnt(起点经纬度) address name
     startMsg: {},  // tel(下单人电话) receiverName(下单人姓名)
     startAddress: null,  //起点详细地址
+    provinceAddr: null,  // 选择的省市区 地址信息
     endPoint: {}, // lat lnt(终点经纬度)   address name
     endMsg: {},  // tel(收件人电话) receiverName(收件人姓名)
     endAddress: null, // 终点详细地址
@@ -14,6 +15,12 @@ export default {
     provinceList: []   // 快递物流时选择省的列表
   },
   effects: {
+    *setProvinceAddr({payload}, {call, put}){
+      yield put({
+        type: 'saveProvinceAddr',
+        payload
+      })
+    },
     *getProvinceList( {payload}, {call, put} ){
       const res = yield call(cusGetAllProvince)
       let arr = res.data.map( item=>{
@@ -86,6 +93,12 @@ export default {
     }
   },
   reducers: {
+    saveProvinceAddr(state, {payload}){
+      return {
+        ...state,
+        provinceAddr: payload
+      }
+    },
     saveProvinceCode( state, {payload} ){
       return {
         ...state,

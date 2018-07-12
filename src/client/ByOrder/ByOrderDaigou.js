@@ -22,7 +22,8 @@ const FlexItem = Flex.Item
   orderType: state.orderType.data,
   adminId: state.orderAddress.adminId,
   startAddress: state.orderAddress.startAddress,
-  endAddress: state.orderAddress.endAddress
+  endAddress: state.orderAddress.endAddress,
+  provinceAddr: state.orderAddress.provinceAddr
 }) )
 @createForm()
 export default class ByOrderDaigou extends Component {
@@ -121,7 +122,7 @@ export default class ByOrderDaigou extends Component {
       return
     }
     const { weight, goodsType, comment, couPay } = this.props.form.getFieldsValue()
-    const {startPoint, endPoint, startMsg, client_id, adminId, startAddress, endAddress} = this.props
+    const {startPoint, endPoint, startMsg, client_id, adminId, startAddress, endAddress, provinceAddr} = this.props
     //验证商品基本信息是否为空
     if ( !weight || !couPay ) {
       this.renderModal('请先将商品信息完善')
@@ -159,7 +160,7 @@ export default class ByOrderDaigou extends Component {
           receiverTel: startMsg.receiverTel,
           cusLongitude: endPoint.lnt,
           cusLatitude: endPoint.lat,
-          receiverAddr: startAddress,
+          receiverAddr: `${provinceAddr}${startAddress}`,
           senderAddress: endAddress,
           goodsType: goodsType?goodsType:'空',
           fee: fee,
@@ -207,7 +208,7 @@ export default class ByOrderDaigou extends Component {
             thumb={<Logo bgColor='#67a1f4' title='购' />}
             arrow="horizontal"
             onClick={ e=>this.props.history.push('/cont/endAddress') }
-          >购货地址
+          >代购地址
             <Brief>
               {Object.keys(this.props.endPoint).length!==0
                 &&this.props.endAddress
@@ -263,7 +264,7 @@ export default class ByOrderDaigou extends Component {
           {/*>商品类型</InputItem>*/}
           <TextareaItem
             {...getFieldProps('goodsType')}
-            title='物品清单'  placeholder='需要购买的商品(选填)'
+            title='代购清单'  placeholder='需要购买的商品(选填)'
             rows={3}
             count={100}
           />

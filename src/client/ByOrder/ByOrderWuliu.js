@@ -22,7 +22,8 @@ const Brief = List.Item.Brief
   adminId: state.orderAddress.adminId,
   startAddress: state.orderAddress.startAddress,
   endAddress: state.orderAddress.endAddress,
-  provinceCode: state.orderAddress.provinceCode
+  provinceCode: state.orderAddress.provinceCode,
+  provinceAddr: state.orderAddress.provinceAddr
 }) )
 @createForm()
 export default class ByOrderTongcheng extends Component {
@@ -91,7 +92,7 @@ export default class ByOrderTongcheng extends Component {
     // 从sessionStorage里取出当前订单的提价比例
     const feeRate = window.sessionStorage.getItem('feeRate')
     let {weight, goodsType, comment} = this.props.form.getFieldsValue()
-    const {startPoint, endPoint, startMsg, endMsg, client_id, adminId, endAddress, provinceCode, startAddress} = this.props
+    const {startPoint, endPoint, startMsg, endMsg, client_id, adminId, endAddress, provinceCode, startAddress, provinceAddr} = this.props
 
     // 检验商品信息是否完善
     if ( !weight ) {
@@ -131,7 +132,7 @@ export default class ByOrderTongcheng extends Component {
           receiverAddr: endAddress,
           senderName: startMsg.receiverName,
           senderTel: startMsg.tel,
-          senderAddress: startAddress,
+          senderAddress: `${provinceAddr}${startAddress}`,
           cusLongitude: startPoint.lnt,
           cusLatitude: startPoint.lat,
           comment,

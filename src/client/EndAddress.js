@@ -21,7 +21,7 @@ export default class EndAddress extends PureComponent {
   constructor(props){
     super(props)
     this.typeId = window.sessionStorage.getItem('typeId')
-    this.title = this.typeId==2?'购货地址':'收货地址'
+    this.title = this.typeId==2?'代购地址':'收货地址'
   }
 
   renderModal( title='', content='', text='确认', onPress=()=>{} ){

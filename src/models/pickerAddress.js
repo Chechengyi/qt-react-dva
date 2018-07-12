@@ -9,9 +9,19 @@ export default {
   state: {
     provinceData: [],
     value: ['520000'],
-    adminId: null
+    adminId: null,
+    province: '贵州省',
+    city: undefined,
+    district: undefined,
+    street: undefined
   },
   effects: {
+    *setSelectAddress({payload}, {call, put}){
+      yield put({
+        type: 'saveSelectAddress',
+        payload
+      })
+    },
     *setValue( {payload}, {call, put} ){
       yield put({
         type: 'saveValue',
@@ -19,7 +29,6 @@ export default {
       })
     },
     *setProvinceData( {payload}, {call, put} ){
-      console.log('获取省级列表')
       const res = yield call( cusGetAllProvince )
       yield put({
         type: 'saveProvinceData',
@@ -27,7 +36,6 @@ export default {
       })
     },
     *setCityData( {payload}, {call, put} ){
-      console.log('获取市级列表')
       code = payload.split(',')[0]
       const res = yield call( cusGetCity, {code} )
       if (res.data) {
@@ -49,7 +57,6 @@ export default {
       }
     },
     *setDistrictData( {payload}, {call, put} ){
-      console.log('获取区县列表')
       // 取出选中的市的code
       let code  = payload[1].split(',')[0]
       const res = yield call( cusGetDistrict, {code} )
@@ -63,7 +70,6 @@ export default {
       })
     },
     *setStreetData( {payload}, {call, put} ) {
-      console.log('获取街道列表')
       let code  = payload[2].split(',')[0]
       // 发送获取street经销商请求
       const res = yield call( cusGetStreet, {code} )
@@ -79,6 +85,15 @@ export default {
     }
   },
   reducers: {
+    saveSelectAddress( state, {payload} ){
+      return {
+        ...state,
+        province: payload.province,
+        city: payload.city,
+        district: payload.district,
+        street: payload.street
+      }
+    },
     saveValue( state, {payload} ){
       return {
         ...state,
@@ -113,7 +128,7 @@ export default {
       for ( var i=0; i<data.length; i++ ) {
         adminId = data[i].adminId || cityParentNode.adminId || provinceParentNode.adminId || districtParentNode.adminId || 1
         arr.push({
-          value: `${data[i].code},${adminId}`,
+          value: `${data[i].code},${adminId},${data[i].name}`,
           label: data[i].name,
           id: data[i].id,
           adminId
@@ -146,7 +161,7 @@ export default {
       for ( var i=0; i<data.length; i++ ) {
         adminId = data[i].adminId || cityParentNode.adminId || provinceParentNode.adminId || 1
         arr.push({
-          value: `${data[i].code},${adminId}`,
+          value: `${data[i].code},${adminId},${data[i].name}`,
           label: data[i].name,
           id: data[i].id,
           adminId
@@ -173,7 +188,7 @@ export default {
         // adminId如果在市级信息中不存在则为父节点的adminId，都不存在则为超管id
         adminId = data[i].adminId || parentNode.adminId || 1
         arr.push({
-          value: `${data[i].code},${adminId}`,
+          value: `${data[i].code},${adminId},${data[i].name}`,
           label: data[i].name,
           id: data[i].id,
           adminId
@@ -192,7 +207,7 @@ export default {
       for ( var i=0; i<payload.length; i++ ) {
         adminId = payload[i].adminId || 1
         arr.push({
-          value: `${payload[i].code},${adminId}`,
+          value: `${payload[i].code},${adminId},${payload[i].name}`,
           label: payload[i].name,
           id: payload[i].id,
           adminId

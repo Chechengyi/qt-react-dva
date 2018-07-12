@@ -12,7 +12,8 @@ import { createForm } from 'rc-form'
   value: state.pickerAddress.value,
   client_name: state.client_login.client_name,
   client_tel: state.client_login.client_tel,
-  adminId: state.orderAddress.adminId
+  adminId: state.orderAddress.adminId,
+  address: state.pickerAddress
 }))
 @createForm()
 export default class StartAddress extends Component {
@@ -53,7 +54,7 @@ export default class StartAddress extends Component {
     }])
   }
   submit=()=>{
-    let {tel, receiverName, address} = this.props.form.getFieldsValue()  // 用户填写的电话和寄件人姓名
+    let {tel, receiverName, address, province} = this.props.form.getFieldsValue()  // 用户填写的电话和寄件人姓名
     tel = tel.replace(/\s+/g,"")
     // 无论是哪类型的订单， 下面的信息不能少
     if ( Object.keys(this.props.startPoint).length==0 ||!tel||!receiverName ) {  // ||!tel||!receiverName
@@ -61,7 +62,7 @@ export default class StartAddress extends Component {
       return
     }
     // 设置下单地点的详细地址， 代购订单里就是收获地址， 此字段不能为空
-    if (/^[\s]*$/.test(address) || !address ) {
+    if (/^[\s]*$/.test(address) || !address || /^[\s]*$/.test(province) || !province ) {
       if (this.typeId==2) {
         this.renderModal('收货地址信息不能为空')
       } else {
@@ -85,15 +86,46 @@ export default class StartAddress extends Component {
       type: 'orderAddress/startAddress',
       payload: address
     })
+    this.props.dispatch({
+      type: 'orderAddress/setProvinceAddr',
+      payload: province
+    })
     // 跳回下单的页面
     this.handleLink()
+  }
+
+  // 保存选择的省市区街道
+  saveAdress= e=> {
+    //  type: pickerAddress/setSelectAddress
+    let province = e[0]
+    let city = e[1]
+    let district = e[2]
+    let street = e[3]
+    let obj = {}
+    if (province) {
+      obj['province'] = province.split(',')[2]
+    }
+    if (city) {
+      obj['city'] = city.split(',')[2]
+    }
+    if (district) {
+      obj['district'] = district.split(',')[2]
+    }
+    if (street) {
+      obj['street'] = street.split(',')[2]
+    }
+    console.log(obj)
+    this.props.dispatch({
+      type: 'pickerAddress/setSelectAddress',
+      payload: obj
+    })
   }
 
   onPickerChange= async (e)=>{
     this.setState({
       value: e
     })
-    console.log(e)
+    this.saveAdress(e)
     this.props.dispatch({
       type: 'pickerAddress/setValue',
       payload: e
@@ -128,6 +160,7 @@ export default class StartAddress extends Component {
     this.setState({
       value: e
     })
+    this.saveAdress(e)
     this.props.dispatch({
       type: 'pickerAddress/setValue',
       payload: e
@@ -169,6 +202,7 @@ export default class StartAddress extends Component {
 
   render(){
     const { getFieldProps } = this.props.form
+    const {address} = this.props
     return <div>
       <NavBar
         icon={<Icon type='left' ></Icon>}
@@ -229,13 +263,30 @@ export default class StartAddress extends Component {
           {/*count={50}*/}
           {/*clear rows={3}*/}
           {/*title='寄件地址' />:null}*/}
+        {/*<TextareaItem*/}
+          {/*{...getFieldProps('address', {*/}
+            {/*initialValue: this.props.startAddress*/}
+            {/*// initialValue: `${address.province?address.province:''}${address.city?address.city:''}${address.district?address.district:''}${address.street?address.street:''}${this.props.startAddress.replace(`${address.province?address.province:''}${address.city?address.city:''}${address.district?address.district:''}${address.street?address.street:''}`, '')}`*/}
+          {/*})}*/}
+          {/*count={50}*/}
+          {/*clear rows={3}*/}
+          {/*title={this.typeId==2?'收货地址':'寄件地址'} />*/}
+      </List>
+      <List renderHeader={()=>'寄件地址'} >
+        <TextareaItem
+          {...getFieldProps('province', {
+            initialValue: `${address.province?address.province:''}${address.city?address.city:''}${address.district?address.district:''}${address.street?address.street:''}`
+          })}
+          rows={2}
+          title='省/市/区'
+        />
         <TextareaItem
           {...getFieldProps('address', {
             initialValue: this.props.startAddress
           })}
-          count={50}
-          clear rows={3}
-          title={this.typeId==2?'收货地址':'寄件地址'} />
+          rows={3}
+          title='详细地址'
+        />
       </List>
       <WhiteSpace />
       <WingBlank>
