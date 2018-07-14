@@ -259,6 +259,15 @@ export default class FrontDesk_table extends  PureComponent {
         )
       },
       {
+        title: '垫付金额',
+        dataIndex: 'couPay',
+        render: (val, text, index)=>(
+          <div>
+            <span style={{color: '#108ee9'}} >{val?val:0}</span> 元
+          </div>
+        )
+      },
+      {
         title: '订单类型',
         dataIndex: 'typeId',
         width: 80,
@@ -272,7 +281,7 @@ export default class FrontDesk_table extends  PureComponent {
         width: 120,
         render: (val, text, index)=>(
           <div>
-            <Tooltip title={text.typeId==2?'代购服务':text.senderAddress||'地址为空'} >
+            <Tooltip title={text.senderAddress} >
               <a style={{color: 'green'}} >查看地址</a>
             </Tooltip>
           </div>

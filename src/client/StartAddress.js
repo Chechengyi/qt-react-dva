@@ -4,6 +4,8 @@ import { NavBar, Icon, List, Button, InputItem,
 import { connect } from 'dva'
 import { createForm } from 'rc-form'
 
+const ListItem = List.Item
+
 @connect( state=>({
   startPoint: state.orderAddress.startPoint,
   startMsg: state.orderAddress.startMsg,
@@ -208,9 +210,33 @@ export default class StartAddress extends Component {
         icon={<Icon type='left' ></Icon>}
         onLeftClick={ this.handleLink }
       >
-        {this.typeId==2?'收货地址':'起始位置(快递员上门位置)'}
+        {this.typeId==2?'收货地址':'寄件位置(快递员上门位置)'}
       </NavBar>
-      <List renderHeader={ ()=>'选择地理行政区域' } >
+      <List>
+        <InputItem
+          placeholder='请输入姓名'
+          {...getFieldProps('receiverName', {
+            initialValue: this.props.client_name
+          })}
+        ><span style={{color: '#e38466'}} >联系人</span></InputItem>
+        <InputItem
+          placeholder='请输入联系电话'
+          {...getFieldProps('tel', {
+            initialValue: this.toTeltype(this.props.client_tel)
+          })}
+          type='phone' ><span style={{color: '#e38466'}} >联系电话</span>
+        </InputItem>
+        <ListItem
+          onClick={ ()=>this.props.history.push('/cont/chooseLocation/start') }
+          extra='去选择'
+          arrow='horizontal'
+        >
+          <span style={{color: '#e38466'}} >选择准确地图定位</span>
+          <List.Item.Brief>
+            {this.props.startPoint.address}
+            {this.props.startPoint.name}
+          </List.Item.Brief>
+        </ListItem>
         <Picker
           ref='picker'
           cols={4}
@@ -220,72 +246,32 @@ export default class StartAddress extends Component {
 
           value={this.props.value}
         >
-          <List.Item>选择区域</List.Item>
+          <List.Item arrow='horizontal' ><span style={{color: '#e38466'}} >选择区域</span></List.Item>
         </Picker>
-      </List>
-      <List renderHeader={ ()=>'选择我的准确地址' } >
-        <div style={{display: this.props.startPoint.address?'none':'block',
-                     padding: 10, textAlign: 'center'
-        }} >
-          <a onClick={ ()=>this.props.history.push('/cont/chooseLocation/start') } >
-            选择准确地址</a>
+        <div style={{display: 'none'}} >
+          <TextareaItem
+            {...getFieldProps('province', {
+              initialValue: `${address.province?address.province:''}${address.city?address.city:''}${address.district?address.district:''}${address.street?address.street:''}`
+            })}
+            rows={2}
+            title='省/市/区'
+          />
         </div>
-        <div style={{
-          padding: '10px 20px',
-          display: !this.props.startPoint.address?'none':'block'
-        }} >
-          {this.props.startPoint.address}
-          {this.props.startPoint.name}
-          <div style={{textAlign: 'center', marginTop: 5}} >
-            <a onClick={ ()=>this.props.history.push('/cont/chooseLocation/start')} >重新选择</a>
-          </div>
-        </div>
-      </List>
-      <List renderHeader={ ()=>'完善基本信息' } >
-        <InputItem
-          placeholder='请输入联系电话'
-          {...getFieldProps('tel', {
-            initialValue: this.toTeltype(this.props.client_tel)
-          })}
-          // defaultValue={this.props.startMsg.tel}
-          type='phone' >联系电话</InputItem>
-        <InputItem
-          placeholder='请输入姓名'
-          {...getFieldProps('receiverName', {
-            initialValue: this.props.client_name
-          })}
-          // defaultValue={this.props.startMsg.receiverName}
-        >姓名</InputItem>
-        {/*{this.typeId==3||this.typeId==1?<TextareaItem*/}
-          {/*{...getFieldProps('address', {*/}
-            {/*initialValue: this.props.startAddress*/}
-          {/*})}*/}
-          {/*count={50}*/}
-          {/*clear rows={3}*/}
-          {/*title='寄件地址' />:null}*/}
-        {/*<TextareaItem*/}
-          {/*{...getFieldProps('address', {*/}
-            {/*initialValue: this.props.startAddress*/}
-            {/*// initialValue: `${address.province?address.province:''}${address.city?address.city:''}${address.district?address.district:''}${address.street?address.street:''}${this.props.startAddress.replace(`${address.province?address.province:''}${address.city?address.city:''}${address.district?address.district:''}${address.street?address.street:''}`, '')}`*/}
-          {/*})}*/}
-          {/*count={50}*/}
-          {/*clear rows={3}*/}
-          {/*title={this.typeId==2?'收货地址':'寄件地址'} />*/}
-      </List>
-      <List renderHeader={()=>'寄件地址'} >
-        <TextareaItem
-          {...getFieldProps('province', {
-            initialValue: `${address.province?address.province:''}${address.city?address.city:''}${address.district?address.district:''}${address.street?address.street:''}`
-          })}
-          rows={2}
-          title='省/市/区'
-        />
+        <ListItem
+          //extra={`${address.province?address.province:''}${address.city?address.city:''}${address.district?address.district:''}${address.street?address.street:''}`}
+        >
+           <span style={{color: '#e38466', marginRight: 10}} >省/市/区</span>
+           <span>
+             {`${address.province?address.province:''}${address.city?address.city:''}${address.district?address.district:''}${address.street?address.street:''}`}
+           </span>
+        </ListItem>
         <TextareaItem
           {...getFieldProps('address', {
             initialValue: this.props.startAddress
           })}
           rows={3}
-          title='详细地址'
+          placeholder='详细地址'
+          title={<span style={{color: '#e38466'}} >详细地址</span>}
         />
       </List>
       <WhiteSpace />

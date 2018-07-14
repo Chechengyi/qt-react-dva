@@ -112,6 +112,7 @@ export default class DrawCont extends Component{
     // 由于定时器原因，所以在这需要做一个是否上班状态验证。才能达到快递员点击下班时立即不在发送定位信息
     if (this.props.isWork){
       console.log(e.position.lat,e.position.lng)
+      // alert('OK')
       sendPos({
         id: this.props.driver_id,
         createTime: new Date(),

@@ -77,7 +77,6 @@ export default class ByOrderDaigou extends Component {
     const {weight} = this.props.form.getFieldsValue()
     // 如果已经估过价， 返回， 不在继续估价
     // if (this.state.expectedFee) return
-
     if ( !weight||!this.distance ) return
     this.setState({
       loading: true
@@ -138,8 +137,8 @@ export default class ByOrderDaigou extends Component {
       }
 
     const fee = await this.sendGetExpectedFee()
-
-    Modal.alert(`订单预算费用为 ${this.state.expectedFee.toFixed(2)}元`,'确认提交订单？', [{
+    if (!fee) return
+    Modal.alert(`订单预算费用为 ${fee.toFixed(2)}元`,'确认提交订单？', [{
       text: '取消', onPress: ()=>{}
     }, {
       text: '确认', onPress: ()=> {

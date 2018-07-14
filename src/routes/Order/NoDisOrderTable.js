@@ -195,7 +195,7 @@ export default class FrontDesk_table extends  PureComponent {
         render: (val, text, index)=>(
           <div>
             {
-              text.typeId==2?'商品代购':text.senderAddress
+              text.senderAddress
             }
           </div>
         )
@@ -287,7 +287,7 @@ export default class FrontDesk_table extends  PureComponent {
         <Form.Item label='取消订单理由(选填)' >
           {getFieldDecorator('cancelReason', {
             rules: [{
-              max: 10, message: '输入不能超过100个字'
+              max: 100, message: '输入不能超过100个字'
             }]
           })(
             <TextArea placeholder='输入不超过100个字' rows={3} />

@@ -102,7 +102,7 @@ export default class Cai extends PureComponent {
   }
 
   handle_reset = () => {
-    this.props.history.replace('/admin/cont/order/ships')
+    this.props.history.replace('/admin/cont/order/dones')
     // return
     // this.props.form.resetFields()
     // this.setState({

@@ -33,10 +33,10 @@ export default class DoneItem extends Component {
         订单成交金额：{data.actualFee} 元
       </Flex>
       {data.typeId==2&&
-        <Flex>垫付金额: 30 元</Flex>
+        <Flex>垫付金额: {data.couPay} 元</Flex>
       }
       <Flex>
-        我的提成：1 元
+        我的提成：{(data.actualFee*data.feeRate).toFixed(2)}元
       </Flex>
     </div>
   }

@@ -34,7 +34,7 @@ export default class ConfirmOrder extends Component {
 
   submit= data=> {
     if (this.state.loading) return
-    let {weight, goodsType, actualFee, price, couComment} = this.props.form.getFieldsValue()
+    let {weight, goodsType, actualFee, couPay, couComment} = this.props.form.getFieldsValue()
     if ( !weight || !actualFee || /^[\s]*$/.test(goodsType) ) {
       Modal.alert('提交的信息不能为空', '请检查表单', [{
         text: '确认', onPress: ()=> {}
@@ -43,7 +43,7 @@ export default class ConfirmOrder extends Component {
     }
     console.log(data.typeId)
     if ( data.typeId==2 ) {
-      if ( !price || /^[\s]*$/.test(price) ) {
+      if ( !couPay || /^[\s]*$/.test(couPay) ) {
         Modal.alert('商品价格不能为空', '', [{
           text: '确认', onPress: ()=> {}
         }])
@@ -133,9 +133,9 @@ export default class ConfirmOrder extends Component {
             商品类型
           </InputItem>
           {data.typeId==2&&<InputItem
-            {...getFieldProps('price', {
+            {...getFieldProps('couPay', {
               // initialValue: data.actualFee,
-              initialValue: 30,
+              initialValue: data.couPay,
               normalize: (v, prev) => {  //验证金额
                 if (v && !/^(([1-9]\d*)|0)(\.\d{0,2}?)?$/.test(v)) {
                   if (v === '.') {

@@ -21,7 +21,7 @@ export default class EndAddress extends PureComponent {
   constructor(props){
     super(props)
     this.typeId = window.sessionStorage.getItem('typeId')
-    this.title = this.typeId==2?'代购地址':'收货地址'
+    this.title = this.typeId==2?'完善代购地址信息':'完善收件地址信息'
   }
 
   renderModal( title='', content='', text='确认', onPress=()=>{} ){
@@ -133,75 +133,57 @@ export default class EndAddress extends PureComponent {
         icon={ <Icon type='left' /> }
         onLeftClick={ e=>this.handleBack() }
       >{this.title}</NavBar>
-      {
-        this.typeId!=3&&
-        <List renderHeader={ ()=>`选择${this.title}` } >
-          <div style={{display: this.props.endPoint.address?'none':'block',
-            padding: 10, textAlign: 'center'
-          }} >
-            <a onClick={ ()=>this.props.history.push('/cont/chooseEndLocation') } >
-              选择准确地址</a>
-          </div>
-          <div style={{
-            padding: '10px 20px',
-            display: !this.props.endPoint.address?'none':'block'
-          }} >
-            {this.props.endPoint.address}
-            {this.props.endPoint.name}
-            <div style={{textAlign: 'center', marginTop: 5}} >
-              <a onClick={ ()=>this.props.history.push('/cont/chooseEndLocation') } >重新选择</a>
-            </div>
-          </div>
-        </List>
-      }
-      {
-        this.typeId==2&&
-        <List renderHeader={ ()=>'购货详细地址'} >
-          <TextareaItem
-            {...getFieldProps('address', {
-              initialValue: this.props.endAddress
-            })}
-            rows={3}
-            count={50}
-            title='详细地址' />
-        </List>
-      }
-      {
-        this.typeId==2?null:
-          <List renderHeader={ ()=>'完善收货人基本信息' } >
-            <InputItem
-              {...getFieldProps('tel', {
-                initialValue: this.props.endMsg.tel
-              })}
-              type='phone'
-            >
-              联系电话
-            </InputItem>
-            <InputItem
-              {...getFieldProps('receiverName', {
-                initialValue: this.props.endMsg.receiverName
-              })}
-            >
-              姓名
-            </InputItem>
-            {this.typeId==3&&
-            <Picker
-              onPickerChange={ this.onPickerChange }
-              cols={1}
-              value={[this.props.provinceCode]}
-              data={this.props.provinceList} >
-              <ListItem>省归属地</ListItem>
-            </Picker>
-            }
-            <TextareaItem
-              {...getFieldProps('address', {
-                initialValue: this.props.endAddress
-              })}
-              rows={3}
-              count={50}
-              title='详细地址' />
-          </List>
-      }
+      <List>
+        {this.typeId!=3&&
+          <ListItem
+            extra='去选择'
+            arrow='horizontal'
+            onClick={ ()=>this.props.history.push('/cont/chooseEndLocation') }
+          >
+            <span style={{color: '#e38466'}} >选择地图准确位置</span>
+            <List.Item.Brief>{this.props.endPoint.address}
+              {this.props.endPoint.name}</List.Item.Brief>
+          </ListItem>
+        }
+        {this.typeId!=2&&
+        <InputItem
+          {...getFieldProps('receiverName', {
+            initialValue: this.props.endMsg.receiverName
+          })}
+        >
+          <span style={{color: '#e38466'}} >联系人</span>
+        </InputItem>
+        }
+        {this.typeId!=2&&
+        <InputItem
+          {...getFieldProps('tel', {
+            initialValue: this.props.endMsg.tel
+          })}
+          type='phone'
+        >
+          <span style={{color: '#e38466'}} >联系电话</span>
+        </InputItem>
+        }
+        {this.typeId==3&&
+        <Picker
+          onPickerChange={ this.onPickerChange }
+          cols={1}
+          value={[this.props.provinceCode]}
+          data={this.props.provinceList} >
+          <ListItem
+            arrow='horizontal'
+          ><span style={{color: '#e38466'}} >省归属地</span></ListItem>
+        </Picker>
+        }
+        <TextareaItem
+          {...getFieldProps('address', {
+            initialValue: this.props.endAddress
+          })}
+          rows={3}
+          count={50}
+          placeholder={this.typeId==2?'购货详细地址':'收件详细地址'}
+          title={<span style={{color: '#e38466'}} >详细地址</span>} />
+      </List>
       <WhiteSpace />
       <WingBlank>
         <Button onClick={ this.submit } type='primary'>确定</Button>

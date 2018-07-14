@@ -199,7 +199,7 @@ export default class FrontDesk_table extends  PureComponent {
         width: 120,
         render: (val, text, index)=>(
           <div>
-            <Tooltip title={text.typeId==2?'代购服务':text.senderAddress||'地址为空'} >
+            <Tooltip title={text.senderAddress} >
               <a style={{color: 'green'}} >查看地址</a>
             </Tooltip>
           </div>
