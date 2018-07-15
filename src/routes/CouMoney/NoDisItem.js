@@ -68,7 +68,8 @@ export default class NoDisItem extends Component{
             </div>
           <span style={{marginLeft: 20}} >账户：{data.putAccount}</span> </div>
         </div>}
-        description={`申请时间：${new Date(data.putTime).toLocaleString()}`}
+        //description={`申请时间：${new Date(data.putTime).toLocaleString()}`}
+        description={`申请时间：${new Date(data.putTime.substring(0, data.putTime.lastIndexOf('.'))).toLocaleString()}`}
       />
       申请人：{data.username} 电话:{data.tel}
     </ListItem>

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'dva'
 import { NavBar, Icon, List, InputItem, Picker,
-  Button, WhiteSpace, WingBlank, Modal, TextareaItem
+  Button, WhiteSpace, WingBlank, Modal, TextareaItem, Flex
 } from 'antd-mobile'
 import { createForm } from 'rc-form'
 
@@ -14,7 +14,8 @@ const ListItem = List.Item
   endMsg: state.orderAddress.endMsg,
   endAddress: state.orderAddress.endAddress,
   provinceList: state.orderAddress.provinceList,
-      provinceCode: state.orderAddress.provinceCode
+  provinceCode: state.orderAddress.provinceCode,
+  chooseAddress: state.orderAddress.chooseAddress
 }) )
 export default class EndAddress extends PureComponent {
 
@@ -36,6 +37,13 @@ export default class EndAddress extends PureComponent {
         type: 'orderAddress/getProvinceList'
       })
     }
+  }
+
+  componentWillUnmount(){
+    this.props.dispatch({
+      type: 'orderAddress/setChooseAddress',
+      payload: null
+    })
   }
 
   submit=()=>{
@@ -91,6 +99,13 @@ export default class EndAddress extends PureComponent {
         type: 'orderAddress/endAddress',
         payload: address
       })
+      this.props.dispatch({
+        type: 'orderAddress/setEndMsg',
+        payload: {
+          tel,
+          receiverName
+        }
+      })
     }
     this.handleBack()
   }
@@ -126,12 +141,37 @@ export default class EndAddress extends PureComponent {
     })
   }
 
+  linkChooseAddress =()=> {
+    this.props.history.push('/cont/myAdress/1')
+    this.saveMsg()
+  }
+
+  saveMsg =()=> {
+    let {tel, receiverName} = this.props.form.getFieldsValue()
+    this.props.dispatch({
+      type: 'orderAddress/setEndMsg',
+      payload: {
+        tel,
+        receiverName
+      }
+    })
+  }
+
+  handleGoBack =()=> {
+    Modal.alert('是否保存填写的信息？', '', [{
+      text: '取消', onPress: ()=>{ this.handleBack() }
+    }, {
+      text: '保存', onPress: ()=>{ this.submit() }
+    }])
+  }
+
   render(){
     const { getFieldProps } = this.props.form
     return <div>
       <NavBar
         icon={ <Icon type='left' /> }
-        onLeftClick={ e=>this.handleBack() }
+        //onLeftClick={ e=>this.handleBack() }
+        onLeftClick={ this.handleGoBack }
       >{this.title}</NavBar>
       <List>
         {this.typeId!=3&&
@@ -145,25 +185,23 @@ export default class EndAddress extends PureComponent {
               {this.props.endPoint.name}</List.Item.Brief>
           </ListItem>
         }
-        {this.typeId!=2&&
         <InputItem
           {...getFieldProps('receiverName', {
             initialValue: this.props.endMsg.receiverName
           })}
+          placeholder={this.typeId==2?'选填':''}
         >
-          <span style={{color: '#e38466'}} >联系人</span>
+          <span style={{color: '#e38466'}} >{this.typeId==2?'商家姓名':'联系人'}</span>
         </InputItem>
-        }
-        {this.typeId!=2&&
         <InputItem
           {...getFieldProps('tel', {
             initialValue: this.props.endMsg.tel
           })}
+          placeholder={this.typeId==2?'选填':''}
           type='phone'
         >
-          <span style={{color: '#e38466'}} >联系电话</span>
+          <span style={{color: '#e38466'}} >{this.typeId==2?'商家电话':'联系电话'}</span>
         </InputItem>
-        }
         {this.typeId==3&&
         <Picker
           onPickerChange={ this.onPickerChange }
@@ -177,13 +215,16 @@ export default class EndAddress extends PureComponent {
         }
         <TextareaItem
           {...getFieldProps('address', {
-            initialValue: this.props.endAddress
+            initialValue: this.props.chooseAddress||this.props.endAddress
           })}
           rows={3}
           count={50}
           placeholder={this.typeId==2?'购货详细地址':'收件详细地址'}
           title={<span style={{color: '#e38466'}} >详细地址</span>} />
       </List>
+      <Flex justify='center' style={{padding: 20}} >
+        <a onClick={this.linkChooseAddress} >我的常用地址</a>
+      </Flex>
       <WhiteSpace />
       <WingBlank>
         <Button onClick={ this.submit } type='primary'>确定</Button>

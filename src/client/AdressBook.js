@@ -17,6 +17,8 @@ export default class AdressBook extends Component {
     this.state = {
       defaultId: null
     }
+    this.type = props.match.params.type
+    console.log(this.type)
   }
 
   componentDidMount(){
@@ -82,7 +84,7 @@ export default class AdressBook extends Component {
             </div>
           </div>
           {this.props.data.map( (item,i)=>(
-            <AddressItem defaultId={this.state.defaultId} setDefaultId={this.setDefaultId} history={this.props.history} data={item} key={i} />
+            <AddressItem type={this.type} defaultId={this.state.defaultId} setDefaultId={this.setDefaultId} history={this.props.history} data={item} key={i} />
           ) )}
         </div>
       </div>

@@ -232,7 +232,9 @@ export default class FrontDesk_table extends  PureComponent {
       {
         title: '下单时间',
         dataIndex: 'createTime',
-        render: val => <span>{new Date(val).toLocaleString()}</span>
+        render: val => <span>
+            {new Date(val.substring(0, val.lastIndexOf('.'))).toLocaleString()}
+          </span>
       },
       {
         title: '客户备注',

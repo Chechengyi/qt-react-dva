@@ -37,10 +37,10 @@ export default [
   //   iconPath: '/grzx.png',
   //   linkTo: ''
   // },
-  // {
-  //   title: '我的地址簿',
-  //   linkTo: '/cont/myAdress'
-  // },
+  {
+    title: '我的地址簿',
+    linkTo: '/cont/myAdress/0'
+  },
   // {
   //   title: '使用指南'
   // }

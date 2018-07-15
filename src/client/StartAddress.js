@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { NavBar, Icon, List, Button, InputItem,
-  WhiteSpace, WingBlank, Modal, Picker, TextareaItem } from 'antd-mobile'
+  WhiteSpace, WingBlank, Modal, Picker, TextareaItem, Flex } from 'antd-mobile'
 import { connect } from 'dva'
 import { createForm } from 'rc-form'
 
@@ -15,7 +15,8 @@ const ListItem = List.Item
   client_name: state.client_login.client_name,
   client_tel: state.client_login.client_tel,
   adminId: state.orderAddress.adminId,
-  address: state.pickerAddress
+  address: state.pickerAddress,
+  chooseAddress: state.orderAddress.chooseAddress
 }))
 @createForm()
 export default class StartAddress extends Component {
@@ -46,6 +47,14 @@ export default class StartAddress extends Component {
       })
     }
   }
+
+  componentWillUnmount(){
+    this.props.dispatch({
+      type: 'orderAddress/setChooseAddress',
+      payload: null
+    })
+  }
+
   /*
   * 根据this.typeId(订单主键id)判断是什么类型的订单，执行不同的订单地址信息完善操作
   * 1 为同城急送  2 为代购服务 3 为快递物流
@@ -202,13 +211,38 @@ export default class StartAddress extends Component {
     return endTel
   }
 
+  linkChooseAddress =()=> {
+    this.props.history.push('/cont/myAdress/1')
+    this.saveMsg()
+  }
+
+  saveMsg =()=> {
+    let {tel, receiverName} = this.props.form.getFieldsValue()  // 用户填写的电话和寄件人姓名
+    this.props.dispatch({
+      type: 'orderAddress/setStartMsg',
+      payload: {
+        tel,
+        receiverName
+      }
+    })
+  }
+
+  handleGoBack = () => {
+    Modal.alert('是否保存填写的信息', '', [{
+      text: '取消', onPress: ()=> {this.handleLink()}
+    }, {
+      text: '保存', onPress: ()=>{ this.submit() }
+    }])
+  }
+
   render(){
     const { getFieldProps } = this.props.form
     const {address} = this.props
     return <div>
       <NavBar
         icon={<Icon type='left' ></Icon>}
-        onLeftClick={ this.handleLink }
+        //onLeftClick={ this.handleLink }
+        onLeftClick={this.handleGoBack}
       >
         {this.typeId==2?'收货地址':'寄件位置(快递员上门位置)'}
       </NavBar>
@@ -216,13 +250,14 @@ export default class StartAddress extends Component {
         <InputItem
           placeholder='请输入姓名'
           {...getFieldProps('receiverName', {
-            initialValue: this.props.client_name
+            initialValue: this.props.startMsg.receiverName||this.props.client_name
           })}
         ><span style={{color: '#e38466'}} >联系人</span></InputItem>
         <InputItem
           placeholder='请输入联系电话'
           {...getFieldProps('tel', {
-            initialValue: this.toTeltype(this.props.client_tel)
+            //initialValue: this.toTeltype(this.props.startMsg.tel||this.props.client_tel)
+            initialValue: this.props.startMsg.tel||this.props.client_tel
           })}
           type='phone' ><span style={{color: '#e38466'}} >联系电话</span>
         </InputItem>
@@ -257,23 +292,27 @@ export default class StartAddress extends Component {
             title='省/市/区'
           />
         </div>
-        <ListItem
-          //extra={`${address.province?address.province:''}${address.city?address.city:''}${address.district?address.district:''}${address.street?address.street:''}`}
-        >
-           <span style={{color: '#e38466', marginRight: 10}} >省/市/区</span>
-           <span>
-             {`${address.province?address.province:''}${address.city?address.city:''}${address.district?address.district:''}${address.street?address.street:''}`}
-           </span>
-        </ListItem>
+        {/*<ListItem*/}
+          {/*//extra={`${address.province?address.province:''}${address.city?address.city:''}${address.district?address.district:''}${address.street?address.street:''}`}*/}
+        {/*>*/}
+           {/*<span style={{color: '#e38466', marginRight: 10}} >省/市/区</span>*/}
+           {/*<span>*/}
+             {/*{`${address.province?address.province:''}${address.city?address.city:''}${address.district?address.district:''}${address.street?address.street:''}`}*/}
+           {/*</span>*/}
+        {/*</ListItem>*/}
         <TextareaItem
           {...getFieldProps('address', {
-            initialValue: this.props.startAddress
+            initialValue: this.props.chooseAddress||this.props.startAddress
           })}
+          extra='去选择'
           rows={3}
           placeholder='详细地址'
           title={<span style={{color: '#e38466'}} >详细地址</span>}
         />
       </List>
+       <Flex justify='center' style={{padding: 20}} >
+         <a onClick={this.linkChooseAddress} >我的常用地址</a>
+       </Flex>
       <WhiteSpace />
       <WingBlank>
         <Button onClick={ this.submit } type='primary'>确定</Button>

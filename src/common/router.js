@@ -216,8 +216,8 @@ export const getRouterData = (app) => {
     '/cont/upDatePsw': {
       component: dynamicWrapper(app, ['client_login'], () => import('../client/UpdatePsw')),
     },
-    '/cont/myAdress': {
-      component: dynamicWrapper(app, ['client_login', 'client_address'], () => import('../client/AdressBook'))
+    '/cont/myAdress/:type': {
+      component: dynamicWrapper(app, ['client_login', 'client_address', 'orderAddress'], () => import('../client/AdressBook'))
     },
     '/cont/addAddress': {
       component: dynamicWrapper(app, ['client_login'], () => import('../client/AddAddress'))

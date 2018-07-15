@@ -64,7 +64,15 @@ export default class AdressItem extends PureComponent {
     })
       .then( res=>{
         console.log(res)
-      } )
+      })
+  }
+
+  handleChoose =address=>{
+    this.props.dispatch({
+      type: 'orderAddress/setChooseAddress',
+      payload: address
+    })
+    this.props.history.goBack()
   }
 
   render () {
@@ -76,9 +84,12 @@ export default class AdressItem extends PureComponent {
       </div>
       <Flex align='center' style={{}} >
         <div style={{flex:6, paddingLeft: 10}}>
-          <a onClick={ e=>{this.handleMoren(true)} }  >
-            <Checkbox checked={this.props.defaultId==data.id} />
-            设为默认</a>
+          {/*<a onClick={ e=>{this.handleMoren(true)} }  >*/}
+            {/*<Checkbox checked={this.props.defaultId==data.id} />*/}
+            {/*设为默认</a>*/}
+          {this.props.type==1&&
+          <a onClick={()=>{this.handleChoose(data.address)}} style={{color: '#e38466'}} >确认选择</a>
+          }
         </div>
         <div style={{flex:4}} >
           <a onClick={e=>this.props.history.push({

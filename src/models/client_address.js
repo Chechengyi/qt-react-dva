@@ -13,6 +13,7 @@ export default {
         payload: true
       })
       const res = yield call(getAdressList, payload)
+      console.log(res)
       yield put({
         type: 'saveData',
         payload: res.data

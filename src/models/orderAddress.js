@@ -12,9 +12,16 @@ export default {
     endAddress: null, // 终点详细地址
     adminId: 1,  // 选择省市区三级联动后设置的下单的归属adminId
     provinceCode: null,   // 快递物流时选择省的code,
-    provinceList: []   // 快递物流时选择省的列表
+    provinceList: [],   // 快递物流时选择省的列表
+    chooseAddress: null
   },
   effects: {
+    *setChooseAddress({payload}, {call, put}){
+      yield put({
+        type: 'saveChooseAddress',
+        payload
+      })
+    },
     *setProvinceAddr({payload}, {call, put}){
       yield put({
         type: 'saveProvinceAddr',
@@ -47,7 +54,6 @@ export default {
       })
     },
     *startAddress( {payload}, {call, put} ){
-      console.log('设置详细地址了')
       yield put({
         type: 'saveStartAddress',
         payload
@@ -93,6 +99,12 @@ export default {
     }
   },
   reducers: {
+    saveChooseAddress(state, {payload}){
+      return {
+        ...state,
+        chooseAddress: payload
+      }
+    },
     saveProvinceAddr(state, {payload}){
       return {
         ...state,

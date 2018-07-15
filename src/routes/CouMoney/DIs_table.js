@@ -246,7 +246,7 @@ export default class FrontDesk_table extends  PureComponent {
         title: '申请时间',
         dataIndex: 'putTime',
         // width:80,
-        render: val => <span>{new Date(val).toLocaleString()}</span>
+        render: val => <span>{new Date(val.substring(0, val.lastIndexOf('.'))).toLocaleString()}</span>
       },
       // {
       //   title: '处理时间',

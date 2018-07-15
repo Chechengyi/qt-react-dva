@@ -55,6 +55,16 @@ export default class Daifukuan_Item extends Component {
         </FlexItem>
       </Flex>
       }
+      {data.typeId==2&&
+      <Flex>
+        <FlexItem>商家姓名：{data.receiverName}</FlexItem>
+        <FlexItem>
+          <a href={`tel:${data.receiverTel}`}>
+            <img style={{width: 20, height: 20}} src="/tel.png" alt=""/>
+            {data.receiverTel}</a>
+        </FlexItem>
+      </Flex>
+      }
       {
         data.typeId==3?null:data.typeId==2?
         <Flex>
