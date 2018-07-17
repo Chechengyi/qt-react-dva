@@ -133,7 +133,7 @@ export default class Reg extends PureComponent {
             <InputItem
               {...getFieldProps('tel')}
               type="phone"
-            >账户</InputItem>
+            >手机号</InputItem>
             <InputItem {...getFieldProps('password')} type='password' >
               密码
             </InputItem>

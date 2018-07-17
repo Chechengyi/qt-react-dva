@@ -123,7 +123,7 @@ export default class ByOrderDaigou extends Component {
     const { weight, goodsType, comment, couPay } = this.props.form.getFieldsValue()
     const {startPoint, endPoint, startMsg, client_id, adminId, startAddress, endAddress, provinceAddr, endMsg} = this.props
     //验证商品基本信息是否为空
-    if ( !weight || !couPay ) {
+    if ( !weight ) { // !couPay
       this.renderModal('请先将商品信息完善')
       return
     }
@@ -246,7 +246,7 @@ export default class ByOrderDaigou extends Component {
           >商品重量</InputItem>
           <InputItem
             extra='元'
-            placeholder='输入要商品的预算价格'
+            placeholder='商品预算价格(选填)'
             {...getFieldProps('couPay', {  // 垫付商品的价格
               normalize: (v, prev) => {  //验证金额(再次验证重量)
                 if (v && !/^(([1-9]\d*)|0)(\.\d{0,2}?)?$/.test(v)) {

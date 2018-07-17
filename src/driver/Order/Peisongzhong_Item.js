@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Flex, Modal, Toast } from 'antd-mobile'
 import { courierAddDone } from '../../services/api'
+import moment from 'moment/min/moment.min'
 
 const FlexItem = Flex.Item
 
@@ -143,7 +144,7 @@ export default class Peisongzhong_Item extends Component {
       </Flex>
       <Flex>
         <FlexItem>
-          下单时间：{ new Date(data.createTime.substring(0, data.createTime.lastIndexOf('.'))).toLocaleString() }
+          下单时间：{new Date(moment(data.createTime).toDate()).toLocaleString()}
         </FlexItem>
       </Flex>
       <Flex justify='center' style={{marginTop: 5}} >

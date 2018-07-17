@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Table, Input, Select, Popconfirm,
   message, Form, Modal, Tooltip} from 'antd';
 import { cancelOrder } from '../../services/api'
+import moment from 'moment/min/moment.min'
 
 const { TextArea } = Input;
 const Option = Select.Option
@@ -60,7 +61,6 @@ export default class FrontDesk_table extends  PureComponent {
   }
 
   componentDidMount () {
-
   }
 
   handleWrite = (index) => {
@@ -228,7 +228,7 @@ export default class FrontDesk_table extends  PureComponent {
         dataIndex: 'createTime',
         // width:80,
         render: val => <span>
-          {new Date(val.substring(0, val.lastIndexOf('.'))).toLocaleString()}
+          {new Date(moment(val).toDate()).toLocaleString()}
           </span>
       },
       {

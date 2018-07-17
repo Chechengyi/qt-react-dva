@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Table, Input, Select, Popconfirm,
   message, Form, Modal, Tooltip} from 'antd';
 import { cancelOrder } from '../../services/api'
+import moment from 'moment/min/moment.min'
 
 const { TextArea } = Input;
 const Option = Select.Option
@@ -164,12 +165,10 @@ export default class FrontDesk_table extends  PureComponent {
         title: '派单时间',
         dataIndex: 'time',
         render: (val, record, index)=> {
-          // {new Date(record.confirmTime)-new Date(record.distributedTime)}
-          // {new Date(record.updateTime)-new Date(record.payTime)}
-          // {new Date(val.substring(0, val.lastIndexOf('.'))).toLocaleString()}
-          const confirmTime = new Date(record.confirmTime)
-            -new Date(record.distributedTime)
-          const endTime = new Date(record.updateTime)-new Date(record.payTime)
+          const confirmTime = moment(record.confirmTime).toDate()
+            - moment(record.distributedTime).toDate()
+          const endTime = moment(record.updateTime).toDate()-
+            moment(record.payTime).toDate()
           return (
             <div>
               <span style={{color: '#ff6700'}} >{Math.ceil((confirmTime+endTime)/1000/60)} 分钟</span>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { List, message, Popconfirm } from 'antd'
 import { adminAccpetCouMoney } from '../../services/api'
+import moment from 'moment/min/moment.min'
 
 const ListItem = List.Item
 const LissItemMeta = ListItem.Meta
@@ -69,7 +70,7 @@ export default class NoDisItem extends Component{
           <span style={{marginLeft: 20}} >账户：{data.putAccount}</span> </div>
         </div>}
         //description={`申请时间：${new Date(data.putTime).toLocaleString()}`}
-        description={`申请时间：${new Date(data.putTime.substring(0, data.putTime.lastIndexOf('.'))).toLocaleString()}`}
+        description={`申请时间：${new Date(moment(val).toDate()).toLocaleString()}`}
       />
       申请人：{data.username} 电话:{data.tel}
     </ListItem>

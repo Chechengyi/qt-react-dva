@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Table, Input, Select, Popconfirm, message, Form, Modal, Tooltip} from 'antd';
 import { cancelOrder } from '../../services/api'
+import moment from 'moment/min/moment.min'
 
 const { TextArea } = Input;
 const Option = Select.Option
@@ -296,7 +297,7 @@ export default class FrontDesk_table extends  PureComponent {
       {
         title: '下单时间',
         dataIndex: 'createTime',
-        render: val => <span>{new Date(val.substring(0, val.lastIndexOf('.'))).toLocaleString()}</span>
+        render: val => <span>{new Date(moment(val).toDate()).toLocaleString()}</span>
       },
       {
         title: '客户备注',

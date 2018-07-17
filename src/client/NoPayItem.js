@@ -30,8 +30,9 @@ export default class NoPayItem extends Component {
     })
   }
 
-  pay =ono=> {
-    fetch(`/weixin/pay?ono=${ono}`)
+  pay =(ono, typeId)=> {
+    const type = typeId==1?'tc':typeId==2?'dg':'wl'
+      fetch(`/weixin/pay?ono=${ono}&type=${type}`)
       .then( res=>{
         return res.json()
       })
@@ -108,7 +109,7 @@ export default class NoPayItem extends Component {
       <div>订单实际费用：<span style={{color:'#ff6700', fontSize: '1.1em'}} >{data.actualFee} 元</span></div>
       <div style={{textAlign: 'center', marginTop: 10}} >
         <button
-          onClick={()=>this.pay(data.ono)}
+          onClick={()=>this.pay(data.ono, data.typeId)}
           style={{padding: '3px 30px', border: 'none',
                   backgroundColor: '#ff6700', color: '#fff'
           }} >

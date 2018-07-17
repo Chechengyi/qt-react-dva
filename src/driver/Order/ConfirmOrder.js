@@ -35,7 +35,7 @@ export default class ConfirmOrder extends Component {
   submit= data=> {
     if (this.state.loading) return
     let {weight, goodsType, actualFee, couPay, couComment} = this.props.form.getFieldsValue()
-    if ( !weight || !actualFee || /^[\s]*$/.test(goodsType) ) {
+    if ( !weight || !actualFee || /^[\s]*$/.test(goodsType)) {
       Modal.alert('提交的信息不能为空', '请检查表单', [{
         text: '确认', onPress: ()=> {}
       }])
