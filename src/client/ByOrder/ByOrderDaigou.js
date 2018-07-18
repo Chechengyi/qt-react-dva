@@ -24,7 +24,7 @@ const FlexItem = Flex.Item
   startAddress: state.orderAddress.startAddress,
   endAddress: state.orderAddress.endAddress,
   provinceAddr: state.orderAddress.provinceAddr
-}) )
+}))
 @createForm()
 export default class ByOrderDaigou extends Component {
 

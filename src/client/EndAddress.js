@@ -48,6 +48,7 @@ export default class EndAddress extends PureComponent {
 
   submit=()=>{
     let {tel, receiverName, address} = this.props.form.getFieldsValue()
+    tel = tel.replace(/\s+/g,"")
     if ( this.typeId==1 || this.typeId==3 ) { // 同城急送订单 快递物流订单
       // 物流订单必须选择省code 验证
       if (!this.props.provinceCode &&this.typeId==3 ) {
@@ -71,7 +72,6 @@ export default class EndAddress extends PureComponent {
         this.renderModal('收货地址不能为空白')
         return
       }
-      tel = tel.replace(/\s+/g,"")
       this.props.dispatch({
         type: 'orderAddress/setEndMsg',
         payload: {

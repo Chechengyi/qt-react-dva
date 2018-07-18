@@ -92,7 +92,7 @@ class BasicLayout extends React.PureComponent {
     //轮询获取未分配订单展示
     this.getOrderCount()
     if (!window.timer) {
-      window.timer = setInterval( this.getOrderCount.bind(this), 1000*30 ) //  三分钟 180，000
+      window.timer = setInterval( this.getOrderCount.bind(this), 1000*15 ) //  三分钟 180，000
     }
     // 轮询获取聊天信息
     // this.getMsg()

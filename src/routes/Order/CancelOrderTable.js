@@ -291,16 +291,29 @@ export default class FrontDesk_table extends  PureComponent {
         render: val => <span>{new Date(moment(val).toDate()).toLocaleString()}</span>
       },
       {
-        title: '客户备注',
-        width: 80,
-        dataIndex: 'comment',
-        render: (val, record, index)=>(
+        title: '快递员备注',
+        dataIndex: 'couComment',
+        render: val => (
           <div>
-            {val&&
             <Tooltip title={val} >
               <span style={{cursor: 'pointer'}} >查看备注</span>
             </Tooltip>
-            }
+          </div>
+        )
+      },
+      {
+        title: '备注/清单',
+        width: 100,
+        dataIndex: 'comment',
+        render: (val, record, index)=>(
+          <div>
+            {record.typeId==2?
+              <Tooltip title={record.goodsType} >
+                <span style={{cursor: 'pointer'}} >查看清单</span>
+              </Tooltip>
+              :<Tooltip title={val} >
+                <span style={{cursor: 'pointer'}} >查看备注</span>
+              </Tooltip>}
           </div>
         )
       },

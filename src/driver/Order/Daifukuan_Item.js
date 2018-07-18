@@ -101,9 +101,11 @@ export default class Daifukuan_Item extends Component {
       <Flex>
         订单预算价格：{data.fee.toFixed(2)}元
       </Flex>
+      {data.typeId!=2&&
       <Flex>
         订单备注：{data.comment}
       </Flex>
+      }
       <Flex>
         <FlexItem>
           下单时间：{new Date(moment(data.createTime).toDate()).toLocaleString()}

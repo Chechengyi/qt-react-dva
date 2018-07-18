@@ -18,30 +18,6 @@ export default class Daiqueren_Item extends Component {
     </a>
   }
 
-  renderOrderPlace = (typeId, data)=> {
-    if ( typeId==2 ) { // 代购订单
-      return <div>
-        <Flex align='center' >
-          购货地点：
-          <a href={`http://uri.amap.com/marker?position=${data.endLongitude},${data.endLatitude}`}>
-            <img style={{width: 25, height: 25}} src="/1.png" alt=""/>
-            去到购货地址
-          </a>
-        </Flex>
-      </div>
-    } else {   // 物流订单
-       return <div>
-         <Flex align='center' >
-           取货地点：
-           <a href={`http://uri.amap.com/marker?position=${data.cusLongitude},${data.cusLatitude}`}>
-             <img style={{width: 25, height: 25}} src="/1.png" alt=""/>
-             {typeId==1?'导航到取货地点': data.senderAddress}
-           </a>
-         </Flex>
-       </div>
-    }
-  }
-
   linkConfirm= data=> {
     this.props.history.push({
       pathname: '/driverElseCont/confirmOrder',
@@ -80,6 +56,9 @@ export default class Daiqueren_Item extends Component {
             data.typeId==2&&
               <span>收件地点：{data.receiverAddr}</span>
           }
+        </div>
+        <div>
+          {data.typeId==2?'购物清单':'物品类型'}：  {data.goodsType}
         </div>
         <div style={{textAlign: 'center'}} >
           <a href={`http://uri.amap.com/marker?position=${data.cusLongitude},${data.cusLatitude}`}>

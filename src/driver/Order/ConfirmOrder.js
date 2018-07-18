@@ -130,7 +130,7 @@ export default class ConfirmOrder extends Component {
               initialValue: data.goodsType
             })}
           >
-            商品类型
+            {data.typeId==2?'代购清单':'物品类型'}
           </InputItem>
           {data.typeId==2&&<InputItem
             {...getFieldProps('couPay', {

@@ -238,16 +238,18 @@ export default class FrontDesk_table extends  PureComponent {
           </span>
       },
       {
-        title: '客户备注',
-        width: 80,
+        title: '备注/清单',
+        width: 100,
         dataIndex: 'comment',
         render: (val, record, index)=>(
           <div>
-            {val&&
-            <Tooltip title={val} >
-              <span style={{cursor: 'pointer'}} >查看备注</span>
-            </Tooltip>
-            }
+            {record.typeId==2?
+              <Tooltip title={record.goodsType} >
+                <span style={{cursor: 'pointer'}} >查看清单</span>
+              </Tooltip>
+              :<Tooltip title={val} >
+                <span style={{cursor: 'pointer'}} >查看备注</span>
+              </Tooltip>}
           </div>
         )
       },
