@@ -101,6 +101,11 @@ export default class Daifukuan_Item extends Component {
       <Flex>
         订单预算价格：{data.fee.toFixed(2)}元
       </Flex>
+      {data.typeId==2&&
+      <Flex>
+        垫付金额：{data.couPay}   元
+      </Flex>
+      }
       {data.typeId!=2&&
       <Flex>
         订单备注：{data.comment}
@@ -114,6 +119,11 @@ export default class Daifukuan_Item extends Component {
       <Flex justify='center' style={{marginTop: 5}} >
         订单实际价格：<span style={{fontSize: '1.1em', color: '#ff6700'}} >{data.actualFee.toFixed(2)} 元</span>
       </Flex>
+      {data.typeId==2&&
+      <Flex>
+        实际支付(快递员垫付+订单实际金额)：{(data.couPay+data.actualFee).toFixed(2)} 元
+      </Flex>
+      }
     </div>
   }
 }

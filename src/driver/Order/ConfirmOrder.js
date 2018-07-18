@@ -50,7 +50,7 @@ export default class ConfirmOrder extends Component {
          return
       }
     }
-
+    couPay = couPay?parseFloat(couPay):couPay
     Modal.alert('确定订单信息正确？', '确认后将不能在更改', [{
       text: '取消', onPress: ()=> {}
     }, {
@@ -65,6 +65,7 @@ export default class ConfirmOrder extends Component {
           goodsType,
           couComment,
           actualFee: parseFloat(actualFee),
+          couPay
         })
           .then( res=> {
             this.setState({

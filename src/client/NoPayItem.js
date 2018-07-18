@@ -103,10 +103,19 @@ export default class NoPayItem extends Component {
       <div>
         订单预算费用：{data.fee} 元
       </div>
+      <div>
+        订单实际费用：{data.actualFee} 元
+      </div>
       {data.typeId==2&&
       <div>商品垫付费用：{data.couPay} 元</div>
       }
-      <div>订单实际费用：<span style={{color:'#ff6700', fontSize: '1.1em'}} >{data.actualFee} 元</span></div>
+      <div>实际支付费用：
+        {data.typeId==2?
+          <span style={{color:'#ff6700', fontSize: '1.1em'}} >{(data.couPay+data.actualFee).toFixed(2)} 元</span>
+          :
+          <span style={{color:'#ff6700', fontSize: '1.1em'}} >{data.actualFee.toFixed(2)} 元</span>
+        }
+      </div>
       <div style={{textAlign: 'center', marginTop: 10}} >
         <button
           onClick={()=>this.pay(data.ono, data.typeId)}
