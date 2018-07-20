@@ -166,6 +166,7 @@ class BasicLayout extends React.PureComponent {
             collapsed={collapsed}
             dispatch={dispatch}
             isMobile={this.state.isMobile}
+            history={this.props.history}
           />
           {/*<Header></Header>*/}
           <Content style={{ margin: '24px 24px 0', height: '100%' }}>

@@ -60,7 +60,8 @@ export default class GlobalHeader extends PureComponent {
                 notification: true
               })
             notification.destroy()
-          }}  href="/#/admin/cont/order/noDisOrder">马上去处理>></a>
+            this.props.history.replace('/admin/cont/order/noDisOrder')
+          }}>马上去处理>></a>
         </div>,
         onClose: ()=> {
           this.setState({

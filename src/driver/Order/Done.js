@@ -78,7 +78,7 @@ export default class Done extends Component {
 
   onEndReached= e=> {
     console.log('去加载把')
-    if ( this.props.loading ) return
+    if ( this.props.loading || this.state.isOver ) return
     this.props.dispatch({
       type: 'courierDone/getData',
       payload: {

@@ -168,21 +168,21 @@ export default class FrontDesk_table extends  PureComponent {
         title: '姓名',
         dataIndex: 'username',
         width:150,
-        render: (val, text, index) => (
-          <div>
-            {this.state.selectWriteKey===index?this.renderWriteInput(getFieldDecorator,val,'username'): val}
-          </div>
-        )
+        // render: (val, text, index) => (
+        //   <div>
+        //     {this.state.selectWriteKey===index?this.renderWriteInput(getFieldDecorator,val,'username'): val}
+        //   </div>
+        // )
       },
       {
         title: '联系电话 ',
         dataIndex: 'tel',
         width: 150,
-        render: (val, text, index) => (
-          <div>
-            {this.state.selectWriteKey===index?this.renderWriteInput(getFieldDecorator,val,'tel'): val}
-          </div>
-        )
+        // render: (val, text, index) => (
+        //   <div>
+        //     {this.state.selectWriteKey===index?this.renderWriteInput(getFieldDecorator,val,'tel'): val}
+        //   </div>
+        // )
       },
       {
         title: '状态',
@@ -199,25 +199,25 @@ export default class FrontDesk_table extends  PureComponent {
         // width:80,
         render: val => <span>{new Date(val).toLocaleDateString()}</span>
       },
-      // {
-      //   title: '操作',
-      //   width: 150,
-      //   render: (val, text, index) => (
-      //     <div>
-      //       {this.state.selectWriteKey===index?
-      //         <div>
-      //           <Popconfirm title='确定保存修改信息？' onConfirm={ () => { this.handleSave(val, index) } } ><a>保存</a></Popconfirm>
-      //           <a style={{marginLeft: '5px'}} onClick={ () => { this.setState({ selectWriteKey: null }) } } >取消</a></div>:
-      //         <div>
-      //           <a onClick={ () => {this.handleWrite(index)} } >修改</a>
-      //           <Popconfirm title="确定重置密码？" onConfirm={ ()=>{ this.resetPsw(val.id) } } >
-      //             <a style={{marginLeft: '5px'}} >重置密码</a>
-      //           </Popconfirm>
-      //         </div>
-      //       }
-      //     </div>
-      //   )
-      // }
+      {
+        title: '操作',
+        width: 150,
+        render: (val, text, index) => (
+          <div>
+            {this.state.selectWriteKey===index?
+              <div>
+                <Popconfirm title='确定保存修改信息？' onConfirm={ () => { this.handleSave(val, index) } } ><a>保存</a></Popconfirm>
+                <a style={{marginLeft: '5px'}} onClick={ () => { this.setState({ selectWriteKey: null }) } } >取消</a></div>:
+              <div>
+                <a onClick={ () => {this.handleWrite(index)} } >修改</a>
+                <Popconfirm title="确定重置密码？" onConfirm={ ()=>{ this.resetPsw(val.id) } } >
+                  <a style={{marginLeft: '5px'}} >重置密码</a>
+                </Popconfirm>
+              </div>
+            }
+          </div>
+        )
+      }
     ]
     var self = this
     const rowSelection = {

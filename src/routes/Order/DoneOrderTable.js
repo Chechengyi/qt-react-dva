@@ -214,15 +214,15 @@ export default class FrontDesk_table extends  PureComponent {
         width:150,
         fixed: 'left'
       },
-      {
-        title: '订单评分',
-        dataIndex: 'start',
-        render: (val, record, index)=>(
-          <div>
-            {val?<span>{val} 星</span>:'未评分'}
-          </div>
-        )
-      },
+      // {
+      //   title: '订单评分',
+      //   dataIndex: 'start',
+      //   render: (val, record, index)=>(
+      //     <div>
+      //       {val?<span>{val} 星</span>:'未评分'}
+      //     </div>
+      //   )
+      // },
       {
         title: '客户姓名',
         dataIndex: 'senderName',
@@ -265,6 +265,15 @@ export default class FrontDesk_table extends  PureComponent {
         render: (val, text, index)=>(
           <div>
             <span style={{color: '#108ee9'}} >{val?val:0}</span> 元
+          </div>
+        )
+      },
+      {
+        title: '快递员提成',
+        dataIndex: 'couMoney',
+        render: (val, record, index) => (
+          <div>
+            <span style={{color: '#000', fontWeight: 500}} >{(record.actualFee * record.feeRate).toFixed(2)}</span> 元
           </div>
         )
       },
@@ -315,14 +324,14 @@ export default class FrontDesk_table extends  PureComponent {
       {
         title: '下单时间',
         dataIndex: 'createTime',
-        render: val => <span>{new Date(moment(val).toDate()).toLocaleString()}</span>
+        render: val => <span>{moment(val).toDate().toLocaleString()}</span>
       },
       {
         title: '快递员备注',
         dataIndex: 'couComment',
         render: val => (
           <div>
-            <Tooltip title={val} >
+            <Tooltip title={val||'无'} >
               <span style={{cursor: 'pointer'}} >查看备注</span>
             </Tooltip>
           </div>
@@ -335,10 +344,10 @@ export default class FrontDesk_table extends  PureComponent {
         render: (val, record, index)=>(
           <div>
             {record.typeId==2?
-              <Tooltip title={record.goodsType} >
+              <Tooltip title={record.goodsType||'无'} >
                 <span style={{cursor: 'pointer'}} >查看清单</span>
               </Tooltip>
-              :<Tooltip title={val} >
+              :<Tooltip title={val||'无'} >
                 <span style={{cursor: 'pointer'}} >查看备注</span>
               </Tooltip>}
           </div>
@@ -396,7 +405,7 @@ export default class FrontDesk_table extends  PureComponent {
         </Form.Item>
       </Modal>
       <Table
-        scroll={{ x: 1600 }}
+        scroll={{ x: 1700 }}
         columns={columns}
         dataSource={this.state.data}
         rowKey={record => record.id }

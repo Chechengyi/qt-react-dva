@@ -201,8 +201,9 @@ export default class Index extends Component {
     return <div>
       <NavBar
         title='快递员上门服务'
-        leftContent={ ()=>(<img onClick={(e)=>{this.handleDrawOpen('revers')}} src="/menu.png" style={{width: 20, height: 20}} alt=""/>
-        ) }
+        // leftContent={ ()=>(<img onClick={(e)=>{this.handleDrawOpen('revers')}} src="/menu.png" style={{width: 20, height: 20}} alt=""/>
+        // ) }
+        leftContent={()=><div onClick={(e)=>{this.handleDrawOpen('revers')}} >订单追踪</div>}
         // rightContent={()=>(<img onClick={ ()=>{ this.props.history.push('/clientChat/1') } } style={{width: 20, height: 20}} src="/wechat1.png" alt=""/>
         // )}
         // rightContent={()=>(

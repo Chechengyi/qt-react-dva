@@ -60,6 +60,11 @@ export default class Daiqueren_Item extends Component {
         <div>
           {data.typeId==2?'购物清单':'物品类型'}：  {data.goodsType}
         </div>
+        {data.typeId!=2&&
+        <div>
+          备注：{data.comment}
+        </div>
+        }
         <div style={{textAlign: 'center'}} >
           <a href={`http://uri.amap.com/marker?position=${data.cusLongitude},${data.cusLatitude}`}>
             <img style={{width: 25, height: 25}} src="/1.png" alt=""/>

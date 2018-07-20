@@ -202,7 +202,7 @@ export default class FrontDesk_table extends  PureComponent {
         width: 100,
         render: (val, text, index)=>(
           <div>
-            <Tooltip title={text.typeId==2?'代购服务':text.senderAddress||'地址为空'} >
+            <Tooltip title={text.senderAddress} >
               <a style={{color: 'green'}} >查看地址</a>
             </Tooltip>
           </div>
@@ -214,7 +214,7 @@ export default class FrontDesk_table extends  PureComponent {
         width: 100,
         render: (val, text, index)=>(
           <div>
-            <Tooltip title={text.typeId==2?text.senderAddress:text.receiverAddr} >
+            <Tooltip title={text.receiverAddr} >
               <a style={{color: 'green'}} >查看地址</a>
             </Tooltip>
           </div>
@@ -272,7 +272,7 @@ export default class FrontDesk_table extends  PureComponent {
       {
         title: '下单时间',
         dataIndex: 'createTime',
-        render: val => <span>{new Date(val.substring(0, val.lastIndexOf('.'))).toLocaleString()}</span>
+        render: val => <span>{new Date(moment(val).toDate()).toLocaleString()}</span>
       },
       // {
       //   title: '客户备注',

@@ -102,6 +102,9 @@ export default class DrawCont extends PureComponent {
             </ListItem>
           </a>
         ) )}
+      <a href="/#/cont/zhinan">
+        <ListItem arrow='horizontal' >用户指南</ListItem>
+      </a>
       <Flex align='center' style={{
         position: 'absolute',
         height: 50, bottom:0, left: 0, width: '100%'

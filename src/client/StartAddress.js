@@ -261,17 +261,6 @@ export default class StartAddress extends Component {
           })}
           type='phone' ><span style={{color: '#e38466'}} >联系电话</span>
         </InputItem>
-        <ListItem
-          onClick={ ()=>this.props.history.push('/cont/chooseLocation/start') }
-          extra='去选择'
-          arrow='horizontal'
-        >
-          <span style={{color: '#e38466'}} >选择准确地图定位</span>
-          <List.Item.Brief>
-            {this.props.startPoint.address}
-            {this.props.startPoint.name}
-          </List.Item.Brief>
-        </ListItem>
         <Picker
           ref='picker'
           cols={4}
@@ -283,6 +272,17 @@ export default class StartAddress extends Component {
         >
           <List.Item arrow='horizontal' ><span style={{color: '#e38466'}} >选择区域</span></List.Item>
         </Picker>
+        <ListItem
+          onClick={ ()=>this.props.history.push('/cont/chooseLocation/start') }
+          extra='去选择'
+          arrow='horizontal'
+        >
+          <span style={{color: '#e38466'}} >选择准确地图定位</span>
+          <List.Item.Brief>
+            {this.props.startPoint.address}
+            {this.props.startPoint.name}
+          </List.Item.Brief>
+        </ListItem>
         <div style={{display: 'none'}} >
           <TextareaItem
             {...getFieldProps('province', {

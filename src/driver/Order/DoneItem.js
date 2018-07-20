@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Flex } from 'antd-mobile'
+import moment from 'moment/min/moment.min'
 
 const FlexItem = Flex.Item
 export default class DoneItem extends Component {
@@ -37,6 +38,9 @@ export default class DoneItem extends Component {
       }
       <Flex>
         我的提成：{(data.actualFee*data.feeRate).toFixed(2)}元
+      </Flex>
+      <Flex>
+        订单送达时间：{moment(data.updateTime).toDate().toLocaleString()}
       </Flex>
     </div>
   }

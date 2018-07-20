@@ -47,7 +47,7 @@ export default class Cont extends PureComponent {
     }
     this.getCount()
     if (!window.timer) {
-      window.timer = setInterval(throttle(this.getCount, 300, this), 1000*20)
+      window.timer = setInterval(throttle(this.getCount, 300, this), 1000*15)
     }
   }
   // 获取为处理订单个数action

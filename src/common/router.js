@@ -162,6 +162,9 @@ export const getRouterData = (app) => {
     '/cont/tiaoyue': {
       component: dynamicWrapper(app, [], () => import('../client/ByOrder/Tiaoyue')),
     },
+    '/cont/zhinan': {
+      component: dynamicWrapper(app, ['provincePriceList'], () => import('../client/ByOrder/Zhinan')),
+    },
     '/cont/noConfirm': {
       component: dynamicWrapper(app, ['client_login', 'socketMsg','clientNoConfirm', 'orderType'], () => import('../client/Order/NoConfirm')),
     },
