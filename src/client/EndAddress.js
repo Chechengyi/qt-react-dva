@@ -48,7 +48,7 @@ export default class EndAddress extends PureComponent {
 
   submit=()=>{
     let {tel, receiverName, address} = this.props.form.getFieldsValue()
-    tel = tel.replace(/\s+/g,"")
+    tel = tel?tel.replace(/\s+/g,""):tel
     if ( this.typeId==1 || this.typeId==3 ) { // 同城急送订单 快递物流订单
       // 物流订单必须选择省code 验证
       if (!this.props.provinceCode &&this.typeId==3 ) {

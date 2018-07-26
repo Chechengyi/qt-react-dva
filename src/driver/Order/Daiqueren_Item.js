@@ -39,24 +39,35 @@ export default class Daiqueren_Item extends Component {
         <div>
           订单类型：{this.renderOrderType(data.typeId)}
         </div>
-        <div>
-          客户姓名：{data.senderName}
-        </div>
-        <div>
-          联系电话：
-          <a href={`tel:${data.senderTel}`}><img
-            style={{width: 25, height: 25}}
-            src="/tel.png" alt=""/>{data.senderTel}</a>
-        </div>
+        <Flex>
+          <Flex.Item>客户姓名：{data.senderName}</Flex.Item>
+          <Flex.Item>
+            <a href={`tel:${data.senderTel}`}><img
+              style={{width: 25, height: 25}}
+              src="/tel.png" alt=""/>{data.senderTel}</a>
+          </Flex.Item>
+        </Flex>
         <div>
           {data.typeId!=2&&
-            <span>客户下单地点: {data.senderAddress}</span>
+            <span>寄件地点: {data.senderAddress}</span>
           }
           {
             data.typeId==2&&
               <span>收件地点：{data.receiverAddr}</span>
           }
         </div>
+        {data.typeId!=2&&
+        <Flex>
+          <Flex.Item>
+            收件人：{data.receiverName}
+          </Flex.Item>
+          <Flex.Item>
+            <a href={`tel:${data.receiverTel}`}><img
+              style={{width: 25, height: 25}}
+              src="/tel.png" alt=""/>{data.receiverTel}</a>
+          </Flex.Item>
+        </Flex>
+        }
         <div>
           {data.typeId==2?'购物清单':'物品类型'}：  {data.goodsType}
         </div>

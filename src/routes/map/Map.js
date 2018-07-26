@@ -93,7 +93,7 @@ export default class Map extends PureComponent {
                 this.props.history.goBack()
               } )
             } else {
-              message.success(`快递员${e.target.F.extData.username}下班了，请分配给其他人`, 0,8)
+              message.error(`快递员${e.target.F.extData.username}下班了，请分配给其他人`, 0,8)
               this.props.history.replace(this.props.match.url)
             }
           } )

@@ -27,11 +27,12 @@ export default class Login extends PureComponent {
 
   submit = () => {
     if (this.props.loading) return
-    const { username, password } = this.props.form.getFieldsValue()
+    let { username, password } = this.props.form.getFieldsValue()
     if ( !username || !password ) {
       Toast.fail('用户名或密码不能为空', 1)
       return
     }
+    username = username.replace(/\s+/g,"")
     // 设置一个200毫秒的延时， 让键盘有足够的失去焦点的时间
     setTimeout( ()=>{
       this.props.dispatch({
@@ -51,7 +52,7 @@ export default class Login extends PureComponent {
         { this.props.client_status==='ERROR'&&this.renderMessage('用户名或密码错误') }
         <List>
           <InputItem
-            // type='phone'
+            type='phone'
             {...getFieldProps('username')}
           >手机号码</InputItem>
           <InputItem

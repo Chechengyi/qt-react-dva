@@ -1,7 +1,13 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
-
+// 快递员取消订单
+export async function couCancelOrder(params) {
+  return request('/order/addCouCancel', {
+    method: 'POST',
+    body: params
+  })
+}
 
 // ajax轮询聊天api
 

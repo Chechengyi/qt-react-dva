@@ -75,13 +75,13 @@ export default class AddAddress extends PureComponent {
         </textarea>
         <Flex align='center' style={{padding: '8px 20px'}} >
           {/*<a style={{fontSize: '1.2em'}} >提交</a>*/}
-          <Flex.Item>
-            {/*<button onClick={ this.submit } >提交</button>*/}
-            <Checkbox
-              defaultChecked={this.state.isDefault}
-              onChange={ e=>this.checkChange(e) }
-            ></Checkbox> 设为默认
-          </Flex.Item>
+          {/*<Flex.Item>*/}
+            {/*/!*<button onClick={ this.submit } >提交</button>*!/*/}
+            {/*<Checkbox*/}
+              {/*defaultChecked={this.state.isDefault}*/}
+              {/*onChange={ e=>this.checkChange(e) }*/}
+            {/*></Checkbox> 设为默认*/}
+          {/*</Flex.Item>*/}
           <Flex.Item>
             <Button type='primary' onClick={ this.submit } >提交</Button>
           </Flex.Item>

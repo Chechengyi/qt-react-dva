@@ -270,7 +270,7 @@ export default class StartAddress extends Component {
 
           value={this.props.value}
         >
-          <List.Item arrow='horizontal' ><span style={{color: '#e38466'}} >选择区域</span></List.Item>
+          <List.Item arrow='horizontal' ><span style={{color: '#e38466'}} >选择城市</span></List.Item>
         </Picker>
         <ListItem
           onClick={ ()=>this.props.history.push('/cont/chooseLocation/start') }
