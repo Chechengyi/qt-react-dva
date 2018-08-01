@@ -54,15 +54,15 @@ export default class LineCharts extends Component{
     series: [{
       name: '同城急送',
       type: 'line',
-      data: [5, 20, 36, 10, 10, 20, 33]
+      data: []
     }, {
       name: '代购服务',
       type: 'line',
-      data: [20, 10, 36, 10, 10, 20, 44]
+      data: []
     }, {
       name: '快递物流',
       type: 'line',
-      data: [23, 25, 30, 33, 10, 4, 40]
+      data: []
     }]
   }
 

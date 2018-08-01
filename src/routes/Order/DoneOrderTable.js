@@ -234,6 +234,14 @@ export default class FrontDesk_table extends  PureComponent {
         width: 150,
       },
       {
+        title: '收件人(代购)姓名',
+        dataIndex: 'receiverName'
+      },
+      {
+        title: '收件人(代购)电话',
+        dataIndex: 'receiverTel'
+      },
+      {
         title: '快递员姓名',
         dataIndex: 'couUsername'
       },
@@ -405,7 +413,7 @@ export default class FrontDesk_table extends  PureComponent {
         </Form.Item>
       </Modal>
       <Table
-        scroll={{ x: 1700 }}
+        scroll={{ x: 2000 }}
         columns={columns}
         dataSource={this.state.data}
         rowKey={record => record.id }

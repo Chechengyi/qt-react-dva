@@ -31,6 +31,7 @@ export default class NoPayItem extends Component {
   }
 
   pay =(ono, typeId)=> {
+    var self = this
     const type = typeId==1?'tc':typeId==2?'dg':'wl'
       fetch(`/weixin/pay?ono=${ono}&type=${type}`)
       .then( res=>{
@@ -54,7 +55,7 @@ export default class NoPayItem extends Component {
                 .then( res=>{
                   if (res.status=='OK') {
                     Toast.success('付款成功', 1)
-                    this.props.history.replace('/cont/ongoing')
+                    self.props.history.replace('/cont/ongoing')
                   } else {
                     Toast.fail('付款失败！', 1)
                   }
@@ -73,7 +74,9 @@ export default class NoPayItem extends Component {
 
   render(){
     const {data, orderType} = this.props
-    return <div style={{padding: '20px 10px', backgroundColor: '#fff', marginBottom: 5}} >
+    return <div
+      style={{padding: '20px 10px', backgroundColor: '#fff', marginBottom: 5,
+      }} >
       <Flex wrap='wrap' style={{marginBottom: 5, fontSize: '1.1em', fontWeight:500}} >
         <FlexItem style={{flex: 'auto'}} >
             订单编号： {data.ono}

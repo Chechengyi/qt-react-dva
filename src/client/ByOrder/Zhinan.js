@@ -34,7 +34,6 @@ export default class Zhinan extends Component{
     })
     Promise.all([p1, p2])
       .then( res=>{
-        console.log(res)
         this.setState({
           tcData: res[0],
           dgData: res[1],
@@ -87,25 +86,25 @@ export default class Zhinan extends Component{
             <div>
               <p>
                 <span style={{fontWeight: 500}} >同城急送：</span>
-                起步价{this.state.dgData&&this.state.dgData.startPrice}元
-                （首距离{this.state.dgData&&this.state.dgData.startDistance}公里+
-                  首重{this.state.dgData&&this.state.dgData.startWeight}公斤
-                ）超出{this.state.dgData&&this.state.dgData.startWeight}公斤续重
-                {this.state.dgData&&this.state.dgData.weightPrice}元钱1公斤，超出
-                {this.state.dgData&&this.state.dgData.startDistance}公里加收
-                {this.state.dgData&&this.state.dgData.plusPrice}元钱一公里
+                起步价{this.state.tcData&&this.state.tcData.startPrice}元
+                （首距离{this.state.tcData&&this.state.tcData.startDistance}公里+
+                  首重{this.state.tcData&&this.state.tcData.startWeight}公斤
+                ）超出{this.state.tcData&&this.state.tcData.startWeight}公斤续重
+                {this.state.tcData&&this.state.tcData.weightPrice}元钱1公斤，超出
+                {this.state.tcData&&this.state.tcData.startDistance}公里加收
+                {this.state.tcData&&this.state.tcData.plusPrice}元钱一公里
               </p>
             </div>
             <div>
               <p>
                 <span style={{fontWeight: 500}} >代购服务：</span>
-                起步价{this.state.tcData&&this.state.tcData.startPrice}元
-                （首距离{this.state.tcData&&this.state.tcData.startDistance}公里+
-                首重{this.state.tcData&&this.state.tcData.startWeight}公斤
-                ）超出{this.state.tcData&&this.state.tcData.startWeight}公斤续重
-                {this.state.tcData&&this.state.tcData.weightPrice}元钱1公斤，超出
-                {this.state.tcData&&this.state.tcData.startDistance}公里加收
-                {this.state.tcData&&this.state.tcData.plusPrice}元钱一公里
+                起步价{this.state.dgData&&this.state.dgData.startPrice}元
+                （首距离{this.state.dgData&&this.state.dgData.startDistance}公里+
+                首重{this.state.dgData&&this.state.dgData.startWeight}公斤
+                ）超出{this.state.dgData&&this.state.dgData.startWeight}公斤续重
+                {this.state.dgData&&this.state.dgData.weightPrice}元钱1公斤，超出
+                {this.state.dgData&&this.state.dgData.startDistance}公里加收
+                {this.state.dgData&&this.state.dgData.plusPrice}元钱一公里
               </p>
             </div>
             <div>
@@ -119,7 +118,7 @@ export default class Zhinan extends Component{
                 dataSource={this.props.data}
                 loading={this.props.loading}
                 columns={columns}
-
+                rowKey={ rowKey=>rowKey.id }
               />
             </div>
           </div>

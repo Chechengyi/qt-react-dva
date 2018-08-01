@@ -172,6 +172,14 @@ export default class FrontDesk_table extends  PureComponent {
         width: 150,
       },
       {
+        title: '收件人(代购)姓名',
+        dataIndex: 'receiverName'
+      },
+      {
+        title: '收件人(代购)电话',
+        dataIndex: 'receiverTel'
+      },
+      {
         title: '预计金额',
         dataIndex: 'money',
         render: (val, text, index)=>(
@@ -238,10 +246,10 @@ export default class FrontDesk_table extends  PureComponent {
         render: (val, record, index)=>(
           <div>
             {record.typeId==2?
-              <Tooltip title={record.goodsType} >
+              <Tooltip title={record.goodsType||'无'} >
                 <span style={{cursor: 'pointer'}} >查看清单</span>
               </Tooltip>
-              :<Tooltip title={val} >
+              :<Tooltip title={val||'无'} >
                 <span style={{cursor: 'pointer'}} >查看备注</span>
               </Tooltip>}
           </div>
@@ -299,7 +307,7 @@ export default class FrontDesk_table extends  PureComponent {
         </Form.Item>
       </Modal>
       <Table
-        scroll={{ x: 1800 }}
+        scroll={{ x: 2100 }}
         columns={columns}
         dataSource={this.state.data}
         rowKey={record => record.id }
