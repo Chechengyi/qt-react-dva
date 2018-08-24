@@ -156,7 +156,7 @@ export default class Index extends Component {
     // } else if (this.state.selectOrderTypeId==3) {
     //   this.props.history.push('/cont/byOrder/wuliu')
     // }
-    return
+    // return
     if (this.props.client_status==='OK') {
       var road
       // this.props.history.push(`/cont/byOrder/${this.state.selectOrderTypeId}`)
