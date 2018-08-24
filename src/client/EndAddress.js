@@ -22,7 +22,7 @@ export default class EndAddress extends PureComponent {
   constructor(props){
     super(props)
     this.typeId = window.sessionStorage.getItem('typeId')
-    this.title = this.typeId==2?'完善代购地址信息':'完善收件地址信息'
+    this.title = this.typeId==2?'完善购货地址信息':'完善收件地址信息'
   }
 
   renderModal( title='', content='', text='确认', onPress=()=>{} ){
@@ -180,7 +180,7 @@ export default class EndAddress extends PureComponent {
             arrow='horizontal'
             onClick={ ()=>this.props.history.push('/cont/chooseEndLocation') }
           >
-            <span style={{color: '#e38466'}} >选择地图准确位置</span>
+            <span style={{color: '#e38466'}} >地图定位</span>
             <List.Item.Brief>{this.props.endPoint.address}
               {this.props.endPoint.name}</List.Item.Brief>
           </ListItem>
@@ -189,7 +189,7 @@ export default class EndAddress extends PureComponent {
           {...getFieldProps('receiverName', {
             initialValue: this.props.endMsg.receiverName
           })}
-          placeholder={this.typeId==2?'选填':''}
+          placeholder={this.typeId==2?'可不填写':''}
         >
           <span style={{color: '#e38466'}} >{this.typeId==2?'商家姓名':'联系人'}</span>
         </InputItem>
@@ -197,7 +197,7 @@ export default class EndAddress extends PureComponent {
           {...getFieldProps('tel', {
             initialValue: this.props.endMsg.tel
           })}
-          placeholder={this.typeId==2?'选填':''}
+          placeholder={this.typeId==2?'可不填写':''}
           type='phone'
         >
           <span style={{color: '#e38466'}} >{this.typeId==2?'商家电话':'联系电话'}</span>
@@ -220,7 +220,7 @@ export default class EndAddress extends PureComponent {
           rows={3}
           count={50}
           placeholder={this.typeId==2?'购货详细地址':'收件详细地址'}
-          title={<span style={{color: '#e38466'}} >详细地址</span>} />
+          title={<span style={{color: '#e38466'}} >{this.typeId==2?'购货地址':'收件地址'}</span>} />
       </List>
       <Flex justify='center' style={{padding: 20}} >
         <a onClick={this.linkChooseAddress} >我的常用地址</a>

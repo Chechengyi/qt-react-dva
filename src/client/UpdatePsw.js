@@ -146,6 +146,7 @@ export default class UpdatePsw extends PureComponent {
               {...getFieldProps('password')}
             > 新密码</InputItem>
             <InputItem
+              placeholder='重复输入密码'
               type='password'
               {...getFieldProps('rePassword')}
             >重复密码</InputItem>

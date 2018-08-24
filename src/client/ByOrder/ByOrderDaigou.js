@@ -46,7 +46,7 @@ export default class ByOrderDaigou extends Component {
     if ( orderType.length!==0 ) {
       for ( var i=0 ;i<orderType.length; i++ ) {
         if ( orderType[i].id==this.typeId ) {
-          window.sessionStorage.setItem('feeRate', orderType[i].feeRate)
+          this.feeRate = orderType[i].feeRate
         }
       }
     }
@@ -146,7 +146,7 @@ export default class ByOrderDaigou extends Component {
           adminId: parseInt(adminId),
           cusId: parseInt(client_id),
           typeId: parseInt(this.typeId),
-          feeRate: parseFloat(window.sessionStorage.getItem('feeRate')),
+          feeRate: this.feeRate,
           weight: parseFloat(weight),
           comment,   //客户填写的订单备注
           distance: this.distance,
@@ -209,7 +209,7 @@ export default class ByOrderDaigou extends Component {
             thumb={<Logo bgColor='#67a1f4' title='购' />}
             arrow="horizontal"
             onClick={ e=>this.props.history.push('/cont/endAddress') }
-          >代购地址
+          >购货地址
             <Brief>
               {Object.keys(this.props.endPoint).length!==0
                 &&this.props.endAddress
@@ -220,7 +220,7 @@ export default class ByOrderDaigou extends Component {
             thumb={<Logo bgColor='#eb6487' title='收' />}
             arrow="horizontal"
             onClick={ e=>this.props.history.push('/cont/startAddress') }
-          >收货地址
+          >收件地址
             <Brief>
               {Object.keys(this.props.startPoint).length!==0&&
               Object.keys(this.props.startMsg).length!==0?'已填':'去完善'}

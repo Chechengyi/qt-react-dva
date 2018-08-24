@@ -244,7 +244,7 @@ export default class StartAddress extends Component {
         //onLeftClick={ this.handleLink }
         onLeftClick={this.handleGoBack}
       >
-        {this.typeId==2?'收货地址':'寄件位置(快递员上门位置)'}
+        {this.typeId==2?'收件地址':'发货地址(快递员上门)'}
       </NavBar>
       <List>
         <InputItem
@@ -252,14 +252,14 @@ export default class StartAddress extends Component {
           {...getFieldProps('receiverName', {
             initialValue: this.props.startMsg.receiverName||this.props.client_name
           })}
-        ><span style={{color: '#e38466'}} >联系人</span></InputItem>
+        ><span style={{color: '#e38466'}} >{this.typeId==2?'收件人':'发件人'}</span></InputItem>
         <InputItem
           placeholder='请输入联系电话'
           {...getFieldProps('tel', {
             //initialValue: this.toTeltype(this.props.startMsg.tel||this.props.client_tel)
             initialValue: this.props.startMsg.tel||this.props.client_tel
           })}
-          type='phone' ><span style={{color: '#e38466'}} >联系电话</span>
+          type='phone' ><span style={{color: '#e38466'}} >{this.typeId==2?'收件电话':'发件电话'}</span>
         </InputItem>
         <Picker
           ref='picker'
@@ -277,7 +277,7 @@ export default class StartAddress extends Component {
           extra='去选择'
           arrow='horizontal'
         >
-          <span style={{color: '#e38466'}} >选择准确地图定位</span>
+          <span style={{color: '#e38466'}} >地图定位</span>
           <List.Item.Brief>
             {this.props.startPoint.address}
             {this.props.startPoint.name}
@@ -306,8 +306,9 @@ export default class StartAddress extends Component {
           })}
           extra='去选择'
           rows={3}
-          placeholder='详细地址'
-          title={<span style={{color: '#e38466'}} >详细地址</span>}
+          // placeholder='详细地址'
+          placeholder={this.typeId==2?'收货地址':'详细地址'}
+          title={<span style={{color: '#e38466'}} >{this.typeId==2?'收货地址':'详细地址'}</span>}
         />
       </List>
        <Flex justify='center' style={{padding: 20}} >

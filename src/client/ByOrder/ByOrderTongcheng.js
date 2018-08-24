@@ -45,7 +45,8 @@ export default class ByOrderTongcheng extends Component {
     if ( orderType.length!==0 ) {
       for ( var i=0 ;i<orderType.length; i++ ) {
         if ( orderType[i].id==1 ) {
-          window.sessionStorage.setItem('feeRate', orderType[i].feeRate||0.03)
+          window.sessionStorage.setItem('feeRate', orderType[i].feeRate)
+          this.feeRate = orderType[i].feeRate
         }
       }
     }
@@ -89,7 +90,6 @@ export default class ByOrderTongcheng extends Component {
       return
     }
     // 从sessionStorage里取出当前订单的提价比例
-    const feeRate = window.sessionStorage.getItem('feeRate')
     let {weight, goodsType, comment} = this.props.form.getFieldsValue()
     const {startPoint, endPoint, startMsg, endMsg, client_id, adminId, endAddress, startAddress, provinceAddr} = this.props
 
@@ -132,7 +132,7 @@ export default class ByOrderTongcheng extends Component {
           adminId: parseInt(adminId),
           cusId: client_id,
           typeId: this.typeId,
-          feeRate: parseFloat(feeRate),
+          feeRate: this.feeRate,
           weight: parseFloat(weight),
           distance: this.distance,  // 具体以后估算的为准
           receiverName: endMsg.receiverName,
@@ -190,7 +190,7 @@ export default class ByOrderTongcheng extends Component {
     // 首先判断 物品距离，重量等信息是否为空 不为空才能发送请求
     const {weight} = this.props.form.getFieldsValue()
 
-    if ( !weight||!this.distance ) return
+    if ( !weight||!this.distance ) return false
     this.setState({
       loading: true
     })
@@ -223,7 +223,7 @@ export default class ByOrderTongcheng extends Component {
       <NavBar
         onLeftClick={ ()=>{ this.props.history.push('/cont/index') } }
         icon={<Icon type='left' ></Icon>}
-      >同城急送</NavBar>
+      >同城配送</NavBar>
       <div>
         <List renderHeader={ ()=>'位置信息(必填)' } >
           <ListItem

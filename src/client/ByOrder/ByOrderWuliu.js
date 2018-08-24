@@ -45,7 +45,7 @@ export default class ByOrderTongcheng extends Component {
     if ( orderType.length!==0 ) {
       for ( var i=0 ;i<orderType.length; i++ ) {
         if ( orderType[i].id==3 ) {
-          window.sessionStorage.setItem('feeRate', orderType[i].feeRate)
+          this.feeRate = orderType[i].feeRate
         }
       }
     }
@@ -90,7 +90,6 @@ export default class ByOrderTongcheng extends Component {
     }
 
     // 从sessionStorage里取出当前订单的提价比例
-    const feeRate = window.sessionStorage.getItem('feeRate')
     let {weight, goodsType, comment} = this.props.form.getFieldsValue()
     const {startPoint, endPoint, startMsg, endMsg, client_id, adminId, endAddress, provinceCode, startAddress, provinceAddr} = this.props
 
@@ -124,7 +123,7 @@ export default class ByOrderTongcheng extends Component {
           adminId: parseInt(adminId),
           cusId: client_id,
           typeId: this.typeId,
-          feeRate: parseFloat(feeRate),
+          feeRate: this.feeRate,
           weight: parseFloat(weight),
           //distance: this.distance,  // 具体以后估算的为准
           receiverName: endMsg.receiverName,

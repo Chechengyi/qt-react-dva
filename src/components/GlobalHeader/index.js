@@ -249,7 +249,7 @@ export default class GlobalHeader extends PureComponent {
         />
         <div className={styles.right}>
           <div className={styles.right}>
-            <audio ref='audio' src="http://data.huiyi8.com/2014/lxy/05/14/10.mp3"></audio>
+            <audio ref='audio' src="http://cdnringuc.shoujiduoduo.com/ringres/user/a48/891/17237891.aac"></audio>
           </div>
           <div style={{marginRight: 50}} >
             <Badge count={this.state.count} >

@@ -130,7 +130,9 @@ export default class Reg extends PureComponent {
             <InputItem {...getFieldProps('password')} type='password' >
               密码
             </InputItem>
-            <InputItem {...getFieldProps('rePassword')} type='password' >
+            <InputItem {...getFieldProps('rePassword')} type='password'
+                       placeholder='重复输入密码'
+            >
               重复密码
             </InputItem>
             <Flex>
